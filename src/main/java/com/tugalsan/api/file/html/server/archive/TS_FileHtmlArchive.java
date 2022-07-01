@@ -362,11 +362,7 @@ public class TS_FileHtmlArchive {
                             } else {
                                 out.write('"');
                                 String sourceFile = remoteName(inputStr, source.toString());
-                                try {
-                                    TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).toDataUri(mimeType(source.toString())).writeTo(out);
-                                } catch (IOException e) {
-                                    warn(e.getMessage());
-                                }
+                                TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).toDataUri(mimeType(source.toString())).writeTo(out);
                                 out.write('"');
                             }
                             if (linkType == LinkType.URL) {
@@ -434,11 +430,7 @@ public class TS_FileHtmlArchive {
                                 } else {
                                     String sourceFile = remoteName(inputStr, source.toString());
                                     File localFileName = localNameFor(outFile, source.toString(), false);
-                                    try {
-                                        TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).writeTo(localFileName.toPath());
-                                    } catch (IOException e) {
-                                        warn(e.getMessage() + " with file " + localFileName + " and source " + sourceFile);
-                                    }
+                                    TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).writeTo(localFileName.toPath());
                                     new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
                                 }
                                 if (linkType == LinkType.URL) {
