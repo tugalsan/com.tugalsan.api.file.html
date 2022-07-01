@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server.archive;
 
-import com.tugalsan.api.file.html.server.archive.*;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
 import java.io.File;
 import java.io.*;
@@ -14,17 +14,18 @@ public class TS_FileHtmlArchive {
     /**
      * Resolves a remote filename wrt a remote context (file or URL)
      */
-    public static String remoteName(CharSequence context, CharSequence fileName) throws MalformedURLException {
-        var contextStr = context.toString();
-        var fileNameStr = fileName.toString();
-        if (TGS_UrlUtils.isValidUrl(contextStr)) {
-            return (new URL(new URL(contextStr), fileNameStr).toString());
-        } else {
+    public static String remoteName(CharSequence context, CharSequence fileName) {
+        return TGS_UnSafe.compile(() -> {
+            var contextStr = context.toString();
+            var fileNameStr = fileName.toString();
+            if (TGS_UrlUtils.isValidUrl(contextStr)) {
+                return (new URL(new URL(contextStr), fileNameStr).toString());
+            }
             if (TGS_UrlUtils.isValidUrl(fileNameStr)) {
                 return (fileNameStr);
             }
             return (new File(new File(contextStr).getParent(), fileNameStr).toString());
-        }
+        });
     }
 
     /**
@@ -32,73 +33,77 @@ public class TS_FileHtmlArchive {
      */
     public static enum LinkType {
         NONE(";lanv;lna;v;nv;urunrenunvi", false) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
             }
         },
         SRC(" src=", false) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
-                int c = in.read();
-                while (c == ' ') {
-                    c = in.read();
-                }
-                switch (c) {
-                    case '\'':
-                        result.appendASCII(in, "'");
-                        return;
-                    case '\"':
-                        result.appendASCII(in, "\"");
-                        return;
-                    default:
-                        result.append(c);
-                        while ((c = in.read()) != -1 && !Character.isWhitespace(c) && c != '>') {
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
+                TGS_UnSafe.execute(() -> {
+                    int c = in.read();
+                    while (c == ' ') {
+                        c = in.read();
+                    }
+                    switch (c) {
+                        case '\'':
+                            result.appendASCII(in, "'");
+                            return;
+                        case '\"':
+                            result.appendASCII(in, "\"");
+                            return;
+                        default:
                             result.append(c);
-                        }
-                        lastChar = c;
-                        return;
-                }
+                            while ((c = in.read()) != -1 && !Character.isWhitespace(c) && c != '>') {
+                                result.append(c);
+                            }
+                            lastChar = c;
+                            return;
+                    }
+                });
             }
         },
         HREF(" href=", false) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
-                SRC.parse(in, result);
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
+                TGS_UnSafe.execute(() -> SRC.parse(in, result));
             }
         },
         LINK("<link ", false) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
-                result.appendASCII(in, ">");
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
+                TGS_UnSafe.execute(() -> result.appendASCII(in, ">"));
             }
         },
         IMPORT("@import url(", true) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
-                URL.parse(in, result);
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
+                TGS_UnSafe.execute(() -> URL.parse(in, result));
             }
         },
         URL("url(", true) {
-            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException {
-                int c = in.read();
-                while (c == ' ') {
-                    c = in.read();
-                }
-                switch (c) {
-                    case '\'':
-                        result.appendASCII(in, "'");
-                        new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
-                        return;
-                    case '\"':
-                        result.appendASCII(in, "\"");
-                        new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
-                        return;
-                    default:
-                        result.append(c);
-                        result.appendASCII(in, ")");
-                        return;
-                }
+            public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
+                TGS_UnSafe.execute(() -> {
+                    int c = in.read();
+                    while (c == ' ') {
+                        c = in.read();
+                    }
+                    switch (c) {
+                        case '\'':
+                            result.appendASCII(in, "'");
+                            new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
+                            return;
+                        case '\"':
+                            result.appendASCII(in, "\"");
+                            new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
+                            return;
+                        default:
+                            result.append(c);
+                            result.appendASCII(in, ")");
+                            return;
+                    }
+                });
             }
         };
         public String tag;
         public boolean css;
 
-        public abstract void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) throws IOException;
+        public abstract void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result);
 
         private LinkType(String s, boolean c) {
             tag = s;
@@ -116,31 +121,33 @@ public class TS_FileHtmlArchive {
      * Reads from in, writes to out, returns linkType found, puts content into
      * result. Returns NULL for end of file.
      */
-    protected static LinkType source(InputStream in, OutputStream out, TS_FileHtmlArchiveByteStreamBuilder result, boolean css) throws IOException {
-        if (lastChar != -1) {
-            out.write(lastChar);
-            lastChar = -1;
-        }
-        var pos = new int[LinkType.values().length];
-        int c;
-        while ((c = in.read()) != -1) {
-            out.write(c);
-            for (var i = 0; i < pos.length; i++) {
-                LinkType linkType = LinkType.values()[i];
-                if (pos[i] < linkType.tag.length() && Character.toLowerCase(c) == linkType.tag.charAt(pos[i])) {
-                    pos[i]++;
-                } else if (Character.toLowerCase(c) == linkType.tag.charAt(pos[0])) {
-                    pos[i] = 1;
-                } else {
-                    pos[i] = 0;
-                }
-                if (pos[i] == linkType.tag.length() && (linkType.css == css || css == false)) {
-                    linkType.parse(in, result);
-                    return (linkType);
+    protected static LinkType source(InputStream in, OutputStream out, TS_FileHtmlArchiveByteStreamBuilder result, boolean css) {
+        return TGS_UnSafe.compile(() -> {
+            if (lastChar != -1) {
+                out.write(lastChar);
+                lastChar = -1;
+            }
+            var pos = new int[LinkType.values().length];
+            int c;
+            while ((c = in.read()) != -1) {
+                out.write(c);
+                for (var i = 0; i < pos.length; i++) {
+                    LinkType linkType = LinkType.values()[i];
+                    if (pos[i] < linkType.tag.length() && Character.toLowerCase(c) == linkType.tag.charAt(pos[i])) {
+                        pos[i]++;
+                    } else if (Character.toLowerCase(c) == linkType.tag.charAt(pos[0])) {
+                        pos[i] = 1;
+                    } else {
+                        pos[i] = 0;
+                    }
+                    if (pos[i] == linkType.tag.length() && (linkType.css == css || css == false)) {
+                        linkType.parse(in, result);
+                        return (linkType);
+                    }
                 }
             }
-        }
-        return (LinkType.NONE);
+            return (LinkType.NONE);
+        });
     }
 
     /**
@@ -210,24 +217,26 @@ public class TS_FileHtmlArchive {
      * Returns the content type. Code from To Kra
      * (https://stackoverflow.com/questions/5801993/quickest-way-to-get-content-type)
      */
-    public static String getContentType(CharSequence urlString) throws IOException {
-        URL url = new URL(urlString.toString());
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("HEAD");
-        if (isRedirect(connection.getResponseCode())) {
-            String newUrl = connection.getHeaderField("Location"); // get
-            // redirect
-            // url from
-            // "location"
-            // header
-            // field
-            return getContentType(newUrl);
-        }
-        String contentType = connection.getContentType();
-        if (contentType.indexOf(' ') != -1) {
-            contentType = contentType.substring(0, contentType.indexOf(' '));
-        }
-        return contentType;
+    public static String getContentType(CharSequence urlString) {
+        return TGS_UnSafe.compile(() -> {
+            URL url = new URL(urlString.toString());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+            if (isRedirect(connection.getResponseCode())) {
+                String newUrl = connection.getHeaderField("Location"); // get
+                // redirect
+                // url from
+                // "location"
+                // header
+                // field
+                return getContentType(newUrl);
+            }
+            String contentType = connection.getContentType();
+            if (contentType.indexOf(' ') != -1) {
+                contentType = contentType.substring(0, contentType.indexOf(' '));
+            }
+            return contentType;
+        });
     }
 
     /**
@@ -247,185 +256,118 @@ public class TS_FileHtmlArchive {
      * Proposes a local name for a file, chooses a name that does not yet exist
      * and creates it
      */
-    public static File localNameFor(File outFile, CharSequence name, boolean overwrite) throws IOException {
-        var nameStr = name.toString();
-        if (TGS_UrlUtils.isValidUrl(nameStr)) {
-            try {
-                nameStr = new URL(nameStr).getFile().replaceAll("[/?<>\\:*|\"]", " ").trim();
-            } catch (MalformedURLException e) {
-                warn(e.getMessage() + " with URL " + nameStr);
-                nameStr = outFile.getName();
+    public static File localNameFor(File outFile, CharSequence name, boolean overwrite) {
+        return TGS_UnSafe.compile(() -> {
+            var nameStr = name.toString();
+            if (TGS_UrlUtils.isValidUrl(nameStr)) {
+                try {
+                    nameStr = new URL(nameStr).getFile().replaceAll("[/?<>\\:*|\"]", " ").trim();
+                } catch (MalformedURLException e) {
+                    warn(e.getMessage() + " with URL " + nameStr);
+                    nameStr = outFile.getName();
+                }
             }
-        }
-        nameStr = new File(nameStr).getName();
-        File targetFile = new File(outFile.getParent(), nameStr);
-        if (targetFile.exists() && !overwrite || nameStr.length() < 5) {
-            targetFile = File.createTempFile("resource-", fileExtension(mimeType(nameStr)), outFile.getParentFile());
-        }
-        return (targetFile);
+            nameStr = new File(nameStr).getName();
+            File targetFile = new File(outFile.getParent(), nameStr);
+            if (targetFile.exists() && !overwrite || nameStr.length() < 5) {
+                targetFile = File.createTempFile("resource-", fileExtension(mimeType(nameStr)), outFile.getParentFile());
+            }
+            return (targetFile);
+        });
     }
 
     /**
      * Inlines an HTML file
      */
-    public static void inline(CharSequence input, OutputStream out, boolean css, File hrefFolder) throws IOException {
-        var inputStr = input.toString();
-        System.err.println("Inlining " + inputStr);
-        try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
-            while (true) {
-                TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
-                LinkType linkType = source(in, out, source, css);
-                big:
-                switch (linkType) {
-                    case LINK:
-                        String link = source.toString();
-                        if (link.contains("stylesheet") && styleSheetPath(link) != null) {
-                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("/>\n<style>\n").writeTo(out);
-                            inline(remoteName(inputStr, styleSheetPath(link)), out, true, hrefFolder);
-                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\n</style>\n").writeTo(out);
-                        } else {
-                            source.writeTo(out);
-                            out.write('>');
-                        }
-                        break;
-                    case HREF:
-                        if (hrefFolder != null && !source.startsWithASCII("#")) {
-                            String remoteName = remoteName(inputStr, source.toString());
-                            try {
-                                switch (getContentType(remoteName)) {
-                                    case "text/html":
-                                        File localFileName = localNameFor(hrefFolder, source.toString(), true);
-                                        if (!localFileName.getName().endsWith(".html")) {
-                                            localFileName = new File(localFileName.getParent(),
-                                                    localFileName.getName() + ".html");
-                                        }
-                                        if (!localFileName.exists()) {
-                                            try ( OutputStream out2 = new FileOutputStream(localFileName)) {
-                                                int myLastChar = lastChar;
-                                                lastChar = -1;
-                                                inline(source.toString(), out2, false, null);
-                                                lastChar = myLastChar;
-                                            }
-                                        }
-                                        new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
-                                        break big;
-                                    case "application/pdf":
-                                        localFileName = localNameFor(hrefFolder, source.toString(), true);
-                                        if (!localFileName.getName().endsWith(".pdf")) {
-                                            localFileName = new File(localFileName.getParent(),
-                                                    localFileName.getName() + ".pdf");
-                                        }
-                                        if (!localFileName.exists()) {
-                                            System.err.println("Downloading " + remoteName);
-                                            TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(remoteName).writeTo(localFileName.toPath());
-                                        }
-                                        new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
-                                        break big;
-                                }
-                            } catch (Exception e) {
-                                warn(e.toString());
-                            }
-                        }
-                        out.write('"');
-                        source.writeTo(out);
-                        out.write('"');
-                        break;
-                    case IMPORT:
-                        new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8(")\n").writeTo(out);
-                        inline(remoteName(inputStr, source.toString()), out, true, hrefFolder);
-                        break;
-                    case URL:
-                    case SRC:
-                        if (source.startsWithASCII("#") || source.startsWithASCII("data:")) {
-                            out.write('"');
-                            source.writeTo(out);
-                            out.write('"');
-                        } else if (source.toString().contains("font") && source.toString().contains("svg")) {
-                            warn("Not embedding SVG font: " + source);
-                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("'omitted-svg-font'").writeTo(out);
-                        } else if (mimeType(source.toString()).isEmpty()) {
-                            out.write('"');
-                            source.writeTo(out);
-                            out.write('"');
-                        } else {
-                            out.write('"');
-                            String sourceFile = remoteName(inputStr, source.toString());
-                            try {
-                                TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).toDataUri(mimeType(source.toString())).writeTo(out);
-                            } catch (IOException e) {
-                                warn(e.getMessage());
-                            }
-                            out.write('"');
-                        }
-                        if (linkType == LinkType.URL) {
-                            out.write(')');
-                        }
-                        break;
-                    default:
-                        return;
-                }
-            }
-        }
-    }
-
-    /**
-     * Produces a bundle
-     */
-    public static void bundle(CharSequence input, File outFile, boolean css) throws IOException {
-        var inputStr = input.toString();
-        System.err.println("Bundling " + inputStr);
-        try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
-            try ( OutputStream out = new FileOutputStream(outFile)) {
+    public static void inline(CharSequence input, OutputStream out, boolean css, File hrefFolder) {
+        TGS_UnSafe.execute(() -> {
+            var inputStr = input.toString();
+            System.err.println("Inlining " + inputStr);
+            try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 while (true) {
                     TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
                     LinkType linkType = source(in, out, source, css);
+                    big:
                     switch (linkType) {
                         case LINK:
                             String link = source.toString();
                             if (link.contains("stylesheet") && styleSheetPath(link) != null) {
-                                File localStyleFile = localNameFor(outFile, styleSheetPath(link), false);
-                                bundle(remoteName(inputStr, styleSheetPath(link)), localStyleFile, true);
-                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("rel=\"stylesheet\" href=\"" + localStyleFile.getName() + "\" />")
-                                        .writeTo(out);
+                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("/>\n<style>\n").writeTo(out);
+                                inline(remoteName(inputStr, styleSheetPath(link)), out, true, hrefFolder);
+                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\n</style>\n").writeTo(out);
                             } else {
                                 source.writeTo(out);
                                 out.write('>');
                             }
                             break;
                         case HREF:
+                            if (hrefFolder != null && !source.startsWithASCII("#")) {
+                                String remoteName = remoteName(inputStr, source.toString());
+                                try {
+                                    switch (getContentType(remoteName)) {
+                                        case "text/html":
+                                            File localFileName = localNameFor(hrefFolder, source.toString(), true);
+                                            if (!localFileName.getName().endsWith(".html")) {
+                                                localFileName = new File(localFileName.getParent(),
+                                                        localFileName.getName() + ".html");
+                                            }
+                                            if (!localFileName.exists()) {
+                                                try ( OutputStream out2 = new FileOutputStream(localFileName)) {
+                                                    int myLastChar = lastChar;
+                                                    lastChar = -1;
+                                                    inline(source.toString(), out2, false, null);
+                                                    lastChar = myLastChar;
+                                                }
+                                            }
+                                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
+                                            break big;
+                                        case "application/pdf":
+                                            localFileName = localNameFor(hrefFolder, source.toString(), true);
+                                            if (!localFileName.getName().endsWith(".pdf")) {
+                                                localFileName = new File(localFileName.getParent(),
+                                                        localFileName.getName() + ".pdf");
+                                            }
+                                            if (!localFileName.exists()) {
+                                                System.err.println("Downloading " + remoteName);
+                                                TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(remoteName).writeTo(localFileName.toPath());
+                                            }
+                                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
+                                            break big;
+                                    }
+                                } catch (Exception e) {
+                                    warn(e.toString());
+                                }
+                            }
                             out.write('"');
                             source.writeTo(out);
                             out.write('"');
                             break;
                         case IMPORT:
-                            File localStyleFile = localNameFor(outFile, source.toString(), false);
-                            new TS_FileHtmlArchiveByteStreamBuilder().append('\"').appendUTF8(localStyleFile.getName()).appendUTF8("\")").writeTo(out);
-                            bundle(remoteName(inputStr, source.toString()), localStyleFile, true);
+                            new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8(")\n").writeTo(out);
+                            inline(remoteName(inputStr, source.toString()), out, true, hrefFolder);
                             break;
                         case URL:
                         case SRC:
-                            if (source.startsWithASCII("#")) {
+                            if (source.startsWithASCII("#") || source.startsWithASCII("data:")) {
                                 out.write('"');
                                 source.writeTo(out);
                                 out.write('"');
-                            } else if (source.startsWithASCII("data:")) {
-                                String[] mimeType = new String[1];
-                                source = source.fromDataUri(mimeType);
-                                File localFileName = localNameFor(outFile, "resource-0" + fileExtension(mimeType[0]),
-                                        false);
-                                source.writeTo(localFileName.toPath());
-                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
-                            } else if (source.startsWithASCII("omitted-svg-font")) {
-                                // Do nothing
+                            } else if (source.toString().contains("font") && source.toString().contains("svg")) {
+                                warn("Not embedding SVG font: " + source);
+                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("'omitted-svg-font'").writeTo(out);
+                            } else if (mimeType(source.toString()).isEmpty()) {
+                                out.write('"');
+                                source.writeTo(out);
+                                out.write('"');
                             } else {
+                                out.write('"');
                                 String sourceFile = remoteName(inputStr, source.toString());
-                                File localFileName = localNameFor(outFile, source.toString(), false);
                                 try {
-                                    TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).writeTo(localFileName.toPath());
+                                    TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).toDataUri(mimeType(source.toString())).writeTo(out);
                                 } catch (IOException e) {
-                                    warn(e.getMessage() + " with file " + localFileName + " and source " + sourceFile);
+                                    warn(e.getMessage());
                                 }
-                                new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
+                                out.write('"');
                             }
                             if (linkType == LinkType.URL) {
                                 out.write(')');
@@ -436,7 +378,80 @@ public class TS_FileHtmlArchive {
                     }
                 }
             }
-        }
+        });
+    }
+
+    /**
+     * Produces a bundle
+     */
+    public static void bundle(CharSequence input, File outFile, boolean css) {
+        TGS_UnSafe.execute(() -> {
+            var inputStr = input.toString();
+            System.err.println("Bundling " + inputStr);
+            try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+                try ( OutputStream out = new FileOutputStream(outFile)) {
+                    while (true) {
+                        TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
+                        LinkType linkType = source(in, out, source, css);
+                        switch (linkType) {
+                            case LINK:
+                                String link = source.toString();
+                                if (link.contains("stylesheet") && styleSheetPath(link) != null) {
+                                    File localStyleFile = localNameFor(outFile, styleSheetPath(link), false);
+                                    bundle(remoteName(inputStr, styleSheetPath(link)), localStyleFile, true);
+                                    new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("rel=\"stylesheet\" href=\"" + localStyleFile.getName() + "\" />")
+                                            .writeTo(out);
+                                } else {
+                                    source.writeTo(out);
+                                    out.write('>');
+                                }
+                                break;
+                            case HREF:
+                                out.write('"');
+                                source.writeTo(out);
+                                out.write('"');
+                                break;
+                            case IMPORT:
+                                File localStyleFile = localNameFor(outFile, source.toString(), false);
+                                new TS_FileHtmlArchiveByteStreamBuilder().append('\"').appendUTF8(localStyleFile.getName()).appendUTF8("\")").writeTo(out);
+                                bundle(remoteName(inputStr, source.toString()), localStyleFile, true);
+                                break;
+                            case URL:
+                            case SRC:
+                                if (source.startsWithASCII("#")) {
+                                    out.write('"');
+                                    source.writeTo(out);
+                                    out.write('"');
+                                } else if (source.startsWithASCII("data:")) {
+                                    String[] mimeType = new String[1];
+                                    source = source.fromDataUri(mimeType);
+                                    File localFileName = localNameFor(outFile, "resource-0" + fileExtension(mimeType[0]),
+                                            false);
+                                    source.writeTo(localFileName.toPath());
+                                    new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
+                                } else if (source.startsWithASCII("omitted-svg-font")) {
+                                    // Do nothing
+                                } else {
+                                    String sourceFile = remoteName(inputStr, source.toString());
+                                    File localFileName = localNameFor(outFile, source.toString(), false);
+                                    try {
+                                        TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).writeTo(localFileName.toPath());
+                                    } catch (IOException e) {
+                                        warn(e.getMessage() + " with file " + localFileName + " and source " + sourceFile);
+                                    }
+                                    new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
+                                }
+                                if (linkType == LinkType.URL) {
+                                    out.write(')');
+                                }
+                                break;
+                            default:
+                                return;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -473,12 +488,11 @@ public class TS_FileHtmlArchive {
      * folder) This will copy the Web page or source file and all resources to
      * the target folder, and adjust the references in the source accordingly.
      */
-    public static void main(String[] args) throws Exception {
-        try {
-            System.out.println("Hello");
-
+    public static void main(final String[] args0) {
 //        args = new String[]{"BUNDLE", "www.mebosa.com", "D:\\me\\Documents\\ProgsCodes\\Maven\\MHTCreator\\"};
-            args = new String[]{"INLINE", "http://mebosa.com"};
+        var args = new String[]{"INLINE", "http://mebosa.com"};
+        TGS_UnSafe.execute(() -> {
+            System.out.println("Hello");
 
             if (args.length != 3 && args.length != 2) {
                 helpAndExit();
@@ -529,9 +543,7 @@ public class TS_FileHtmlArchive {
                 default:
                     helpAndExit();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
 }

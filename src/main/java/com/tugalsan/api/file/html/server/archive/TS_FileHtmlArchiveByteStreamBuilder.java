@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.server.archive;
 
+import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,42 +50,53 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
         len = d.length;
     }
 
-    public TS_FileHtmlArchiveByteStreamBuilder append(InputStream in) throws IOException {
+    public TS_FileHtmlArchiveByteStreamBuilder append(InputStream in) {
         return (append(in, Integer.MAX_VALUE));
     }
 
-    public TS_FileHtmlArchiveByteStreamBuilder append(InputStream in, int num) throws IOException {
-        int c;
-        while (num-- > 0 && (c = in.read()) != -1) {
-            append(c);
-        }
-        return (this);
+    public TS_FileHtmlArchiveByteStreamBuilder append(InputStream in, int num0) {
+        return TGS_UnSafe.compile(() -> {
+            var num = num0;
+            int c;
+            while (num-- > 0 && (c = in.read()) != -1) {
+                append(c);
+            }
+            return (this);
+        });
     }
 
-    public TS_FileHtmlArchiveByteStreamBuilder append(URL url) throws IOException {
-        try ( InputStream in = url.openStream()) {
-            append(in, Integer.MAX_VALUE);
-        }
-        return (this);
+    public TS_FileHtmlArchiveByteStreamBuilder append(URL url) {
+        return TGS_UnSafe.compile(() -> {
+            try ( InputStream in = url.openStream()) {
+                append(in, Integer.MAX_VALUE);
+            }
+            return (this);
+        });
     }
 
-    public TS_FileHtmlArchiveByteStreamBuilder append(Path input) throws IOException {
-        try ( InputStream in = Files.newInputStream(input)) {
-            append(in);
-        }
-        return (this);
+    public TS_FileHtmlArchiveByteStreamBuilder append(Path input) {
+        return TGS_UnSafe.compile(() -> {
+            try ( InputStream in = Files.newInputStream(input)) {
+                append(in);
+            }
+            return (this);
+        });
     }
 
-    public void writeTo(OutputStream out) throws IOException {
-        for (int i = 0; i < len; i++) {
-            out.write(data[i]);
-        }
+    public void writeTo(OutputStream out) {
+        TGS_UnSafe.execute(() -> {
+            for (var i = 0; i < len; i++) {
+                out.write(data[i]);
+            }
+        });
     }
 
-    public void writeTo(Path output) throws IOException {
-        try ( OutputStream o = Files.newOutputStream(output)) {
-            writeTo(o);
-        }
+    public void writeTo(Path output) {
+        TGS_UnSafe.execute(() -> {
+            try ( OutputStream o = Files.newOutputStream(output)) {
+                writeTo(o);
+            }
+        });
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder toDataUri(CharSequence mime) {
@@ -122,25 +134,29 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
      * Reads until any of the (ASCII) delimiters appears. Reads, but does not
      * append the delimiter.
      */
-    public TS_FileHtmlArchiveByteStreamBuilder appendASCII(InputStream in, CharSequence delimiters) throws IOException {
-        int c;
-        var delimitersStr = delimiters.toString();
-        while ((c = in.read()) != -1 && delimitersStr.indexOf(c) == -1) {
-            append(c);
-        }
-        return (this);
+    public TS_FileHtmlArchiveByteStreamBuilder appendASCII(InputStream in, CharSequence delimiters) {
+        return TGS_UnSafe.compile(() -> {
+            int c;
+            var delimitersStr = delimiters.toString();
+            while ((c = in.read()) != -1 && delimitersStr.indexOf(c) == -1) {
+                append(c);
+            }
+            return (this);
+        });
     }
 
     public boolean startsWithASCII(CharSequence s) {
         return -1 == IntStream.range(0, s.length()).filter(i -> i > len || data[i] != s.charAt(i)).findAny().orElse(-1);
     }
 
-    public static TS_FileHtmlArchiveByteStreamBuilder forUrlOrFile(CharSequence source) throws IOException {
-        var sourceStr = source.toString();
-        if (TGS_UrlUtils.isValidUrl(sourceStr)) {
-            return (new TS_FileHtmlArchiveByteStreamBuilder().append(new URL(sourceStr)));
-        } else {
-            return (new TS_FileHtmlArchiveByteStreamBuilder().append(Path.of(sourceStr)));
-        }
+    public static TS_FileHtmlArchiveByteStreamBuilder forUrlOrFile(CharSequence source) {
+        return TGS_UnSafe.compile(() -> {
+            var sourceStr = source.toString();
+            if (TGS_UrlUtils.isValidUrl(sourceStr)) {
+                return (new TS_FileHtmlArchiveByteStreamBuilder().append(new URL(sourceStr)));
+            } else {
+                return (new TS_FileHtmlArchiveByteStreamBuilder().append(Path.of(sourceStr)));
+            }
+        });
     }
 }
