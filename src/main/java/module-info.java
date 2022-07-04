@@ -3,6 +3,7 @@ module com.tugalsan.api.file.html {
     requires org.apache.commons.text;
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.compiler;
+    requires com.tugalsan.api.executable;
     requires com.tugalsan.api.list;
     requires com.tugalsan.api.string;
     requires com.tugalsan.api.pack;

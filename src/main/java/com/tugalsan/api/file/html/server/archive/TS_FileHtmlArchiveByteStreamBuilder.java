@@ -67,7 +67,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
 
     public TS_FileHtmlArchiveByteStreamBuilder append(URL url) {
         return TGS_UnSafe.compile(() -> {
-            try ( InputStream in = url.openStream()) {
+            try ( var in = url.openStream()) {
                 append(in, Integer.MAX_VALUE);
             }
             return (this);
@@ -76,7 +76,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
 
     public TS_FileHtmlArchiveByteStreamBuilder append(Path input) {
         return TGS_UnSafe.compile(() -> {
-            try ( InputStream in = Files.newInputStream(input)) {
+            try ( var in = Files.newInputStream(input)) {
                 append(in);
             }
             return (this);
@@ -93,7 +93,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
 
     public void writeTo(Path output) {
         TGS_UnSafe.execute(() -> {
-            try ( OutputStream o = Files.newOutputStream(output)) {
+            try ( var o = Files.newOutputStream(output)) {
                 writeTo(o);
             }
         });

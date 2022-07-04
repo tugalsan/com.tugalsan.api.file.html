@@ -219,23 +219,32 @@ public class TS_FileHtmlArchive {
      */
     public static String getContentType(CharSequence urlString) {
         return TGS_UnSafe.compile(() -> {
-            URL url = new URL(urlString.toString());
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("HEAD");
-            if (isRedirect(connection.getResponseCode())) {
-                String newUrl = connection.getHeaderField("Location"); // get
-                // redirect
-                // url from
-                // "location"
-                // header
-                // field
-                return getContentType(newUrl);
+            var url = TGS_UnSafe.compile(() -> new URL(urlString.toString()));
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("HEAD");
+                if (isRedirect(con.getResponseCode())) {
+                    String newUrl = con.getHeaderField("Location"); // get
+                    // redirect
+                    // url from
+                    // "location"
+                    // header
+                    // field
+                    return getContentType(newUrl);
+                }
+                String contentType = con.getContentType();
+                if (contentType.indexOf(' ') != -1) {
+                    contentType = contentType.substring(0, contentType.indexOf(' '));
+                }
+                return contentType;
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                if (con != null) {
+                    con.disconnect();
+                }
             }
-            String contentType = connection.getContentType();
-            if (contentType.indexOf(' ') != -1) {
-                contentType = contentType.substring(0, contentType.indexOf(' '));
-            }
-            return contentType;
         });
     }
 
@@ -283,14 +292,14 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.execute(() -> {
             var inputStr = input.toString();
             System.err.println("Inlining " + inputStr);
-            try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+            try ( var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 while (true) {
-                    TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
-                    LinkType linkType = source(in, out, source, css);
+                    var source = new TS_FileHtmlArchiveByteStreamBuilder();
+                    var linkType = source(in, out, source, css);
                     big:
                     switch (linkType) {
                         case LINK:
-                            String link = source.toString();
+                            var link = source.toString();
                             if (link.contains("stylesheet") && styleSheetPath(link) != null) {
                                 new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("/>\n<style>\n").writeTo(out);
                                 inline(remoteName(inputStr, styleSheetPath(link)), out, true, hrefFolder);
@@ -302,17 +311,17 @@ public class TS_FileHtmlArchive {
                             break;
                         case HREF:
                             if (hrefFolder != null && !source.startsWithASCII("#")) {
-                                String remoteName = remoteName(inputStr, source.toString());
+                                var remoteName = remoteName(inputStr, source.toString());
                                 try {
                                     switch (getContentType(remoteName)) {
                                         case "text/html":
-                                            File localFileName = localNameFor(hrefFolder, source.toString(), true);
+                                            var localFileName = localNameFor(hrefFolder, source.toString(), true);
                                             if (!localFileName.getName().endsWith(".html")) {
                                                 localFileName = new File(localFileName.getParent(),
                                                         localFileName.getName() + ".html");
                                             }
                                             if (!localFileName.exists()) {
-                                                try ( OutputStream out2 = new FileOutputStream(localFileName)) {
+                                                try ( var out2 = new FileOutputStream(localFileName)) {
                                                     int myLastChar = lastChar;
                                                     lastChar = -1;
                                                     inline(source.toString(), out2, false, null);
@@ -384,8 +393,8 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.execute(() -> {
             var inputStr = input.toString();
             System.err.println("Bundling " + inputStr);
-            try ( InputStream in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
-                try ( OutputStream out = new FileOutputStream(outFile)) {
+            try ( var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+                try ( var out = new FileOutputStream(outFile)) {
                     while (true) {
                         TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
                         LinkType linkType = source(in, out, source, css);
@@ -520,7 +529,7 @@ public class TS_FileHtmlArchive {
                     if (targetFile.exists()) {
                         error("File already exists: " + targetFile);
                     }
-                    try ( OutputStream out = new FileOutputStream(targetFile)) {
+                    try ( var out = new FileOutputStream(targetFile)) {
                         inline(source, out, false, null);
                     }
                     break;
@@ -528,7 +537,7 @@ public class TS_FileHtmlArchive {
                     if (!targetFile.isDirectory()) {
                         error("Directory does not exist " + targetFile);
                     }
-                    try ( OutputStream out = new FileOutputStream(new File(targetFile, "index.html"))) {
+                    try ( var out = new FileOutputStream(new File(targetFile, "index.html"))) {
                         inline(source, out, false, new File(targetFile, "resources.html"));
                     }
                     break;
