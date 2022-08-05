@@ -3,12 +3,15 @@ package com.tugalsan.api.file.html.server.element;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.file.txt.server.*;
+import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
+
+    final private static TS_Log d = TS_Log.of(TS_FileHtmlImage64.class.getSimpleName());
 
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
@@ -49,6 +52,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
     public TS_FileHtmlImage64(CharSequence nameAndId, CharSequence fileLoc, CharSequence width, CharSequence height, CharSequence rotationInDegrees_0_90_180_270) {
         super(null, "img", nameAndId);
         var fileLocStr = fileLoc.toString();
+        d.ci("cons", "fileLocStr", fileLocStr);
         String base64;
         String imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
@@ -63,7 +67,11 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             base64 = TS_FileTxtUtils.toBase64(path);
             imageFileType = TS_FileUtils.getNameType(path);
         }
-        properties.add(new TGS_FileHtmlProperty("data", "image/" + imageFileType + ";base64, " + base64));
+        d.ci("cons", "base64.len", base64 == null ? "null" : base64.length());
+        d.ci("cons", "imageFileType", imageFileType);
+        var base64_data = "image/" + imageFileType + ";base64, " + base64;
+        d.ci("cons", "base64_data", base64_data);
+        properties.add(new TGS_FileHtmlProperty("data", base64_data));
         properties.add(new TGS_FileHtmlProperty("width", width));
         properties.add(new TGS_FileHtmlProperty("height", height));
         properties.add(new TGS_FileHtmlProperty("rotation", rotationInDegrees_0_90_180_270));
@@ -78,7 +86,8 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
                 rotate += "padding:15px;";
             }
         }
-        var size_fix = "max-height:100%; max-width:100%;";
+//        var size_fix = "max-height:100%; max-width:100%;";
+        var size_fix = "max-width:100%;";
         var size_width = getWidth_Properties1() == null ? "" : ("width:" + getWidth_Properties1() + ";");
         var size_height = getHeight_Properties2() == null ? "" : ("height:" + getHeight_Properties2() + ";");
         var size = size_fix + size_width + size_height;

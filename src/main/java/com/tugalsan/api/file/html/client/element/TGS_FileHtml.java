@@ -30,11 +30,14 @@ public class TGS_FileHtml {
     @Override
     public String toString() {
         var sj = new StringJoiner("\n");
-        sj.add(TGS_FileHtmlUtils.beginLines(browserTitle, false, true, 5, 5, browserIconHrefPng, true, optionalCustomDomain));
+        sj.add(TGS_FileHtmlUtils.beginLines(browserTitle, useDefaultCss, addTableBorder, 5, 5, browserIconHrefPng, addDivCenter, optionalCustomDomain));
         childeren.stream().forEachOrdered(s -> sj.add(s.toString()));
         sj.add(TGS_FileHtmlUtils.endLines(true));
         return sj.toString();
     }
+    public boolean useDefaultCss = true;
+    public boolean addTableBorder = false;
+    public boolean addDivCenter = true;
 
     public static TGS_FileHtml of(TGS_CompilerType1<String, CharSequence> escapeHTML, TGS_ListTable lstTable, CharSequence title, CharSequence hrefPngIcon) {
         var htmlTable = TGS_FileHtmlTable.of(escapeHTML, lstTable);

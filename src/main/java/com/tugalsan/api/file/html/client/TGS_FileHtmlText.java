@@ -1,8 +1,15 @@
 package com.tugalsan.api.file.html.client;
 
 import com.tugalsan.api.network.client.*;
+import java.util.*;
 
 public class TGS_FileHtmlText {
+
+    public static String getDefaultCustomCssForBlackText() {
+        return "var(--colorTextPrimary)";
+    }
+
+    public String customCssForBlackText = getDefaultCustomCssForBlackText();
 
     public static TGS_FileHtmlText textWhite() {
         return new TGS_FileHtmlText().setBold(true).setHexcolor("FFFFFF");
@@ -131,7 +138,11 @@ public class TGS_FileHtmlText {
         var sb = new StringBuilder();
         sb.setLength(0);
         if (hexcolor != null) {
-            sb.append("<font color='#").append(hexcolor).append("'>");
+            if (customCssForBlackText != null && Objects.equals(hexcolor, "000000")) {
+                sb.append("<font color='").append(customCssForBlackText).append("'>");
+            } else {
+                sb.append("<font color='#").append(hexcolor).append("'>");
+            }
         }
         if (isBold()) {
             sb.append("<b>");

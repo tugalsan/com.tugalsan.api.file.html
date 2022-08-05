@@ -72,7 +72,7 @@ public class TGS_FileHtmlUtils {
             sj.add("<style>");
             sj.add("html * {");
             sj.add("   font-size: 1em !important");
-            sj.add("   font-family: Arial !important");
+            sj.add("   font-family: fontText, Arial Unicode MS, Arial,Helvetica,sans-serif !important");
             sj.add("}");
             sj.add("</style>");
         }

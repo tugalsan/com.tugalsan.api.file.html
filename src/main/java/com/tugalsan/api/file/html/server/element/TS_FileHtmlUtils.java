@@ -209,8 +209,8 @@ public class TS_FileHtmlUtils {
                                                         		</div>
                                                         	<div class="right" >
                                                         		<h4>VADİ LOCA SİTESİ</h4>
-                                                        		<div style="padding-left: 6px;font-family: Arial, Helvetica, sans-serif;font-size:1em;float:left;color: green;">YAŞAM VADİSİNİN YANI BAŞINDA,</div>
-                                                        		<div style="padding-left: 6px;font-family: Arial, Helvetica, sans-serif;font-size:1em;float:right;color: green;">AKTİF HAYATIN TAM ORTASINDA...</div>
+                                                        		<div style="padding-left: 6px;font-family: fontText, Arial Unicode MS, Arial,Helvetica,sans-serif;font-size:1em;float:left;color: green;">YAŞAM VADİSİNİN YANI BAŞINDA,</div>
+                                                        		<div style="padding-left: 6px;font-family: fontText, Arial Unicode MS, Arial,Helvetica,sans-serif;font-size:1em;float:right;color: green;">AKTİF HAYATIN TAM ORTASINDA...</div>
                                                         	</div>
                                                         </div>
                                                         	<style>
@@ -227,7 +227,7 @@ public class TS_FileHtmlUtils {
                                                         }
                                                         h4{
                                                         margin:0;
-                                                        font-family: Arial, Helvetica, sans-serif;
+                                                        font-family: fontText, Arial Unicode MS, Arial,Helvetica,sans-serif;
                                                         font-size:1.5em;
                                                         padding-top: 10px;
                                                         }
