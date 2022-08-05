@@ -9,7 +9,7 @@ public class TGS_FileHtml {
 
     public String browserTitle;
     public String browserIconHrefPng;
-    public String optionalCustomDomain;
+    public CharSequence optionalCustomDomain;
 
     public List<TGS_FileHtmlElement> getChilderen() {
         return childeren;
@@ -23,7 +23,7 @@ public class TGS_FileHtml {
     public TGS_FileHtml(CharSequence pageTitle, CharSequence hrefPngIcon, CharSequence optionalCustomDomain) {
         this.browserTitle = pageTitle == null ? null : pageTitle.toString();
         this.browserIconHrefPng = hrefPngIcon == null ? null : hrefPngIcon.toString();
-        this.optionalCustomDomain = optionalCustomDomain == null ? null : optionalCustomDomain.toString();
+        this.optionalCustomDomain = optionalCustomDomain;
         childeren = TGS_ListUtils.of();
     }
 
