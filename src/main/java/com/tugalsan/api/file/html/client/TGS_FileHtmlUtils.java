@@ -36,19 +36,27 @@ public class TGS_FileHtmlUtils {
 
     public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, CharSequence optional_hrefPngIcon, boolean addDivCenter, CharSequence optionalCustomDomain) {
         var sj = new StringJoiner("\n");
+        //DOCTYPE
         sj.add("<!doctype html>");
+        //HTML START
         sj.add("<html lang=\"tr\" dir=\"ltr\">");
+        //HTML->HEAD START
         sj.add("<head>");
+        //HTML->HEAD->FAV ICON
         if (optional_hrefPngIcon != null) {
             sj.add("<link id=\"favicon\" rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"" + optional_hrefPngIcon + "\"/>");
         }
+        //HTML->HEAD->CHARSET
         sj.add(TGS_StringUtils.concat("<meta charset='", StandardCharsets.UTF_8.name(), "'>"));
+        //HTML->HEAD->TITLE
         sj.add(TGS_StringUtils.concat("<title>", browserTitle, "</title>"));
+        //HTML->HEAD->BORDER STYLE
         if (addBorder) {
             sj.add("<style>");
             sj.add("table, th, td {border: 1px solid black !important}");
             sj.add("</style>");
         }
+        //HTML->HEAD->MARGIN STYLE
         sj.add("<style>");
         sj.add("body {");
         sj.add("   margin-left: " + leftMargin + "px !important;");
@@ -57,6 +65,7 @@ public class TGS_FileHtmlUtils {
         sj.add("   margin-bottom: " + topMargin + "px !important;");
         sj.add("}");
         sj.add("</style>");
+        //HTML->HEAD->CSS
         if (addDefaultCss) {
             sj.add("<script>");
             sj.add("window.boot_loader_main = function () {");
@@ -76,8 +85,11 @@ public class TGS_FileHtmlUtils {
             sj.add("}");
             sj.add("</style>");
         }
+        //HTML->HEAD END
         sj.add("</head>");
+        //HTML->BODY START
         sj.add("<body>");
+        //HTML->BODY->DIV START
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
         }
