@@ -41,7 +41,7 @@ public class TGS_FileHtmlUtils {
 //        if (addDefaultCss) {
 //            sj.add("<html lang=\"tr\" dir=\"ltr\" class=\"Dark-Black\">");
 //        } else {
-            sj.add("<html lang=\"tr\" dir=\"ltr\">");
+        sj.add("<html lang=\"tr\" dir=\"ltr\">");
 //        }
         //HTML->HEAD START
         sj.add("<head>");
@@ -96,7 +96,7 @@ public class TGS_FileHtmlUtils {
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
             if (addDefaultCss) {
-                sj.add("<div class=\"theme_container\">\n");//DO NOT USE TEXT BLOCK GWT DOES NOT LIKE IT
+                sj.add("<div class=\"theme_container\">\n");
                 sj.add("<div class=\"theme_switch\">\n");
                 sj.add("<label for=\"theme_toggle\">\n");
                 sj.add("<input id=\"theme_toggle\" class=\"theme_toggle-switch\" type=\"checkbox\">\n");
@@ -106,11 +106,23 @@ public class TGS_FileHtmlUtils {
                 sj.add("</div>\n");
                 sj.add("</div>\n");
                 sj.add("<script>\n");
+                sj.add("var theme_el = document.getElementsByTagName('html')[0];\n");
+                sj.add("if (theme_el.classList.contains('Dark-Black')){\n");
+                sj.add("	document.getElementById(\"theme_toggle\").checked=false;\n");
+                sj.add("}\n");
+                sj.add("if (theme_el.classList.contains('Light-Cream')){\n");
+                sj.add("	document.getElementById(\"theme_toggle\").checked=true;\n");
+                sj.add("}\n");
                 sj.add("document.getElementById(\"theme_toggle\").addEventListener(\"click\", function(){\n");
-                sj.add("document.getElementsByTagName('html')[0].classList.toggle('Light-Cream');\n");
-                sj.add("document.getElementsByTagName('html')[0].classList.toggle('Dark-Black');\n");
+                sj.add("	if (theme_el.classList.contains('Dark-Black')){\n");
+                sj.add("		theme_el.classList.remove('Dark-Black');\n");
+                sj.add("		theme_el.classList.add('Light-Cream');\n");
+                sj.add("	} else {\n");
+                sj.add("		theme_el.classList.add('Dark-Black');\n");
+                sj.add("		theme_el.classList.remove('Light-Cream');\n");
+                sj.add("	}\n");
                 sj.add("});\n");
-                sj.add("</script>");
+                sj.add("</script>\n");
             }
         }
         return sj.toString();
