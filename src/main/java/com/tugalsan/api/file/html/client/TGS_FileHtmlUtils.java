@@ -92,7 +92,7 @@ public class TGS_FileHtmlUtils {
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
             if (addDefaultCss) {
-                sj.add("<style>\n"
+                sj.add("<style>\n"//DO NOT USE TEXT BLOCK GWT DOES NOT LIKE IT
                         + "                       .container{\n"
                         + "                           width: 100%;\n"
                         + "                           margin-right: 20px;\n"
