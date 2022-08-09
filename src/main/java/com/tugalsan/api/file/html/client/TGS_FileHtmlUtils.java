@@ -92,223 +92,221 @@ public class TGS_FileHtmlUtils {
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
             if (addDefaultCss) {
-                sj.add("""
-                       <style>
-                       .container{
-                           width: 100%;
-                           margin-right: 20px;
-                           position: relative;
-                       }
-                       .theme_switch {
-                       	line-height: 1.8;
-                           opacity: 25%;
-                           z-index: 9999;
-                           position: fixed;
-                           top: 20px;
-                           right: 30px;
-                           color: var(--colorTextPrimary);
-                       	
-                         width: 7.5rem;
-                         height: 4rem;
-                       }
-                       
-                       .theme_switch input {
-                         position: absolute;
-                         top: 0;
-                         left: 0;
-                         z-index: 2;
-                         opacity: 0;
-                       }
-                       
-                       .theme_switch label {
-                         cursor: pointer;
-                       }
-                       
-                       .theme_background {
-                         z-index: 1;
-                         position: absolute;
-                         width: 7.5rem;
-                         height: 4rem;
-                         border-radius: 2.5rem;
-                         border: 0.25rem var(--widgetBorder);
-                         background: linear-gradient(to right, var(--widgetBorder) 0%,#202020 100%);
-                         transition: all 0.3s;
-                       }
-                       
-                       .theme_switch input:checked ~ .fill {
-                         background: #E9F8FD;
-                       }
-                       
-                       .theme_stars1,
-                       .theme_stars2 {
-                         position: absolute;
-                         height: 0.4rem;
-                         width: 0.4rem; 
-                         background: #FFFFFF;
-                         border-radius: 50%;
-                         transition: 0.3s all ease;
-                       }
-                       
-                       .theme_stars1 {
-                         top: 6px;
-                         right: 23px;
-                       }
-                       
-                       .theme_stars2 {
-                         top: 40px;
-                         right: 48px;
-                       }
-                       
-                       .theme_stars1:after,
-                       .theme_stars1:before,
-                       .theme_stars2:after,
-                       .theme_stars2:before{
-                         position: absolute;
-                         content: "";
-                         display: block;
-                         height: 0.25rem;
-                         width: 0.25rem;
-                         background: #FFFFFF;
-                         border-radius: 50%;
-                         transition: 0.2s all ease;
-                       }
-                       
-                       .theme_stars1:after {
-                         top: 8px;
-                         right: 20px;
-                       }
-                       
-                       .theme_stars1:before {
-                         top: 18px;
-                         right: -12px;
-                       }
-                       
-                       .theme_stars2:after {
-                         top: -8px;
-                         right: -16px;
-                       }
-                       
-                       .theme_stars2:before {
-                         top: 6px;
-                         right: -26px;
-                       }
-                       
-                       .theme_sun-moon {
-                         z-index: 2;
-                         position: absolute;
-                         left: 0;
-                         display: inline-block;
-                         height: 3rem;
-                         width: 3rem;
-                         margin: 0.5rem;
-                         background: #FFFDF2;
-                         border-radius: 50%;
-                         transition: all 0.5s ease;
-                         
-                         /* Default to Moon */
-                         border: 0.25rem solid #DEE2C6;
-                       }
-                       
-                       .theme_sun-moon .theme_dots {
-                         position: absolute;
-                         top: 3px;
-                         left: 23px;
-                         height: 1rem;
-                         width: 1rem; 
-                         background: #EFEEDB;
-                         border: 0.25rem solid #DEE2C6;
-                         border-radius: 50%;
-                         transition: 0.4s all ease;
-                       }
-                       
-                       .theme_sun-moon .theme_dots:after,
-                       .theme_sun-moon .theme_dots:before {
-                         position: absolute;
-                         content: "";
-                         display: block;
-                         height: 0.25rem;
-                         width: 0.25rem;
-                         background: #EFEEDB;
-                         border: 0.25rem solid #DEE2C6;
-                         border-radius: 50%;
-                         transition: 0.4s all ease;
-                       }
-                       
-                       .theme_sun-moon .theme_dots:after {
-                         top: -4px;
-                         left: -26px;
-                       }
-                       
-                       .theme_sun-moon .theme_dots:before {
-                         top: 18px;
-                         left: -10px;
-                       }
-                       
-                       /* Transition to Sun */
-                       
-                       .theme_switch input:checked ~ .theme_sun-moon {
-                         left: calc(100% - 4rem);
-                         background: #F5EC59;
-                         border-color: #E7C65C;
-                         transform: rotate(-25deg);
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots,
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:after,
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:before {
-                         background: #FFFFFF;
-                         border-color: #FFFFFF;
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots {
-                         height: 1.5rem;
-                         width: 1.5rem;
-                         top: 0px;
-                         left: -20px;
-                         transform: rotate(25deg);
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:after {
-                         height: 0.65rem;
-                         width: 0.65rem;
-                         top: 2px;
-                         left: -12px;
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:before {
-                         height: 0.4rem;
-                         width: 0.4rem;
-                         top: 6px;
-                         left: 14px;
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_background .theme_stars1,
-                       .theme_switch input:checked ~ .theme_background .theme_stars2 {
-                         opacity: 0;
-                         transform: translateY(2rem);
-                       }
-                       
-                       .theme_switch input:checked ~ .theme_background {
-                         border: 0.25rem solid #78C1D5;
-                         background: linear-gradient(to right, #78C1D5 0%, #BBE7F5 100%);
-                       }
-                       </style>
-                       <div class="container">
-                       <div class="theme_switch">
-                       <label for="theme_toggle">
-                       <input id="theme_toggle" class="theme_toggle-switch" type="checkbox">
-                       <div class="theme_sun-moon"><div class="theme_dots"></div></div>
-                       <div class="theme_background"><div class="theme_stars1"></div><div class="theme_stars2"></div></div>
-                       </label>
-                       </div>
-                       </div>
-                       <script>
-                       document.getElementById("theme_toggle").addEventListener("click", function(){
-                           document.getElementsByTagName('html')[0].classList.toggle('Light-Cream');
-                           document.getElementsByTagName('html')[0].classList.toggle('Dark-Black');
-                       });
-                       </script>
-                       """);
+                sj.add("<style>\n"
+                        + "                       .container{\n"
+                        + "                           width: 100%;\n"
+                        + "                           margin-right: 20px;\n"
+                        + "                           position: relative;\n"
+                        + "                       }\n"
+                        + "                       .theme_switch {\n"
+                        + "                       	line-height: 1.8;\n"
+                        + "                           opacity: 25%;\n"
+                        + "                           z-index: 9999;\n"
+                        + "                           position: fixed;\n"
+                        + "                           top: 20px;\n"
+                        + "                           right: 30px;\n"
+                        + "                           color: var(--colorTextPrimary);\n"
+                        + "                       	\n"
+                        + "                         width: 7.5rem;\n"
+                        + "                         height: 4rem;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input {\n"
+                        + "                         position: absolute;\n"
+                        + "                         top: 0;\n"
+                        + "                         left: 0;\n"
+                        + "                         z-index: 2;\n"
+                        + "                         opacity: 0;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch label {\n"
+                        + "                         cursor: pointer;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_background {\n"
+                        + "                         z-index: 1;\n"
+                        + "                         position: absolute;\n"
+                        + "                         width: 7.5rem;\n"
+                        + "                         height: 4rem;\n"
+                        + "                         border-radius: 2.5rem;\n"
+                        + "                         border: 0.25rem var(--widgetBorder);\n"
+                        + "                         background: linear-gradient(to right, var(--widgetBorder) 0%,#202020 100%);\n"
+                        + "                         transition: all 0.3s;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .fill {\n"
+                        + "                         background: #E9F8FD;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars1,\n"
+                        + "                       .theme_stars2 {\n"
+                        + "                         position: absolute;\n"
+                        + "                         height: 0.4rem;\n"
+                        + "                         width: 0.4rem; \n"
+                        + "                         background: #FFFFFF;\n"
+                        + "                         border-radius: 50%;\n"
+                        + "                         transition: 0.3s all ease;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars1 {\n"
+                        + "                         top: 6px;\n"
+                        + "                         right: 23px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars2 {\n"
+                        + "                         top: 40px;\n"
+                        + "                         right: 48px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars1:after,\n"
+                        + "                       .theme_stars1:before,\n"
+                        + "                       .theme_stars2:after,\n"
+                        + "                       .theme_stars2:before{\n"
+                        + "                         position: absolute;\n"
+                        + "                         content: \"\";\n"
+                        + "                         display: block;\n"
+                        + "                         height: 0.25rem;\n"
+                        + "                         width: 0.25rem;\n"
+                        + "                         background: #FFFFFF;\n"
+                        + "                         border-radius: 50%;\n"
+                        + "                         transition: 0.2s all ease;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars1:after {\n"
+                        + "                         top: 8px;\n"
+                        + "                         right: 20px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars1:before {\n"
+                        + "                         top: 18px;\n"
+                        + "                         right: -12px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars2:after {\n"
+                        + "                         top: -8px;\n"
+                        + "                         right: -16px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_stars2:before {\n"
+                        + "                         top: 6px;\n"
+                        + "                         right: -26px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_sun-moon {\n"
+                        + "                         z-index: 2;\n"
+                        + "                         position: absolute;\n"
+                        + "                         left: 0;\n"
+                        + "                         display: inline-block;\n"
+                        + "                         height: 3rem;\n"
+                        + "                         width: 3rem;\n"
+                        + "                         margin: 0.5rem;\n"
+                        + "                         background: #FFFDF2;\n"
+                        + "                         border-radius: 50%;\n"
+                        + "                         transition: all 0.5s ease;\n"
+                        + "                         \n"
+                        + "                         /* Default to Moon */\n"
+                        + "                         border: 0.25rem solid #DEE2C6;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_sun-moon .theme_dots {\n"
+                        + "                         position: absolute;\n"
+                        + "                         top: 3px;\n"
+                        + "                         left: 23px;\n"
+                        + "                         height: 1rem;\n"
+                        + "                         width: 1rem; \n"
+                        + "                         background: #EFEEDB;\n"
+                        + "                         border: 0.25rem solid #DEE2C6;\n"
+                        + "                         border-radius: 50%;\n"
+                        + "                         transition: 0.4s all ease;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_sun-moon .theme_dots:after,\n"
+                        + "                       .theme_sun-moon .theme_dots:before {\n"
+                        + "                         position: absolute;\n"
+                        + "                         content: \"\";\n"
+                        + "                         display: block;\n"
+                        + "                         height: 0.25rem;\n"
+                        + "                         width: 0.25rem;\n"
+                        + "                         background: #EFEEDB;\n"
+                        + "                         border: 0.25rem solid #DEE2C6;\n"
+                        + "                         border-radius: 50%;\n"
+                        + "                         transition: 0.4s all ease;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_sun-moon .theme_dots:after {\n"
+                        + "                         top: -4px;\n"
+                        + "                         left: -26px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_sun-moon .theme_dots:before {\n"
+                        + "                         top: 18px;\n"
+                        + "                         left: -10px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       /* Transition to Sun */\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon {\n"
+                        + "                         left: calc(100% - 4rem);\n"
+                        + "                         background: #F5EC59;\n"
+                        + "                         border-color: #E7C65C;\n"
+                        + "                         transform: rotate(-25deg);\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots,\n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:after,\n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:before {\n"
+                        + "                         background: #FFFFFF;\n"
+                        + "                         border-color: #FFFFFF;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots {\n"
+                        + "                         height: 1.5rem;\n"
+                        + "                         width: 1.5rem;\n"
+                        + "                         top: 0px;\n"
+                        + "                         left: -20px;\n"
+                        + "                         transform: rotate(25deg);\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:after {\n"
+                        + "                         height: 0.65rem;\n"
+                        + "                         width: 0.65rem;\n"
+                        + "                         top: 2px;\n"
+                        + "                         left: -12px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_sun-moon .theme_dots:before {\n"
+                        + "                         height: 0.4rem;\n"
+                        + "                         width: 0.4rem;\n"
+                        + "                         top: 6px;\n"
+                        + "                         left: 14px;\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_background .theme_stars1,\n"
+                        + "                       .theme_switch input:checked ~ .theme_background .theme_stars2 {\n"
+                        + "                         opacity: 0;\n"
+                        + "                         transform: translateY(2rem);\n"
+                        + "                       }\n"
+                        + "                       \n"
+                        + "                       .theme_switch input:checked ~ .theme_background {\n"
+                        + "                         border: 0.25rem solid #78C1D5;\n"
+                        + "                         background: linear-gradient(to right, #78C1D5 0%, #BBE7F5 100%);\n"
+                        + "                       }\n"
+                        + "                       </style>\n"
+                        + "                       <div class=\"container\">\n"
+                        + "                       <div class=\"theme_switch\">\n"
+                        + "                       <label for=\"theme_toggle\">\n"
+                        + "                       <input id=\"theme_toggle\" class=\"theme_toggle-switch\" type=\"checkbox\">\n"
+                        + "                       <div class=\"theme_sun-moon\"><div class=\"theme_dots\"></div></div>\n"
+                        + "                       <div class=\"theme_background\"><div class=\"theme_stars1\"></div><div class=\"theme_stars2\"></div></div>\n"
+                        + "                       </label>\n"
+                        + "                       </div>\n"
+                        + "                       </div>\n"
+                        + "                       <script>\n"
+                        + "                       document.getElementById(\"theme_toggle\").addEventListener(\"click\", function(){\n"
+                        + "                           document.getElementsByTagName('html')[0].classList.toggle('Light-Cream');\n"
+                        + "                           document.getElementsByTagName('html')[0].classList.toggle('Dark-Black');\n"
+                        + "                       });\n"
+                        + "                       </script>");
             }
         }
         return sj.toString();
