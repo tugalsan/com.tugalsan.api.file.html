@@ -92,7 +92,7 @@ public class TGS_FileHtmlUtils {
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
             if (addDefaultCss) {
-                sj.add("<div class=\"container\">\n");//DO NOT USE TEXT BLOCK GWT DOES NOT LIKE IT
+                sj.add("<div class=\"theme_container\">\n");//DO NOT USE TEXT BLOCK GWT DOES NOT LIKE IT
                 sj.add("<div class=\"theme_switch\">\n");
                 sj.add("<label for=\"theme_toggle\">\n");
                 sj.add("<input id=\"theme_toggle\" class=\"theme_toggle-switch\" type=\"checkbox\">\n");
