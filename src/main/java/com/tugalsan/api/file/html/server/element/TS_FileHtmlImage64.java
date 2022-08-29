@@ -11,7 +11,7 @@ import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
 
-    final private static TS_Log d = TS_Log.of(TS_FileHtmlImage64.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_FileHtmlImage64.class);
 
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
