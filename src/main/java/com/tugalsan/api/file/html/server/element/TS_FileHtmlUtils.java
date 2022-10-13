@@ -181,7 +181,7 @@ public class TS_FileHtmlUtils {
         <script>
         var myVar;
         
-        function myFunction() {
+        function filterTable() {
           myVar = setTimeout(showPage, 3000);
         }
         
@@ -191,7 +191,7 @@ public class TS_FileHtmlUtils {
         }
         </script>"""
         );
-        htm = TS_FileHtmlUtils.updateBodyTag(htm, "<body  onload=\"myFunction()\" >");
+        htm = TS_FileHtmlUtils.updateBodyTag(htm, "<body  onload=\"filterTable()\" >");
         htm = TS_FileHtmlUtils.appendToBodyStartAfter(htm, "<div id=\"loader\"></div><div style=\"display:none;\" id=\"myDiv\" class=\"animate-bottom\">");
         htm = TS_FileHtmlUtils.appendToBodyEndBefore(htm, "</div>");
         return TS_FileHtmlUtils.appendToBodyEndBefore(htm, heavyContent);
