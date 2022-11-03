@@ -38,11 +38,11 @@ public class TGS_FileHtmlUtils {
         //DOCTYPE
         sj.add("<!doctype html>");
         //HTML START
-//        if (addDefaultCss) {
-//            sj.add("<html lang=\"tr\" dir=\"ltr\" class=\"Dark-Black\">");
-//        } else {
-        sj.add("<html lang=\"tr\" dir=\"ltr\">");
-//        }
+        if (addDefaultCss) {
+            sj.add("<html lang=\"tr\" dir=\"ltr\" class=\"Light-Cream\">");
+        } else {
+            sj.add("<html lang=\"tr\" dir=\"ltr\">");
+        }
         //HTML->HEAD START
         sj.add("<head>");
         //HTML->HEAD->FAV ICON
