@@ -74,12 +74,20 @@ public class TGS_FileHtmlUtils {
             sj.add("window.boot_loader_main = function () {");
             sj.add("console.log(\"index.jsp: welcome\");");
             sj.add("};");
-            sj.add("</script>");
+            sj.add("var script = document.createElement('script');");
             if (optionalCustomDomain == null) {
-                sj.add("<script src=\"../res-common/res/js/boot_loader.js\"></script>");
+                sj.add("script.src = \"http://\"" + " + window.hostname + " + "\"/res-common/res/js/boot_loader.js\";");
             } else {
-                sj.add("<script src=\"" + optionalCustomDomain + "/res-common/res/js/boot_loader.js\"></script>");
+                sj.add("script.src = \"" + optionalCustomDomain  + "/res-common/res/js/boot_loader.js\";");
             }
+            sj.add("script.type = 'text/javascript';");
+            sj.add("document.head.appendChild(script);");
+            sj.add("</script>");
+//            if (optionalCustomDomain == null) {
+//                sj.add("<script src=\"../res-common/res/js/boot_loader.js\"></script>");
+//            } else {
+//                sj.add("<script src=\"" + optionalCustomDomain + "/res-common/res/js/boot_loader.js\"></script>");
+//            }
         } else {
             sj.add("<style>");
             sj.add("html * {");
