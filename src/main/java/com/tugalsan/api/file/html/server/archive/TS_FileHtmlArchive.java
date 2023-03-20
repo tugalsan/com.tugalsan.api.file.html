@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.server.archive;
 
+import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
@@ -163,7 +164,7 @@ public class TS_FileHtmlArchive {
      * Guesses the MIME type (or returns empty string)
      */
     public static String mimeType(CharSequence path) {
-        var pathStr = path.toString().toLowerCase();
+        var pathStr = TGS_CharSetCast.toLocaleLowerCase(path);
         for (var i = 0; i < MIME().size(); i += 2) {
             if (pathStr.contains(MIME().get(i))) {
                 return (MIME().get(i + 1));
@@ -183,7 +184,7 @@ public class TS_FileHtmlArchive {
             warn("Unknown mime type " + mimeTypeStr + ", using .dat");
             return (".dat");
         }
-        mimeTypeStr = "." + mimeTypeStr.substring(pos + 1).toLowerCase();
+        mimeTypeStr = "." + TGS_CharSetCast.toLocaleLowerCase(mimeTypeStr.substring(pos + 1));
         if (mimeTypeStr.equals(".font-sfnt")) {
             return (".ttf");
         }
@@ -292,7 +293,7 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.execute(() -> {
             var inputStr = input.toString();
             System.err.println("Inlining " + inputStr);
-            try ( var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+            try (var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 while (true) {
                     var source = new TS_FileHtmlArchiveByteStreamBuilder();
                     var linkType = source(in, out, source, css);
@@ -321,7 +322,7 @@ public class TS_FileHtmlArchive {
                                                         localFileName.getName() + ".html");
                                             }
                                             if (!localFileName.exists()) {
-                                                try ( var out2 = new FileOutputStream(localFileName)) {
+                                                try (var out2 = new FileOutputStream(localFileName)) {
                                                     int myLastChar = lastChar;
                                                     lastChar = -1;
                                                     inline(source.toString(), out2, false, null);
@@ -393,8 +394,8 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.execute(() -> {
             var inputStr = input.toString();
             System.err.println("Bundling " + inputStr);
-            try ( var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
-                try ( var out = new FileOutputStream(outFile)) {
+            try (var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+                try (var out = new FileOutputStream(outFile)) {
                     while (true) {
                         TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
                         LinkType linkType = source(in, out, source, css);
@@ -529,7 +530,7 @@ public class TS_FileHtmlArchive {
                     if (targetFile.exists()) {
                         error("File already exists: " + targetFile);
                     }
-                    try ( var out = new FileOutputStream(targetFile)) {
+                    try (var out = new FileOutputStream(targetFile)) {
                         inline(source, out, false, null);
                     }
                     break;
@@ -537,7 +538,7 @@ public class TS_FileHtmlArchive {
                     if (!targetFile.isDirectory()) {
                         error("Directory does not exist " + targetFile);
                     }
-                    try ( var out = new FileOutputStream(new File(targetFile, "index.html"))) {
+                    try (var out = new FileOutputStream(new File(targetFile, "index.html"))) {
                         inline(source, out, false, new File(targetFile, "resources.html"));
                     }
                     break;
