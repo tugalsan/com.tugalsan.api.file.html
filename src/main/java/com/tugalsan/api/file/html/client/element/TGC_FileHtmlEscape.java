@@ -1,12 +1,12 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.compiler.client.*;
+import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.file.html.client.*;
 
-public class TGC_FileHtmlEscape implements TGS_CompilerType1<String, CharSequence> {
+public class TGC_FileHtmlEscape implements TGS_CallableType1<String, CharSequence> {
 
     @Override
-    public String compile(CharSequence unsafeHtmlText) {
+    public String call(CharSequence unsafeHtmlText) {
         return TGC_FileHtmlUtils.escape(unsafeHtmlText);
     }
 }

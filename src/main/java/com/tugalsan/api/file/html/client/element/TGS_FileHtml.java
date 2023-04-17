@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.compiler.client.*;
+import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.file.html.client.*;
 import com.tugalsan.api.list.client.*;
 import java.util.*;
@@ -39,7 +39,7 @@ public class TGS_FileHtml {
     public boolean addTableBorder = false;
     public boolean addDivCenter = true;
 
-    public static TGS_FileHtml of(TGS_CompilerType1<String, CharSequence> escapeHTML, TGS_ListTable lstTable, CharSequence title, CharSequence hrefPngIcon) {
+    public static TGS_FileHtml of(TGS_CallableType1<String, CharSequence> escapeHTML, TGS_ListTable lstTable, CharSequence title, CharSequence hrefPngIcon) {
         var htmlTable = TGS_FileHtmlTable.of(escapeHTML, lstTable);
         var html = new TGS_FileHtml(title, null);
         html.getChilderen().add(htmlTable);

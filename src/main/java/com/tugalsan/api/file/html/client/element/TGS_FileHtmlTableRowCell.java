@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.compiler.client.*;
+import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.string.client.*;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -37,7 +37,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         return childeren;
     }
 
-    public TGS_FileHtmlTableRowCell(TGS_CompilerType1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
+    public TGS_FileHtmlTableRowCell(TGS_CallableType1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
         super(escapeHTML, "td", nameAndId);
         counter++;
         properties.add(new TGS_FileHtmlProperty("rowspan", rowspan));

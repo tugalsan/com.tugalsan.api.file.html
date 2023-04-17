@@ -1,13 +1,13 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.compiler.client.*;
+import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.list.client.*;
 import java.util.List;
 import java.util.stream.*;
 
 public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
 
-    public static TGS_FileHtmlTable of(TGS_CompilerType1<String, CharSequence> escapeHTML, TGS_ListTable table) {
+    public static TGS_FileHtmlTable of(TGS_CallableType1<String, CharSequence> escapeHTML, TGS_ListTable table) {
         var cs = table.getMaxColumnSize();
         var rs = table.getRowSize();
         var htmlTable = new TGS_FileHtmlTable("", "");
