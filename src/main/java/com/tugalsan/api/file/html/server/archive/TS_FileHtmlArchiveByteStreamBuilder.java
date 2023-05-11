@@ -1,6 +1,7 @@
 package com.tugalsan.api.file.html.server.archive;
 
 import com.tugalsan.api.unsafe.client.*;
+import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import java.io.IOException;
 import java.io.InputStream;
@@ -152,7 +153,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     public static TS_FileHtmlArchiveByteStreamBuilder forUrlOrFile(CharSequence source) {
         return TGS_UnSafe.call(() -> {
             var sourceStr = source.toString();
-            if (TGS_UrlUtils.isValidUrl(sourceStr)) {
+            if (TGS_UrlUtils.isValidUrl(TGS_Url.of(sourceStr))) {
                 return (new TS_FileHtmlArchiveByteStreamBuilder().append(new URL(sourceStr)));
             } else {
                 return (new TS_FileHtmlArchiveByteStreamBuilder().append(Path.of(sourceStr)));

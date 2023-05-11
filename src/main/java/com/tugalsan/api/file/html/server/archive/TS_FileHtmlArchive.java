@@ -19,10 +19,10 @@ public class TS_FileHtmlArchive {
         return TGS_UnSafe.call(() -> {
             var contextStr = context.toString();
             var fileNameStr = fileName.toString();
-            if (TGS_UrlUtils.isValidUrl(contextStr)) {
+            if (TGS_UrlUtils.isValidUrl(TGS_Url.of(contextStr))) {
                 return (new URL(new URL(contextStr), fileNameStr).toString());
             }
-            if (TGS_UrlUtils.isValidUrl(fileNameStr)) {
+            if (TGS_UrlUtils.isValidUrl(TGS_Url.of(fileNameStr))) {
                 return (fileNameStr);
             }
             return (new File(new File(contextStr).getParent(), fileNameStr).toString());
@@ -269,7 +269,7 @@ public class TS_FileHtmlArchive {
     public static File localNameFor(File outFile, CharSequence name, boolean overwrite) {
         return TGS_UnSafe.call(() -> {
             var nameStr = name.toString();
-            if (TGS_UrlUtils.isValidUrl(nameStr)) {
+            if (TGS_UrlUtils.isValidUrl(TGS_Url.of(nameStr))) {
                 try {
                     nameStr = new URL(nameStr).getFile().replaceAll("[/?<>\\:*|\"]", " ").trim();
                 } catch (MalformedURLException e) {
@@ -293,7 +293,7 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.run(() -> {
             var inputStr = input.toString();
             System.err.println("Inlining " + inputStr);
-            try (var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+            try (var in = TGS_UrlUtils.isValidUrl(TGS_Url.of(inputStr)) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 while (true) {
                     var source = new TS_FileHtmlArchiveByteStreamBuilder();
                     var linkType = source(in, out, source, css);
@@ -394,7 +394,7 @@ public class TS_FileHtmlArchive {
         TGS_UnSafe.run(() -> {
             var inputStr = input.toString();
             System.err.println("Bundling " + inputStr);
-            try (var in = TGS_UrlUtils.isValidUrl(inputStr) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
+            try (var in = TGS_UrlUtils.isValidUrl(TGS_Url.of(inputStr)) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 try (var out = new FileOutputStream(outFile)) {
                     while (true) {
                         TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
@@ -503,7 +503,7 @@ public class TS_FileHtmlArchive {
             File targetFile = null;
             if (args.length == 3) {
                 targetFile = new File(args[2]);
-            } else if (args[0].equals("INLINE") && !TGS_UrlUtils.isValidUrl(source)) {
+            } else if (args[0].equals("INLINE") && !TGS_UrlUtils.isValidUrl(TGS_Url.of(source))) {
                 File sourceFile = new File(source);
                 String fileName = sourceFile.getName();
                 int pos = fileName.lastIndexOf('.');
