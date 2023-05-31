@@ -8,7 +8,7 @@ module com.tugalsan.api.file.html {
     requires com.tugalsan.api.charset;
     requires com.tugalsan.api.log;
     requires com.tugalsan.api.string;
-    requires com.tugalsan.api.pack;
+    requires com.tugalsan.api.tuple;
     requires com.tugalsan.api.network;
     requires com.tugalsan.api.url;
     requires com.tugalsan.api.file;

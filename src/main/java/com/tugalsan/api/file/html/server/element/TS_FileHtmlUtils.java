@@ -2,7 +2,7 @@ package com.tugalsan.api.file.html.server.element;
 
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.txt.server.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import java.nio.file.*;
 import net.htmlparser.jericho.*;
@@ -98,12 +98,12 @@ public class TS_FileHtmlUtils {
         );
     }
 
-    public static TGS_Pack2<String, String> ribHeadContentAfterTitle_returnHtmlAndHeadContent(CharSequence html) {
+    public static TGS_Tuple2<String, String> ribHeadContentAfterTitle_returnHtmlAndHeadContent(CharSequence html) {
         var idxTitleEndAfter = TS_FileHtmlUtils.getIdxTitleEndAfter(html);
         var idxHeadEndBefore = TS_FileHtmlUtils.getIdxHeadEndBefore(html);
         var ribContent = html.subSequence(idxTitleEndAfter, idxHeadEndBefore).toString();
         var newHtm = TGS_StringUtils.concat(html.subSequence(0, idxTitleEndAfter), html.subSequence(idxHeadEndBefore, html.length()));
-        return new TGS_Pack2(newHtm, ribContent);
+        return new TGS_Tuple2(newHtm, ribContent);
     }
 
     public static String appendToHead(CharSequence html, CharSequence content) {

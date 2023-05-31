@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.server;
 
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import java.util.*;
 
 public class TGS_FileHtmlTabUtils {
@@ -68,7 +68,7 @@ public class TGS_FileHtmlTabUtils {
                }""";
     }
 
-    final public static String buttons(TGS_Pack2<String, String>... btnNamesAndIds) {
+    final public static String buttons(TGS_Tuple2<String, String>... btnNamesAndIds) {
         var sb = new StringBuilder();
         sb.append("<!-- Tab links -->\n");
         sb.append("<div class=\"tab\">\n");
