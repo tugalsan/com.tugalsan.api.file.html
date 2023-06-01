@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.server.element;
 
+import com.tugalsan.api.file.html.server.TS_FileHtmlUtils;
 import com.tugalsan.api.callable.client.*;
 
 public class TS_FileHtmlEscape implements TGS_CallableType1<String, CharSequence> {
