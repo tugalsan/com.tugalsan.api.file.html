@@ -1,4 +1,4 @@
-package com.tugalsan.api.file.html.server;
+package com.tugalsan.api.file.html.client;
 
 import com.tugalsan.api.tuple.client.*;
 import java.util.*;

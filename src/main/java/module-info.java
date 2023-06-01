@@ -3,6 +3,7 @@ module com.tugalsan.api.file.html {
     requires org.apache.commons.text;
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.os;
     requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.list;
     requires com.tugalsan.api.charset;
