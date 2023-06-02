@@ -6,66 +6,68 @@ import java.util.*;
 public class TGS_FileHtmlTabUtils {
 
     final public static String css() {
-        return """
-               /* Style the tab */
-               .tab {
-                 overflow: hidden;
-                 border: 1px solid #ccc;
-                 background-color: #f1f1f1;
-               }
-               
-               /* Style the buttons that are used to open the tab content */
-               .tab button {
-                 background-color: inherit;
-                 float: left;
-                 border: none;
-                 outline: none;
-                 cursor: pointer;
-                 padding: 14px 16px;
-                 transition: 0.3s;
-               }
-               
-               /* Change background color of buttons on hover */
-               .tab button:hover {
-                 background-color: #ddd;
-               }
-               
-               /* Create an active/current tablink class */
-               .tab button.active {
-                 background-color: #ccc;
-               }
-               
-               /* Style the tab content */
-               .tabcontent {
-                 display: none;
-                 padding: 6px 12px;
-                 border: 1px solid #ccc;
-                 border-top: none;
-               }""";
+        return new StringJoiner("\n")
+                .add("/* Style the tab */")
+                .add(".tab {")
+                .add("  overflow: hidden;")
+                .add("  border: 1px solid #ccc;")
+                .add("  background-color: #f1f1f1;")
+                .add("}")
+                .add("")
+                .add("/* Style the buttons that are used to open the tab content */")
+                .add(".tab button {")
+                .add("background-color: inherit;")
+                .add("  float: left;")
+                .add("  border: none;")
+                .add("  outline: none;")
+                .add("  cursor: pointer;")
+                .add("  padding: 14px 16px;")
+                .add("  transition: 0.3s;")
+                .add("}")
+                .add("")
+                .add("/* Change background color of buttons on hover */")
+                .add(".tab button:hover {")
+                .add("  background-color: #ddd;")
+                .add("}")
+                .add("")
+                .add("/* Create an active/current tablink class */")
+                .add(".tab button.active {")
+                .add("  background-color: #ccc;")
+                .add("}")
+                .add("")
+                .add("/* Style the tab content */")
+                .add(".tabcontent {")
+                .add("  display: none;")
+                .add("  padding: 6px 12px;")
+                .add("  border: 1px solid #ccc;")
+                .add("  border-top: none;")
+                .add("}")
+                .toString();
     }
 
     final public static String js() {
-        return """
-               function openTab(evt, cityName) {
-                 // Declare all variables
-                 var i, tabcontent, tablinks;
-               
-                 // Get all elements with class="tabcontent" and hide them
-                 tabcontent = document.getElementsByClassName("tabcontent");
-                 for (i = 0; i < tabcontent.length; i++) {
-                   tabcontent[i].style.display = "none";
-                 }
-               
-                 // Get all elements with class="tablinks" and remove the class "active"
-                 tablinks = document.getElementsByClassName("tablinks");
-                 for (i = 0; i < tablinks.length; i++) {
-                   tablinks[i].className = tablinks[i].className.replace(" active", "");
-                 }
-               
-                 // Show the current tab, and add an "active" class to the button that opened the tab
-                 document.getElementById(cityName).style.display = "block";
-                 evt.currentTarget.className += " active";
-               }""";
+        return new StringJoiner("\n")
+                .add("function openTab(evt, cityName) {")
+                .add("// Declare all variables")
+                .add("var i, tabcontent, tablinks;")
+                .add("")
+                .add("// Get all elements with class=\"tabcontent\" and hide them")
+                .add("tabcontent = document.getElementsByClassName(\"tabcontent\");")
+                .add("for (i = 0; i < tabcontent.length; i++) {")
+                .add("  tabcontent[i].style.display = \"none\";")
+                .add("}")
+                .add("")
+                .add("// Get all elements with class=\"tablinks\" and remove the class \"active\"")
+                .add("tablinks = document.getElementsByClassName(\"tablinks\");")
+                .add("for (i = 0; i < tablinks.length; i++) {")
+                .add("  tablinks[i].className = tablinks[i].className.replace(\" active\", \"\");")
+                .add("}")
+                .add("")
+                .add("// Show the current tab, and add an \"active\" class to the button that opened the tab")
+                .add("document.getElementById(cityName).style.display = \"block\";")
+                .add("  evt.currentTarget.className += \" active\";")
+                .add("}")
+                .toString();
     }
 
     final public static String buttons(TGS_Tuple2<String, String>... btnNamesAndIds) {
