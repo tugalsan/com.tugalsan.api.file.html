@@ -104,33 +104,33 @@ public class TGS_FileHtmlUtils {
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
             if (addDefaultCss) {
-                sj.add("<div class=\"theme_container\">\n");
-                sj.add("<div class=\"theme_switch\">\n");
-                sj.add("<label for=\"theme_toggle\">\n");
-                sj.add("<input id=\"theme_toggle\" class=\"theme_toggle-switch\" type=\"checkbox\">\n");
-                sj.add("<div class=\"theme_sun-moon\"><div class=\"theme_dots\"></div></div>\n");
-                sj.add("<div class=\"theme_background\"><div class=\"theme_stars1\"></div><div class=\"theme_stars2\"></div></div>\n");
-                sj.add("</label>\n");
-                sj.add("</div>\n");
-                sj.add("</div>\n");
-                sj.add("<script>\n");
-                sj.add("var theme_el = document.getElementsByTagName('html')[0];\n");
+                sj.add("<div class=\"theme_container\">");
+                sj.add("<div class=\"theme_switch\">");
+                sj.add("<label for=\"theme_toggle\">");
+                sj.add("<input id=\"theme_toggle\" class=\"theme_toggle-switch\" type=\"checkbox\">");
+                sj.add("<div class=\"theme_sun-moon\"><div class=\"theme_dots\"></div></div>");
+                sj.add("<div class=\"theme_background\"><div class=\"theme_stars1\"></div><div class=\"theme_stars2\"></div></div>");
+                sj.add("</label>");
+                sj.add("</div>");
+                sj.add("</div>");
+                sj.add("<script>");
+                sj.add("var theme_el = document.getElementsByTagName('html')[0];");
                 sj.add("if (theme_el.classList.contains('Dark-Black')){\n");
-                sj.add("	document.getElementById(\"theme_toggle\").checked=false;\n");
+                sj.add("	document.getElementById(\"theme_toggle\").checked=false;");
                 sj.add("}\n");
-                sj.add("if (theme_el.classList.contains('Light-Cream')){\n");
-                sj.add("	document.getElementById(\"theme_toggle\").checked=true;\n");
+                sj.add("if (theme_el.classList.contains('Light-Cream')){");
+                sj.add("	document.getElementById(\"theme_toggle\").checked=true;");
                 sj.add("}\n");
-                sj.add("document.getElementById(\"theme_toggle\").addEventListener(\"click\", function(){\n");
-                sj.add("	if (theme_el.classList.contains('Dark-Black')){\n");
-                sj.add("		theme_el.classList.remove('Dark-Black');\n");
-                sj.add("		theme_el.classList.add('Light-Cream');\n");
+                sj.add("document.getElementById(\"theme_toggle\").addEventListener(\"click\", function(){");
+                sj.add("	if (theme_el.classList.contains('Dark-Black')){");
+                sj.add("		theme_el.classList.remove('Dark-Black');");
+                sj.add("		theme_el.classList.add('Light-Cream');");
                 sj.add("	} else {\n");
-                sj.add("		theme_el.classList.add('Dark-Black');\n");
-                sj.add("		theme_el.classList.remove('Light-Cream');\n");
-                sj.add("	}\n");
-                sj.add("});\n");
-                sj.add("</script>\n");
+                sj.add("		theme_el.classList.add('Dark-Black');");
+                sj.add("		theme_el.classList.remove('Light-Cream');");
+                sj.add("	}");
+                sj.add("});");
+                sj.add("</script>");
             }
         }
         return sj.toString();
