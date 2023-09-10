@@ -221,9 +221,8 @@ public class TS_FileHtmlArchive {
     public static String getContentType(CharSequence urlString) {
         return TGS_UnSafe.call(() -> {
             var url = TGS_UnSafe.call(() -> new URL(urlString.toString()));
-            HttpURLConnection con = null;
-            try {
-                con = (HttpURLConnection) url.openConnection();
+            var con = (HttpURLConnection) url.openConnection();
+            try (AutoCloseable conc = () -> con.disconnect()) {
                 con.setRequestMethod("HEAD");
                 if (isRedirect(con.getResponseCode())) {
                     String newUrl = con.getHeaderField("Location"); // get
@@ -239,12 +238,6 @@ public class TS_FileHtmlArchive {
                     contentType = contentType.substring(0, contentType.indexOf(' '));
                 }
                 return contentType;
-            } catch (Exception e) {
-                throw e;
-            } finally {
-                if (con != null) {
-                    con.disconnect();
-                }
             }
         });
     }
@@ -299,7 +292,7 @@ public class TS_FileHtmlArchive {
                     var linkType = source(in, out, source, css);
                     big:
                     switch (linkType) {
-                        case LINK:
+                        case LINK -> {
                             var link = source.toString();
                             if (link.contains("stylesheet") && styleSheetPath(link) != null) {
                                 new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("/>\n<style>\n").writeTo(out);
@@ -309,13 +302,13 @@ public class TS_FileHtmlArchive {
                                 source.writeTo(out);
                                 out.write('>');
                             }
-                            break;
-                        case HREF:
+                        }
+                        case HREF -> {
                             if (hrefFolder != null && !source.startsWithASCII("#")) {
                                 var remoteName = remoteName(inputStr, source.toString());
                                 try {
                                     switch (getContentType(remoteName)) {
-                                        case "text/html":
+                                        case "text/html" -> {
                                             var localFileName = localNameFor(hrefFolder, source.toString(), true);
                                             if (!localFileName.getName().endsWith(".html")) {
                                                 localFileName = new File(localFileName.getParent(),
@@ -331,8 +324,9 @@ public class TS_FileHtmlArchive {
                                             }
                                             new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
                                             break big;
-                                        case "application/pdf":
-                                            localFileName = localNameFor(hrefFolder, source.toString(), true);
+                                        }
+                                        case "application/pdf" -> {
+                                            File localFileName = localNameFor(hrefFolder, source.toString(), true);
                                             if (!localFileName.getName().endsWith(".pdf")) {
                                                 localFileName = new File(localFileName.getParent(),
                                                         localFileName.getName() + ".pdf");
@@ -343,21 +337,21 @@ public class TS_FileHtmlArchive {
                                             }
                                             new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
                                             break big;
+                                        }
                                     }
-                                } catch (Exception e) {
+                                } catch (IOException e) {
                                     warn(e.toString());
                                 }
                             }
                             out.write('"');
                             source.writeTo(out);
                             out.write('"');
-                            break;
-                        case IMPORT:
+                        }
+                        case IMPORT -> {
                             new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8(")\n").writeTo(out);
                             inline(remoteName(inputStr, source.toString()), out, true, hrefFolder);
-                            break;
-                        case URL:
-                        case SRC:
+                        }
+                        case URL, SRC -> {
                             if (source.startsWithASCII("#") || source.startsWithASCII("data:")) {
                                 out.write('"');
                                 source.writeTo(out);
@@ -378,9 +372,10 @@ public class TS_FileHtmlArchive {
                             if (linkType == LinkType.URL) {
                                 out.write(')');
                             }
-                            break;
-                        default:
+                        }
+                        default -> {
                             return;
+                        }
                     }
                 }
             }
@@ -400,7 +395,7 @@ public class TS_FileHtmlArchive {
                         TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
                         LinkType linkType = source(in, out, source, css);
                         switch (linkType) {
-                            case LINK:
+                            case LINK -> {
                                 String link = source.toString();
                                 if (link.contains("stylesheet") && styleSheetPath(link) != null) {
                                     File localStyleFile = localNameFor(outFile, styleSheetPath(link), false);
@@ -411,19 +406,18 @@ public class TS_FileHtmlArchive {
                                     source.writeTo(out);
                                     out.write('>');
                                 }
-                                break;
-                            case HREF:
+                            }
+                            case HREF -> {
                                 out.write('"');
                                 source.writeTo(out);
                                 out.write('"');
-                                break;
-                            case IMPORT:
+                            }
+                            case IMPORT -> {
                                 File localStyleFile = localNameFor(outFile, source.toString(), false);
                                 new TS_FileHtmlArchiveByteStreamBuilder().append('\"').appendUTF8(localStyleFile.getName()).appendUTF8("\")").writeTo(out);
                                 bundle(remoteName(inputStr, source.toString()), localStyleFile, true);
-                                break;
-                            case URL:
-                            case SRC:
+                            }
+                            case URL, SRC -> {
                                 if (source.startsWithASCII("#")) {
                                     out.write('"');
                                     source.writeTo(out);
@@ -446,9 +440,10 @@ public class TS_FileHtmlArchive {
                                 if (linkType == LinkType.URL) {
                                     out.write(')');
                                 }
-                                break;
-                            default:
+                            }
+                            default -> {
                                 return;
+                            }
                         }
                     }
                 }
@@ -516,7 +511,7 @@ public class TS_FileHtmlArchive {
                 helpAndExit();
             }
             switch (args[0]) {
-                case "BUNDLE":
+                case "BUNDLE" -> {
                     if (!targetFile.isDirectory()) {
                         error("Target directory does not exist " + targetFile);
                     }
@@ -525,25 +520,24 @@ public class TS_FileHtmlArchive {
                         error("File already exists: " + targetFile);
                     }
                     bundle(source, targetFile, false);
-                    break;
-                case "INLINE":
+                }
+                case "INLINE" -> {
                     if (targetFile.exists()) {
                         error("File already exists: " + targetFile);
                     }
                     try (var out = new FileOutputStream(targetFile)) {
                         inline(source, out, false, null);
                     }
-                    break;
-                case "INLINE+":
+                }
+                case "INLINE+" -> {
                     if (!targetFile.isDirectory()) {
                         error("Directory does not exist " + targetFile);
                     }
                     try (var out = new FileOutputStream(new File(targetFile, "index.html"))) {
                         inline(source, out, false, new File(targetFile, "resources.html"));
                     }
-                    break;
-                default:
-                    helpAndExit();
+                }
+                default -> helpAndExit();
             }
         });
     }
