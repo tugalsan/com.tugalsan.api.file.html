@@ -1,8 +1,8 @@
 package com.tugalsan.api.file.html.server.element;
 
+import com.tugalsan.api.crypto.client.TGS_CryptUtils;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
-import com.tugalsan.api.file.txt.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.*;
@@ -64,7 +64,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             imageFileType = TGS_UrlUtils.getFileNameType(url);
         } else {
             var path = Path.of(fileLocStr);
-            base64 = TS_FileTxtUtils.toBase64(path);
+            base64 = TGS_CryptUtils.encrypt64(TS_FileUtils.read(path));
             imageFileType = TS_FileUtils.getNameType(path);
         }
         d.ci("cons", "base64.len", base64 == null ? "null" : base64.length());
