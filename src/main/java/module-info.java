@@ -1,4 +1,5 @@
 module com.tugalsan.api.file.html {
+    requires gwt.user;
     requires jericho.html;
     requires org.apache.commons.text;
     requires com.tugalsan.api.unsafe;
