@@ -11,6 +11,9 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
         var cs = table.getMaxColumnSize();
         var rs = table.getRowSize();
         var htmlTable = new TGS_FileHtmlTable("", "");
+        if (table.isHeaderBold()){
+            htmlTable.setHeaderRowCount(1);
+        }
         IntStream.range(0, rs).forEachOrdered(ri -> {
             var row = new TGS_FileHtmlTableRow("");
             htmlTable.getChilderen().add(row);
