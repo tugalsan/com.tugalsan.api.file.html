@@ -32,7 +32,7 @@ public class TGS_FileHtmlElement {
         return syleClassName;
     }
 
-    public void setSyleClassName(String syleClassName) {
+    final public void setSyleClassName(String syleClassName) {
         this.syleClassName = syleClassName;
     }
     private String syleClassName;

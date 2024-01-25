@@ -34,69 +34,81 @@ public class TS_FileHtmlArchive {
      */
     public static enum LinkType {
         NONE(";lanv;lna;v;nv;urunrenunvi", false) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
             }
         },
         SRC(" src=", false) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
                 TGS_UnSafe.run(() -> {
-                    int c = in.read();
+                    var c = in.read();
                     while (c == ' ') {
                         c = in.read();
                     }
                     switch (c) {
-                        case '\'':
+                        case '\'' -> {
                             result.appendASCII(in, "'");
                             return;
-                        case '\"':
+                        }
+                        case '\"' -> {
                             result.appendASCII(in, "\"");
                             return;
-                        default:
+                        }
+                        default -> {
                             result.append(c);
                             while ((c = in.read()) != -1 && !Character.isWhitespace(c) && c != '>') {
                                 result.append(c);
                             }
                             lastChar = c;
                             return;
+                        }
                     }
                 });
             }
         },
         HREF(" href=", false) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
                 TGS_UnSafe.run(() -> SRC.parse(in, result));
             }
         },
         LINK("<link ", false) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
                 TGS_UnSafe.run(() -> result.appendASCII(in, ">"));
             }
         },
         IMPORT("@import url(", true) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
                 TGS_UnSafe.run(() -> URL.parse(in, result));
             }
         },
         URL("url(", true) {
+            @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
                 TGS_UnSafe.run(() -> {
-                    int c = in.read();
+                    var c = in.read();
                     while (c == ' ') {
                         c = in.read();
                     }
                     switch (c) {
-                        case '\'':
+                        case '\'' -> {
                             result.appendASCII(in, "'");
                             new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
                             return;
-                        case '\"':
+                        }
+                        case '\"' -> {
                             result.appendASCII(in, "\"");
                             new TS_FileHtmlArchiveByteStreamBuilder().appendASCII(in, ")");
                             return;
-                        default:
+                        }
+                        default -> {
                             result.append(c);
                             result.appendASCII(in, ")");
                             return;
+                        }
                     }
                 });
             }
@@ -133,7 +145,7 @@ public class TS_FileHtmlArchive {
             while ((c = in.read()) != -1) {
                 out.write(c);
                 for (var i = 0; i < pos.length; i++) {
-                    LinkType linkType = LinkType.values()[i];
+                    var linkType = LinkType.values()[i];
                     if (pos[i] < linkType.tag.length() && Character.toLowerCase(c) == linkType.tag.charAt(pos[i])) {
                         pos[i]++;
                     } else if (Character.toLowerCase(c) == linkType.tag.charAt(pos[0])) {
@@ -199,7 +211,7 @@ public class TS_FileHtmlArchive {
      * Extracts the style sheet path from a <link...>
      */
     public static String styleSheetPath(CharSequence link) {
-        Matcher m = Pattern.compile("href\\s*=\\s*'([^']+)'").matcher(link);
+        var m = Pattern.compile("href\\s*=\\s*'([^']+)'").matcher(link);
         if (m.find()) {
             return (m.group(1));
         }
@@ -225,7 +237,7 @@ public class TS_FileHtmlArchive {
             try (AutoCloseable conc = () -> con.disconnect()) {
                 con.setRequestMethod("HEAD");
                 if (isRedirect(con.getResponseCode())) {
-                    String newUrl = con.getHeaderField("Location"); // get
+                    var newUrl = con.getHeaderField("Location"); // get
                     // redirect
                     // url from
                     // "location"
@@ -233,7 +245,7 @@ public class TS_FileHtmlArchive {
                     // field
                     return getContentType(newUrl);
                 }
-                String contentType = con.getContentType();
+                var contentType = con.getContentType();
                 if (contentType.indexOf(' ') != -1) {
                     contentType = contentType.substring(0, contentType.indexOf(' '));
                 }
@@ -271,7 +283,7 @@ public class TS_FileHtmlArchive {
                 }
             }
             nameStr = new File(nameStr).getName();
-            File targetFile = new File(outFile.getParent(), nameStr);
+            var targetFile = new File(outFile.getParent(), nameStr);
             if (targetFile.exists() && !overwrite || nameStr.length() < 5) {
                 targetFile = File.createTempFile("resource-", fileExtension(mimeType(nameStr)), outFile.getParentFile());
             }
@@ -316,7 +328,7 @@ public class TS_FileHtmlArchive {
                                             }
                                             if (!localFileName.exists()) {
                                                 try (var out2 = new FileOutputStream(localFileName)) {
-                                                    int myLastChar = lastChar;
+                                                    var myLastChar = lastChar;
                                                     lastChar = -1;
                                                     inline(source.toString(), out2, false, null);
                                                     lastChar = myLastChar;
@@ -326,7 +338,7 @@ public class TS_FileHtmlArchive {
                                             break big;
                                         }
                                         case "application/pdf" -> {
-                                            File localFileName = localNameFor(hrefFolder, source.toString(), true);
+                                            var localFileName = localNameFor(hrefFolder, source.toString(), true);
                                             if (!localFileName.getName().endsWith(".pdf")) {
                                                 localFileName = new File(localFileName.getParent(),
                                                         localFileName.getName() + ".pdf");
@@ -365,7 +377,7 @@ public class TS_FileHtmlArchive {
                                 out.write('"');
                             } else {
                                 out.write('"');
-                                String sourceFile = remoteName(inputStr, source.toString());
+                                var sourceFile = remoteName(inputStr, source.toString());
                                 TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).toDataUri(mimeType(source.toString())).writeTo(out);
                                 out.write('"');
                             }
@@ -392,13 +404,13 @@ public class TS_FileHtmlArchive {
             try (var in = TGS_UrlUtils.isValidUrl(TGS_Url.of(inputStr)) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
                 try (var out = new FileOutputStream(outFile)) {
                     while (true) {
-                        TS_FileHtmlArchiveByteStreamBuilder source = new TS_FileHtmlArchiveByteStreamBuilder();
-                        LinkType linkType = source(in, out, source, css);
+                        var source = new TS_FileHtmlArchiveByteStreamBuilder();
+                        var linkType = source(in, out, source, css);
                         switch (linkType) {
                             case LINK -> {
-                                String link = source.toString();
+                                var link = source.toString();
                                 if (link.contains("stylesheet") && styleSheetPath(link) != null) {
-                                    File localStyleFile = localNameFor(outFile, styleSheetPath(link), false);
+                                    var localStyleFile = localNameFor(outFile, styleSheetPath(link), false);
                                     bundle(remoteName(inputStr, styleSheetPath(link)), localStyleFile, true);
                                     new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("rel=\"stylesheet\" href=\"" + localStyleFile.getName() + "\" />")
                                             .writeTo(out);
@@ -413,7 +425,7 @@ public class TS_FileHtmlArchive {
                                 out.write('"');
                             }
                             case IMPORT -> {
-                                File localStyleFile = localNameFor(outFile, source.toString(), false);
+                                var localStyleFile = localNameFor(outFile, source.toString(), false);
                                 new TS_FileHtmlArchiveByteStreamBuilder().append('\"').appendUTF8(localStyleFile.getName()).appendUTF8("\")").writeTo(out);
                                 bundle(remoteName(inputStr, source.toString()), localStyleFile, true);
                             }
@@ -423,17 +435,17 @@ public class TS_FileHtmlArchive {
                                     source.writeTo(out);
                                     out.write('"');
                                 } else if (source.startsWithASCII("data:")) {
-                                    String[] mimeType = new String[1];
+                                    var mimeType = new String[1];
                                     source = source.fromDataUri(mimeType);
-                                    File localFileName = localNameFor(outFile, "resource-0" + fileExtension(mimeType[0]),
+                                    var localFileName = localNameFor(outFile, "resource-0" + fileExtension(mimeType[0]),
                                             false);
                                     source.writeTo(localFileName.toPath());
                                     new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
                                 } else if (source.startsWithASCII("omitted-svg-font")) {
                                     // Do nothing
                                 } else {
-                                    String sourceFile = remoteName(inputStr, source.toString());
-                                    File localFileName = localNameFor(outFile, source.toString(), false);
+                                    var sourceFile = remoteName(inputStr, source.toString());
+                                    var localFileName = localNameFor(outFile, source.toString(), false);
                                     TS_FileHtmlArchiveByteStreamBuilder.forUrlOrFile(sourceFile).writeTo(localFileName.toPath());
                                     new TS_FileHtmlArchiveByteStreamBuilder().appendUTF8("\"" + localFileName.getName() + "\"").writeTo(out);
                                 }
@@ -470,8 +482,15 @@ public class TS_FileHtmlArchive {
      * Prints the help and exits
      */
     public static void helpAndExit() {
-        error("HTMLArchiver (BUNDLE|INLINE) <source> <target>\n\n"
-                + "Creates an archive of an HTML file or a Website (given by <source>), in one of the following ways:\n* BUNDLE: Copies the source and all referenced resources to a directory. <target> has to be a virgin directory.\n* INLINE: Creates a single HTML file from the source, which contains all resources. <target> has to be a non-existing file.\n\nSee https://suchanek.name/programs/HTMLArchiver\n");
+        error("""
+              HTMLArchiver (BUNDLE|INLINE) <source> <target>
+              
+              Creates an archive of an HTML file or a Website (given by <source>), in one of the following ways:
+              * BUNDLE: Copies the source and all referenced resources to a directory. <target> has to be a virgin directory.
+              * INLINE: Creates a single HTML file from the source, which contains all resources. <target> has to be a non-existing file.
+              
+              See https://suchanek.name/programs/HTMLArchiver
+              """);
     }
 
     /**
@@ -494,14 +513,14 @@ public class TS_FileHtmlArchive {
             if (args.length != 3 && args.length != 2) {
                 helpAndExit();
             }
-            String source = args[1];
-            File targetFile = null;
+            var source = args[1];
+            File targetFile;
             if (args.length == 3) {
                 targetFile = new File(args[2]);
             } else if (args[0].equals("INLINE") && !TGS_UrlUtils.isValidUrl(TGS_Url.of(source))) {
-                File sourceFile = new File(source);
-                String fileName = sourceFile.getName();
-                int pos = fileName.lastIndexOf('.');
+                var sourceFile = new File(source);
+                var fileName = sourceFile.getName();
+                var pos = fileName.lastIndexOf('.');
                 if (pos != -1) {
                     fileName = fileName.substring(0, pos);
                 }
@@ -509,6 +528,7 @@ public class TS_FileHtmlArchive {
                 targetFile = new File(sourceFile.getParentFile(), fileName);
             } else {
                 helpAndExit();
+                return;
             }
             switch (args[0]) {
                 case "BUNDLE" -> {
@@ -537,7 +557,8 @@ public class TS_FileHtmlArchive {
                         inline(source, out, false, new File(targetFile, "resources.html"));
                     }
                 }
-                default -> helpAndExit();
+                default ->
+                    helpAndExit();
             }
         });
     }

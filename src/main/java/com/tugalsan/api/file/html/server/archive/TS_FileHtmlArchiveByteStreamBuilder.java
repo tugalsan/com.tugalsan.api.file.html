@@ -3,9 +3,9 @@ package com.tugalsan.api.file.html.server.archive;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +29,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder appendUTF8(CharSequence str) {
-        ByteBuffer b = StandardCharsets.UTF_8.encode(str.toString());
+        var b = StandardCharsets.UTF_8.encode(str.toString());
         while (b.hasRemaining()) {
             append(b.get());
         }
@@ -37,7 +37,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder append(byte[] s) {
-        for (int i = 0; i < s.length; i++) {
+        for (var i = 0; i < s.length; i++) {
             append(s[i]);
         }
         return (this);
@@ -113,7 +113,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
         if (!startsWithASCII("data:")) {
             return (null);
         }
-        TS_FileHtmlArchiveByteStreamBuilder mimeBytes = new TS_FileHtmlArchiveByteStreamBuilder();
+        var mimeBytes = new TS_FileHtmlArchiveByteStreamBuilder();
         int i;
         for (i = 5; i < len && i < 100 && data[i] != ','; i++) {
             mimeBytes.append(data[i]);
@@ -154,7 +154,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
         return TGS_UnSafe.call(() -> {
             var sourceStr = source.toString();
             if (TGS_UrlUtils.isValidUrl(TGS_Url.of(sourceStr))) {
-                return (new TS_FileHtmlArchiveByteStreamBuilder().append(new URL(sourceStr)));
+                return (new TS_FileHtmlArchiveByteStreamBuilder().append(URI.create(sourceStr).toURL()));
             } else {
                 return (new TS_FileHtmlArchiveByteStreamBuilder().append(Path.of(sourceStr)));
             }
