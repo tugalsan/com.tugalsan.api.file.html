@@ -1,6 +1,7 @@
 package com.tugalsan.api.file.html.client;
 
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.url.client.TGS_Url;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.StringJoiner;
@@ -33,7 +34,7 @@ public class TGS_FileHtmlUtils {
 //    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, CharSequence optional_hrefPngIcon, boolean addDivCenter) {
 //        return beginLines(browserTitle, addDefaultCss, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, null);
 //    }
-    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, CharSequence optional_hrefPngIcon, boolean addDivCenter, CharSequence optionalCustomDomain) {
+    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url optionalCustomDomain) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");

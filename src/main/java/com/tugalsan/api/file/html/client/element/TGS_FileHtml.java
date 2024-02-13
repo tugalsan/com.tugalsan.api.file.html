@@ -8,9 +8,9 @@ import java.util.*;
 
 public class TGS_FileHtml {
 
-    public String browserTitle;
-    public String browserIconHrefPng;
-    public CharSequence optionalCustomDomain;
+    public CharSequence browserTitle;
+    public TGS_Url browserIconHrefPng;
+    public TGS_Url optionalCustomDomain;
 
     public List<TGS_FileHtmlElement> getChilderen() {
         return childeren;
@@ -21,9 +21,9 @@ public class TGS_FileHtml {
         this(pageTitle, hrefPngIcon, null);
     }
 
-    public TGS_FileHtml(CharSequence pageTitle, TGS_Url hrefPngIcon, CharSequence optionalCustomDomain) {
-        this.browserTitle = pageTitle == null ? null : pageTitle.toString();
-        this.browserIconHrefPng = hrefPngIcon == null ? null : hrefPngIcon.toString();
+    public TGS_FileHtml(CharSequence pageTitle, TGS_Url hrefPngIcon, TGS_Url optionalCustomDomain) {
+        this.browserTitle = pageTitle;
+        this.browserIconHrefPng = hrefPngIcon;
         this.optionalCustomDomain = optionalCustomDomain;
         childeren = TGS_ListUtils.of();
     }
