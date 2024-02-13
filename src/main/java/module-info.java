@@ -1,5 +1,6 @@
 module com.tugalsan.api.file.html {
     requires gwt.user;
+    requires java.desktop;
     requires jericho.html;
     requires org.apache.commons.text;
     requires com.tugalsan.api.unsafe;
@@ -16,6 +17,7 @@ module com.tugalsan.api.file.html {
     requires com.tugalsan.api.url;
     requires com.tugalsan.api.file;
     requires com.tugalsan.api.file.txt;
+    requires com.tugalsan.api.file.common;
     exports com.tugalsan.api.file.html.client;
     exports com.tugalsan.api.file.html.client.element;
     exports com.tugalsan.api.file.html.server;
