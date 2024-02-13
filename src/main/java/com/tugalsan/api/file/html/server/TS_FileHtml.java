@@ -17,7 +17,7 @@ import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
 import java.util.Objects;
-import com.tugalsan.api.file.common.server.TS_FileTmcrCodeFontTags;
+import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
 import com.tugalsan.api.file.common.server.TS_FileCommonBall;
 
 public class TS_FileHtml extends TS_FileCommonInterface {
@@ -541,37 +541,37 @@ public class TS_FileHtml extends TS_FileCommonInterface {
         if (isClosed()) {
             return "#000000";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_BLUE())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_BLUE())) {
             return "#0000FF";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_CYAN())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_CYAN())) {
             return "#00FFFF";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_DARK_GRAY())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_DARK_GRAY())) {
             return "#505050";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_GRAY())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GRAY())) {
             return "#808080";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_GREEN())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GREEN())) {
             return "#008000";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_LIGHT_GRAY())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_LIGHT_GRAY())) {
             return "#D3D3D3";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_MAGENTA())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_MAGENTA())) {
             return "#FF00FF";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_ORANGE())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_ORANGE())) {
             return "#FFA500";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_PINK())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_PINK())) {
             return "#FFC0CB";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_RED())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_RED())) {
             return "#FF0000";
         }
-        if (Objects.equals(macroGlobals.fontColor, TS_FileTmcrCodeFontTags.CODE_TOKEN_FONT_COLOR_YELLOW())) {
+        if (Objects.equals(macroGlobals.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_YELLOW())) {
             return "#FFFF00";
         }
         return customCssForBlackText == null ? "#000000" : customCssForBlackText;
