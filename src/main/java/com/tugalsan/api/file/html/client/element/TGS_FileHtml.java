@@ -3,6 +3,7 @@ package com.tugalsan.api.file.html.client.element;
 import com.tugalsan.api.callable.client.*;
 import com.tugalsan.api.file.html.client.*;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.url.client.TGS_Url;
 import java.util.*;
 
 public class TGS_FileHtml {
@@ -16,11 +17,11 @@ public class TGS_FileHtml {
     }
     private final List<TGS_FileHtmlElement> childeren;
 
-    public TGS_FileHtml(CharSequence pageTitle, CharSequence hrefPngIcon) {
+    public TGS_FileHtml(CharSequence pageTitle, TGS_Url hrefPngIcon) {
         this(pageTitle, hrefPngIcon, null);
     }
 
-    public TGS_FileHtml(CharSequence pageTitle, CharSequence hrefPngIcon, CharSequence optionalCustomDomain) {
+    public TGS_FileHtml(CharSequence pageTitle, TGS_Url hrefPngIcon, CharSequence optionalCustomDomain) {
         this.browserTitle = pageTitle == null ? null : pageTitle.toString();
         this.browserIconHrefPng = hrefPngIcon == null ? null : hrefPngIcon.toString();
         this.optionalCustomDomain = optionalCustomDomain;

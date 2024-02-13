@@ -33,15 +33,15 @@ public class TS_FileHtml extends TS_FileCommonInterface {
     public TS_FileCommonBall macroGlobals;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
-    private final String favIconPng;
-    private final TGS_CallableType2<String, TS_FileHtml, String> convertLocalLocationToRemote;
+    private final TGS_Url favIconPng;
+    private final TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
 
     public boolean base64() {
         return isBase64;
     }
     private final boolean isBase64;
 
-    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, String favIconPng, TGS_CallableType2<String, TS_FileHtml, String> convertLocalLocationToRemote) {
+    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Url favIconPng, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
         super(enabled, localFile, remoteFile);
         this.isBase64 = isBase64;
         this.fontHeightScalePercent = fontHeightScalePercent;
@@ -51,7 +51,7 @@ public class TS_FileHtml extends TS_FileCommonInterface {
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonBall macroGlobals, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, String favIconPng, TGS_CallableType2<String, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
+    public static void use(boolean enabled, TS_FileCommonBall macroGlobals, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Url favIconPng, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, favIconPng, convertLocalLocationToRemote);
         try {
             instance.use_init(macroGlobals);
@@ -155,8 +155,8 @@ public class TS_FileHtml extends TS_FileCommonInterface {
 //                sh = ((int) (selectedWidth * height / width) + "px");
             }
             var image = isBase64
-                    ? new TS_FileHtmlImage64(TS_FileHtmlImage64.class.getSimpleName() + "_" + imageCounter, imageLoc.startsWith("http") ? mImageLoc : imageLoc, sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270))
-                    : new TS_FileHtmlImage(TS_FileHtmlImage.class.getSimpleName() + "_" + imageCounter, mImageLoc, sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270));
+                    ? new TS_FileHtmlImage64(TS_FileHtmlImage64.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString().startsWith("http") ? mImageLoc.toString() : imageLoc, sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270))
+                    : new TS_FileHtmlImage(TS_FileHtmlImage.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString(), sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270));
             if (tableRowCell == null) {
                 webWriter.getChilderen().add(image);
             } else {
