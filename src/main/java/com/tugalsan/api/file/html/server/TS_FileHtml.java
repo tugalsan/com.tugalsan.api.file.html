@@ -33,7 +33,6 @@ public class TS_FileHtml extends TS_FileCommonInterface {
     public TS_FileCommonBall macroGlobals;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
-    private final TGS_Url favIconPng;
     private final TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
 
     public boolean base64() {
@@ -41,18 +40,17 @@ public class TS_FileHtml extends TS_FileCommonInterface {
     }
     private final boolean isBase64;
 
-    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Url favIconPng, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
+    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
         super(enabled, localFile, remoteFile);
         this.isBase64 = isBase64;
         this.fontHeightScalePercent = fontHeightScalePercent;
         this.widthScalePercent = widthScalePercent;
-        this.favIconPng = favIconPng;
         this.convertLocalLocationToRemote = convertLocalLocationToRemote;
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonBall macroGlobals, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Url favIconPng, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
-        var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, favIconPng, convertLocalLocationToRemote);
+    public static void use(boolean enabled, TS_FileCommonBall macroGlobals, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
+        var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
             instance.use_init(macroGlobals);
             web.run(instance);
@@ -69,7 +67,7 @@ public class TS_FileHtml extends TS_FileCommonInterface {
         if (isClosed()) {
             return;
         }
-        webWriter = new TGS_FileHtml(macroGlobals.funcName, favIconPng, macroGlobals.customDomain);
+        webWriter = new TGS_FileHtml(macroGlobals.funcName, macroGlobals.favIconPng, macroGlobals.customDomain);
     }
 
     @Override
