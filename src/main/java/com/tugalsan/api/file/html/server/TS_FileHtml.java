@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server;
 
 import com.tugalsan.api.callable.client.TGS_CallableType2;
-import com.tugalsan.api.file.common.server.TS_FileCommonInterface;
+import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
 import com.tugalsan.api.file.html.server.element.*;
 import com.tugalsan.api.file.html.client.*;
 import com.tugalsan.api.string.server.*;
@@ -18,9 +18,9 @@ import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
 import java.util.Objects;
 import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
-import com.tugalsan.api.file.common.server.TS_FileCommonBall;
+import com.tugalsan.api.file.common.server.TS_FileCommonConfig;
 
-public class TS_FileHtml extends TS_FileCommonInterface {
+public class TS_FileHtml extends TS_FileCommonAbstract {
 
     final private static TS_Log d = TS_Log.of(TS_FileHtml.class);
 
@@ -30,7 +30,7 @@ public class TS_FileHtml extends TS_FileCommonInterface {
 
     public TGS_FileHtml webWriter;
 
-    public TS_FileCommonBall fileCommonBall;
+    public TS_FileCommonConfig fileCommonConfig;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
     private final TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
@@ -49,10 +49,10 @@ public class TS_FileHtml extends TS_FileCommonInterface {
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonBall fileCommonBall, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
+    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
-            instance.use_init(fileCommonBall);
+            instance.use_init(fileCommonConfig);
             web.run(instance);
         } catch (Exception e) {
             instance.saveFile(e.getMessage());
@@ -62,12 +62,12 @@ public class TS_FileHtml extends TS_FileCommonInterface {
         }
     }
 
-    private void use_init(TS_FileCommonBall fileCommonBall) {
-        this.fileCommonBall = fileCommonBall;
+    private void use_init(TS_FileCommonConfig fileCommonConfig) {
+        this.fileCommonConfig = fileCommonConfig;
         if (isClosed()) {
             return;
         }
-        webWriter = new TGS_FileHtml(fileCommonBall.funcName, fileCommonBall.favIconPng, fileCommonBall.customDomain);
+        webWriter = new TGS_FileHtml(fileCommonConfig.funcName, fileCommonConfig.favIconPng, fileCommonConfig.customDomain);
     }
 
     @Override
@@ -134,8 +134,8 @@ public class TS_FileHtml extends TS_FileCommonInterface {
 //            d.ci("addImageWeb", "w", mWidth, "h", mHeight, "r", rotationInDegrees_0_90_180_270);
             var mImageLoc = convertLocalLocationToRemote.call(this, imageLoc);
 //            mImageLoc = TS_FileTmcrFileConverter.convertLocalLocationToRemote(
-//                    fileCommonBall.username,
-//                    fileCommonBall.url,
+//                    fileCommonConfig.username,
+//                    fileCommonConfig.url,
 //                    mImageLoc
 //            );
             if (mImageLoc == null) {
@@ -525,11 +525,11 @@ public class TS_FileHtml extends TS_FileCommonInterface {
 
     private String getFont() {
         if (styleIterator == null) {
-            var calculatedfontHeight = (int) (Math.round((fileCommonBall.fontHeight + FONT_HEIGHT_OFFSET()) * fontHeightScalePercent / 100f));
+            var calculatedfontHeight = (int) (Math.round((fileCommonConfig.fontHeight + FONT_HEIGHT_OFFSET()) * fontHeightScalePercent / 100f));
             while (calculatedfontHeight < 1) {
                 calculatedfontHeight++;
             }
-            styleIterator = "font-family:fontText, Arial Unicode MS, Arial,Helvetica,sans-serif;color:" + getFontColor() + ";font-size:" + calculatedfontHeight + "px;font-style:" + (fileCommonBall.fontItalic ? "italic" : "normal") + ";font-weight:" + (fileCommonBall.fontBold ? "bold" : "normal") + ";";
+            styleIterator = "font-family:fontText, Arial Unicode MS, Arial,Helvetica,sans-serif;color:" + getFontColor() + ";font-size:" + calculatedfontHeight + "px;font-style:" + (fileCommonConfig.fontItalic ? "italic" : "normal") + ";font-weight:" + (fileCommonConfig.fontBold ? "bold" : "normal") + ";";
         }
         return styleIterator;
     }
@@ -539,37 +539,37 @@ public class TS_FileHtml extends TS_FileCommonInterface {
         if (isClosed()) {
             return "#000000";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_BLUE())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_BLUE())) {
             return "#0000FF";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_CYAN())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_CYAN())) {
             return "#00FFFF";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_DARK_GRAY())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_DARK_GRAY())) {
             return "#505050";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GRAY())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GRAY())) {
             return "#808080";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GREEN())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_GREEN())) {
             return "#008000";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_LIGHT_GRAY())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_LIGHT_GRAY())) {
             return "#D3D3D3";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_MAGENTA())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_MAGENTA())) {
             return "#FF00FF";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_ORANGE())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_ORANGE())) {
             return "#FFA500";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_PINK())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_PINK())) {
             return "#FFC0CB";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_RED())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_RED())) {
             return "#FF0000";
         }
-        if (Objects.equals(fileCommonBall.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_YELLOW())) {
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_YELLOW())) {
             return "#FFFF00";
         }
         return customCssForBlackText == null ? "#000000" : customCssForBlackText;
