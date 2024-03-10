@@ -2,6 +2,7 @@ package com.tugalsan.api.file.html.client;
 
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
+import com.tugalsan.api.url.client.parser.TGS_UrlParser;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.StringJoiner;
@@ -75,9 +76,15 @@ public class TGS_FileHtmlUtils {
             sj.add("window.boot_loader_main = function () {");
             sj.add("console.log(\"index.jsp: welcome\");");
             sj.add("};");
+
+            var parser = TGS_UrlParser.of(bootLoaderJs);
+            sj.add("let protocol = 'https';");
+            sj.add("let hostname = '" + parser.host.domain + "';");
+            sj.add("let port = " + parser.host.port + ";");
+
             sj.add("var script = document.createElement('script');");
             System.out.println("bootloaderJs:" + bootLoaderJs);
-            sj.add("script.src = '%s'".formatted(bootLoaderJs));
+            sj.add("script.src = '" + bootLoaderJs + "'");
             sj.add("script.type = 'text/javascript';");
             sj.add("document.head.appendChild(script);");
             sj.add("</script>");
