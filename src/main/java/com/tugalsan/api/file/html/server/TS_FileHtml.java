@@ -67,7 +67,12 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         if (isClosed()) {
             return;
         }
-        webWriter = new TGS_FileHtml(fileCommonConfig.funcName, fileCommonConfig.favIconPng, fileCommonConfig.customDomain);
+        webWriter = TGS_FileHtml.of(
+                null, null,
+                fileCommonConfig.funcName,
+                fileCommonConfig.favIconPng,
+                fileCommonConfig.bootloaderJs
+        );
     }
 
     @Override

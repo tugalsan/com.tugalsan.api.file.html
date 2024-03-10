@@ -34,12 +34,12 @@ public class TGS_FileHtmlUtils {
 //    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, CharSequence optional_hrefPngIcon, boolean addDivCenter) {
 //        return beginLines(browserTitle, addDefaultCss, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, null);
 //    }
-    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url optionalCustomDomain) {
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");
         //HTML START
-        if (addDefaultCss) {
+        if (bootLoaderJs != null) {
             sj.add("<html lang=\"tr\" dir=\"ltr\" class=\"Light-Cream\">");
         } else {
             sj.add("<html lang=\"tr\" dir=\"ltr\">");
@@ -70,25 +70,17 @@ public class TGS_FileHtmlUtils {
         sj.add("}");
         sj.add("</style>");
         //HTML->HEAD->CSS
-        if (addDefaultCss) {
+        if (bootLoaderJs != null) {
             sj.add("<script>");
             sj.add("window.boot_loader_main = function () {");
             sj.add("console.log(\"index.jsp: welcome\");");
             sj.add("};");
             sj.add("var script = document.createElement('script');");
-            if (optionalCustomDomain == null) {
-                sj.add("script.src = \"http://\"" + " + window.hostname + " + "\"/res-common/res/js/boot_loader.js\";");
-            } else {
-                sj.add("script.src = \"" + optionalCustomDomain  + "/res-common/res/js/boot_loader.js\";");
-            }
+            System.out.println("bootloaderJs:" + bootLoaderJs);
+            sj.add("script.src = '%s'".formatted(bootLoaderJs));
             sj.add("script.type = 'text/javascript';");
             sj.add("document.head.appendChild(script);");
             sj.add("</script>");
-//            if (optionalCustomDomain == null) {
-//                sj.add("<script src=\"../res-common/res/js/boot_loader.js\"></script>");
-//            } else {
-//                sj.add("<script src=\"" + optionalCustomDomain + "/res-common/res/js/boot_loader.js\"></script>");
-//            }
         } else {
             sj.add("<style>");
             sj.add("html * {");
@@ -104,7 +96,7 @@ public class TGS_FileHtmlUtils {
         //HTML->BODY->DIV START
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
-            if (addDefaultCss) {
+            if (bootLoaderJs != null) {
                 sj.add("<div class=\"theme_container\">");
                 sj.add("<div class=\"theme_switch\">");
                 sj.add("<label for=\"theme_toggle\">");
