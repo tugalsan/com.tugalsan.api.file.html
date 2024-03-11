@@ -11,7 +11,7 @@ import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
 
-    final private static TS_Log d = TS_Log.of(true, TS_FileHtmlImage64.class);
+    final private static TS_Log d = TS_Log.of(false, TS_FileHtmlImage64.class);
 
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
@@ -72,7 +72,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
         d.ci("cons", "imageFileType", imageFileType);
-        var base64_data = imageFileType + ";base64, " + base64;
+        var base64_data = imageFileType + ";base64," + base64;
         d.ci("cons", "base64_data", base64_data);
         properties.add(new TGS_FileHtmlProperty("data", base64_data));
         properties.add(new TGS_FileHtmlProperty("width", width));
