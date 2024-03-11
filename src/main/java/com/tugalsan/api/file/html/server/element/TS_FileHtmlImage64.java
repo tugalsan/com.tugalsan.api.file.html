@@ -67,12 +67,12 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             imageFileType = TS_FileUtils.mime(path);
         }
         if (base64 == null) {
-            base64 = "jpg";
+            base64 = "image/jpeg";
         }
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
         d.ci("cons", "imageFileType", imageFileType);
-        var base64_data = "image/" + imageFileType + ";base64, " + base64;
+        var base64_data = imageFileType + ";base64, " + base64;
         d.ci("cons", "base64_data", base64_data);
         properties.add(new TGS_FileHtmlProperty("data", base64_data));
         properties.add(new TGS_FileHtmlProperty("width", width));
