@@ -67,7 +67,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             imageFileType = TS_FileUtils.mime(path);
         }
         if (base64 == null) {
-            base64 = "null";
+            base64 = "jpg";
         }
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
