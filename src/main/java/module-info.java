@@ -2,6 +2,7 @@ module com.tugalsan.api.file.html {
     requires gwt.user;
     requires java.desktop;
     requires jericho.html;
+    requires org.apache.tika.core;
     requires org.apache.commons.text;
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.crypto;

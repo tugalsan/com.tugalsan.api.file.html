@@ -11,7 +11,7 @@ import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
 
-    final private static TS_Log d = TS_Log.of(TS_FileHtmlImage64.class);
+    final private static TS_Log d = TS_Log.of(true, TS_FileHtmlImage64.class);
 
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
@@ -56,18 +56,21 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         String base64;
         String imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
+            d.ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
             base64 = TS_UrlDownloadUtils.toBase64(url);
-            if (base64 == null) {
-                base64 = "null";
-            }
-            imageFileType = TGS_UrlUtils.getFileNameType(url);
+            imageFileType = TS_UrlUtils.mime(url);
         } else {
+            d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
             base64 = TGS_CryptUtils.encrypt64(TS_FileUtils.read(path));
-            imageFileType = TS_FileUtils.getNameType(path);
+            imageFileType = TS_FileUtils.mime(path);
         }
-        d.ci("cons", "base64.len", base64 == null ? "null" : base64.length());
+        if (base64 == null) {
+            base64 = "null";
+        }
+        d.ci("cons", "base64", base64);
+        d.ci("cons", "base64.len", base64.length());
         d.ci("cons", "imageFileType", imageFileType);
         var base64_data = "image/" + imageFileType + ";base64, " + base64;
         d.ci("cons", "base64_data", base64_data);
