@@ -112,9 +112,6 @@ public class TGS_FileHtmlUtils {
             sj.add("}");
             sj.add("</style>");
         }
-        //HTML->HEAD END
-        sj.add("</head>");
-        //HTML->BODY START
         var bodyClass = TGS_Coronator.ofStr().coronateAs(__ -> {
             var pageSize = pageSizeAX == null ? "" : ("A" + pageSizeAX);
             var pageOri = landscape == null ? "" : (landscape ? "landscape" : "portrait");
@@ -130,8 +127,15 @@ public class TGS_FileHtmlUtils {
             return "";
         });
         if (bodyClass.isEmpty()) {
+            //HTML->HEAD END
+            sj.add("</head>");
+            //HTML->BODY START
             sj.add("<body>");
         } else {
+            sj.add("<style>@page { size: " + bodyClass + " }</style>");
+            //HTML->HEAD END
+            sj.add("</head>");
+            //HTML->BODY START
             sj.add("<body class='" + bodyClass + "'>");
         }
         //HTML->BODY->DIV START
