@@ -185,6 +185,7 @@ public class TGS_FileHtmlUtils {
     }
 
     private static void addPaperCss(StringJoiner sj) {
+        sj.add("/** ref:https://github.com/cognitom/paper-css  **/");
         sj.add("@page { margin: 0 }");
         sj.add("body { margin: 0 }");
         sj.add(".sheet {");
