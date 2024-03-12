@@ -43,7 +43,7 @@ public class TGS_FileHtmlUtils {
     public static String pageStart(Integer padding) {//papaer-css
         //<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
         if (padding == null || padding < 10) {
-            return "<section>";
+            return "<section class='sheet'>";
         }
         if (padding < 15) {
             return "<section class='sheet padding-10mm'>";
@@ -57,7 +57,7 @@ public class TGS_FileHtmlUtils {
         return "<section class='sheet padding-25mm'>";
     }
 
-    public static String pageEnd(int padding) {
+    public static String pageEnd() {
         return "</section>";
     }
 

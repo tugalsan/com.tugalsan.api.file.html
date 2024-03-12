@@ -115,10 +115,19 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             d.ce("createNewPage.ERROR: MIFWeb.createNewPage -> why table exists!");
             return false;
         }
+        var paddingFix = 0;
         if (isFirstPageTriggered) {
-            webWriter.getChilderen().add(new TGS_FileHtmlHR());
+            var span = new TGS_FileHtmlSpan(null, "", TGS_FileHtmlUtils.pageEnd(), "");
+            span.pureCode = true;
+            webWriter.getChilderen().add(span);
+            span = new TGS_FileHtmlSpan(null, "", TGS_FileHtmlUtils.pageStart(paddingFix), "");
+            span.pureCode = true;
+            webWriter.getChilderen().add(span);
         } else {
             isFirstPageTriggered = true;
+            var span = new TGS_FileHtmlSpan(null, "", TGS_FileHtmlUtils.pageStart(paddingFix), "");
+            span.pureCode = true;
+            webWriter.getChilderen().add(span);
         }
         return true;
     }
