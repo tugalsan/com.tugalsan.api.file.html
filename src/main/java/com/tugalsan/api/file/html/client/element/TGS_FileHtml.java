@@ -12,7 +12,7 @@ public class TGS_FileHtml {
     public TGS_Url browserIconHrefPng;
     public TGS_Url bootLoaderJs;
     private Integer pageSizeAX;
-    private boolean landscape;
+    private Boolean landscape;
 
     public List<TGS_FileHtmlElement> getChilderen() {
         return childeren;

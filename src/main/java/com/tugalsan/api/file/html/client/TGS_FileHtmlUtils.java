@@ -115,13 +115,13 @@ public class TGS_FileHtmlUtils {
         var bodyClass = TGS_Coronator.ofStr().coronateAs(__ -> {
             var pageSize = pageSizeAX == null ? "" : ("A" + pageSizeAX);
             var pageOri = landscape == null ? "" : (landscape ? "landscape" : "portrait");
-            if (pageSize.isEmpty() && pageOri.isEmpty()) {
-                return pageSize + " " + landscape;
+            if (!pageSize.isEmpty() && !pageOri.isEmpty()) {
+                return pageSize + " " + pageOri;
             }
-            if (pageSize.isEmpty()) {
+            if (!pageSize.isEmpty()) {
                 return pageSize;
             }
-            if (pageOri.isEmpty()) {
+            if (!pageOri.isEmpty()) {
                 return pageOri;
             }
             return "";
