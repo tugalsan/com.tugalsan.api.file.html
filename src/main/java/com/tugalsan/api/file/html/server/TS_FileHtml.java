@@ -71,7 +71,8 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                 null, null,
                 fileCommonConfig.funcName,
                 fileCommonConfig.favIconPng,
-                fileCommonConfig.bootloaderJs
+                fileCommonConfig.bootloaderJs,
+                pageSizeAX, landscape
         );
     }
 
