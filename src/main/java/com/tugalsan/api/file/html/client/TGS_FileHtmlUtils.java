@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.client;
 
-import com.tugalsan.api.file.common.server.TS_FileCommonFavIcon;
 import com.tugalsan.api.coronator.client.TGS_Coronator;
+import com.tugalsan.api.file.common.client.TGS_FileCommonFavIcon;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
@@ -34,7 +34,7 @@ public class TGS_FileHtmlUtils {
         );
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
         return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
@@ -60,11 +60,7 @@ public class TGS_FileHtmlUtils {
         return "</section>";
     }
 
-    /*
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style='filter: invert(100%);'><rect width='100%' height='100%' fill='white'/><text x='-1' y='15.5' stroke='red'>ms</text></svg>" type="image/svg+xml" />
-     */
-
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");

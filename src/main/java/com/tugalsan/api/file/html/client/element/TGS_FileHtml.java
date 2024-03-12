@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.file.common.server.TS_FileCommonFavIcon;
 import com.tugalsan.api.callable.client.*;
+import com.tugalsan.api.file.common.client.TGS_FileCommonFavIcon;
 import com.tugalsan.api.file.html.client.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
@@ -10,7 +10,7 @@ import java.util.*;
 public class TGS_FileHtml {
 
     public CharSequence browserTitle;
-    public TS_FileCommonFavIcon browserIconHrefPng;
+    public TGS_FileCommonFavIcon browserIconHrefPng;
     public TGS_Url bootLoaderJs;
     public Integer pageSizeAX;
     public Boolean landscape;
@@ -20,7 +20,7 @@ public class TGS_FileHtml {
     }
     private final List<TGS_FileHtmlElement> childeren;
 
-    private TGS_FileHtml(CharSequence pageTitle, TS_FileCommonFavIcon hrefPngIcon, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    private TGS_FileHtml(CharSequence pageTitle, TGS_FileCommonFavIcon hrefPngIcon, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         this.browserTitle = pageTitle;
         this.browserIconHrefPng = hrefPngIcon;
         this.bootLoaderJs = bootLoaderJs;
@@ -40,11 +40,11 @@ public class TGS_FileHtml {
     public boolean addTableBorder = false;
     public boolean addDivCenter = true;
 
-    public static TGS_FileHtml of(TGS_CallableType1<String, CharSequence> optional_escapeHTML, TGS_ListTable optional_lstTable, CharSequence title, TS_FileCommonFavIcon optional_hrefPngIcon, TGS_Url optional_bootLoaderJs) {
+    public static TGS_FileHtml of(TGS_CallableType1<String, CharSequence> optional_escapeHTML, TGS_ListTable optional_lstTable, CharSequence title, TGS_FileCommonFavIcon optional_hrefPngIcon, TGS_Url optional_bootLoaderJs) {
         return of(optional_escapeHTML, optional_lstTable, title, optional_hrefPngIcon, optional_bootLoaderJs, null, null);
     }
 
-    public static TGS_FileHtml of(TGS_CallableType1<String, CharSequence> optional_escapeHTML, TGS_ListTable optional_lstTable, CharSequence title, TS_FileCommonFavIcon optional_hrefPngIcon, TGS_Url optional_bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    public static TGS_FileHtml of(TGS_CallableType1<String, CharSequence> optional_escapeHTML, TGS_ListTable optional_lstTable, CharSequence title, TGS_FileCommonFavIcon optional_hrefPngIcon, TGS_Url optional_bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var html = new TGS_FileHtml(title, optional_hrefPngIcon, optional_bootLoaderJs, pageSizeAX, landscape);
         if (optional_lstTable != null) {
             var htmlTable = TGS_FileHtmlTable.of(optional_escapeHTML, optional_lstTable);
