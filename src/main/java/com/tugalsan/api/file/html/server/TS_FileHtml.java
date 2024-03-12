@@ -109,6 +109,8 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         } else {
             this.pageSizeAX = pageSizeAX;
         }
+        webWriter.pageSizeAX = pageSizeAX;
+        webWriter.landscape = landscape;
         if (table != null) {
             d.ce("createNewPage.ERROR: MIFWeb.createNewPage -> why table exists!");
             return false;
@@ -121,7 +123,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         return true;
     }
     private boolean isFirstPageTriggered = false;
-    private Integer pageSizeAX = null;
+    private Integer pageSizeAX;
     private boolean landscape;
 
     private boolean addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {

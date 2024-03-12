@@ -8,11 +8,11 @@ import java.util.*;
 
 public class TGS_FileHtml {
 
-    public final CharSequence browserTitle;
-    public final TGS_Url browserIconHrefPng;
-    public final TGS_Url bootLoaderJs;
-    public final Integer pageSizeAX;
-    public final Boolean landscape;
+    public CharSequence browserTitle;
+    public TGS_Url browserIconHrefPng;
+    public TGS_Url bootLoaderJs;
+    public Integer pageSizeAX;
+    public Boolean landscape;
 
     public List<TGS_FileHtmlElement> getChilderen() {
         return childeren;
