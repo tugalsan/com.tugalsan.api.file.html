@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.client;
 
+import com.tugalsan.api.coronator.client.TGS_Coronator;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
@@ -36,6 +37,10 @@ public class TGS_FileHtmlUtils {
 //        return beginLines(browserTitle, addDefaultCss, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, null);
 //    }
     public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
+        return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
+    }
+
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");
@@ -99,7 +104,25 @@ public class TGS_FileHtmlUtils {
         //HTML->HEAD END
         sj.add("</head>");
         //HTML->BODY START
-        sj.add("<body>");
+        var bodyClass = TGS_Coronator.ofStr().coronateAs(__ -> {
+            var pageSize = pageSizeAX == null ? "" : ("A" + pageSizeAX);
+            var pageOri = landscape == null ? "" : (landscape ? "landscape" : "portrait");
+            if (pageSize.isEmpty() && pageOri.isEmpty()) {
+                return pageSize + " " + landscape;
+            }
+            if (pageSize.isEmpty()) {
+                return pageSize;
+            }
+            if (pageOri.isEmpty()) {
+                return pageOri;
+            }
+            return "";
+        });
+        if (bodyClass.isEmpty()) {
+            sj.add("<body>");
+        } else {
+            sj.add("<body class='" + bodyClass + "'>");
+        }
         //HTML->BODY->DIV START
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");

@@ -100,6 +100,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         if (isClosed()) {
             return true;
         }
+        this.landscape = landscape;
         if (pageSizeAX < 0) {
             this.pageSizeAX = null;
         } else if (pageSizeAX > pageSizeMaxWidth.length) {
@@ -120,6 +121,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     }
     private boolean isFirstPageTriggered = false;
     private Integer pageSizeAX = null;
+    private boolean landscape;
 
     private boolean addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {
         if (isClosed()) {

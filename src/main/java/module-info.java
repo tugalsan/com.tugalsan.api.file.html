@@ -6,6 +6,7 @@ module com.tugalsan.api.file.html {
     requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.crypto;
     requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.coronator;
     requires com.tugalsan.api.os;
     requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.list;
