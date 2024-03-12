@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.client;
 
+import com.tugalsan.api.file.common.server.TS_FileCommonFavIcon;
 import com.tugalsan.api.coronator.client.TGS_Coronator;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
@@ -33,10 +34,7 @@ public class TGS_FileHtmlUtils {
         );
     }
 
-//    public static String beginLines(CharSequence browserTitle, boolean addDefaultCss, boolean addBorder, int leftMargin, int topMargin, CharSequence optional_hrefPngIcon, boolean addDivCenter) {
-//        return beginLines(browserTitle, addDefaultCss, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, null);
-//    }
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
         return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
@@ -62,7 +60,11 @@ public class TGS_FileHtmlUtils {
         return "</section>";
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    /*
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' style='filter: invert(100%);'><rect width='100%' height='100%' fill='white'/><text x='-1' y='15.5' stroke='red'>ms</text></svg>" type="image/svg+xml" />
+     */
+
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");
@@ -76,7 +78,7 @@ public class TGS_FileHtmlUtils {
         sj.add("<head>");
         //HTML->HEAD->FAV ICON
         if (optional_hrefPngIcon != null) {
-            sj.add("<link id=\"favicon\" rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"" + optional_hrefPngIcon + "\"/>");
+            sj.add(optional_hrefPngIcon.toString());
         }
         //HTML->HEAD->CHARSET
         sj.add(TGS_StringUtils.concat("<meta charset='", StandardCharsets.UTF_8.name(), "'>"));
