@@ -40,6 +40,27 @@ public class TGS_FileHtmlUtils {
         return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
+    public static String pageStart(Integer padding) {//papaer-css
+        //<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+        if (padding == null || padding < 10) {
+            return "<section>";
+        }
+        if (padding < 15) {
+            return "<section class='sheet padding-10mm'>";
+        }
+        if (padding < 20) {
+            return "<section class='sheet padding-15mm'>";
+        }
+        if (padding < 25) {
+            return "<section class='sheet padding-20mm'>";
+        }
+        return "<section class='sheet padding-25mm'>";
+    }
+
+    public static String pageEnd(int padding) {
+        return "</section>";
+    }
+
     public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
