@@ -40,7 +40,7 @@ public class TGS_FileHtmlUtils {
         return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_Url optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");
@@ -66,15 +66,20 @@ public class TGS_FileHtmlUtils {
             sj.add("table, th, td {border: 1px solid black !important}");
             sj.add("</style>");
         }
-        //HTML->HEAD->MARGIN STYLE
-        sj.add("<style>");
-        sj.add("body {");
-        sj.add("   margin-left: " + leftMargin + "px !important;");
-        sj.add("   margin-right: " + leftMargin + "px !important;");
-        sj.add("   margin-top: " + topMargin + "px !important;");
-        sj.add("   margin-bottom: " + topMargin + "px !important;");
-        sj.add("}");
-        sj.add("</style>");
+        if (leftMargin != null || topMargin != null) {
+            sj.add("<style>");
+            sj.add("body {");
+            if (leftMargin != null) {
+                sj.add("   margin-left: " + leftMargin + "px !important;");
+                sj.add("   margin-right: " + leftMargin + "px !important;");
+            }
+            if (topMargin != null) {
+                sj.add("   margin-top: " + topMargin + "px !important;");
+                sj.add("   margin-bottom: " + topMargin + "px !important;");
+            }
+            sj.add("}");
+            sj.add("</style>");
+        }
         //HTML->HEAD->CSS
         if (bootLoaderJs != null) {
             sj.add("<script>");
@@ -93,7 +98,13 @@ public class TGS_FileHtmlUtils {
             sj.add("script.type = 'text/javascript';");
             sj.add("document.head.appendChild(script);");
             sj.add("</script>");
-        } else {
+        }
+        if (pageSizeAX != null) {
+            sj.add("<style>");
+            addPaperCss(sj);
+            sj.add("</style>");
+        }
+        if (bootLoaderJs == null && pageSizeAX == null) {
             sj.add("<style>");
             sj.add("html * {");
             sj.add("   font-size: 1em !important");
@@ -167,5 +178,56 @@ public class TGS_FileHtmlUtils {
         sj.add("</body>");
         sj.add("</html>");
         return sj.toString();
+    }
+
+    private static void addPaperCss(StringJoiner sj) {
+        sj.add("@page { margin: 0 }");
+        sj.add("body { margin: 0 }");
+        sj.add(".sheet {");
+        sj.add("  margin: 0;");
+        sj.add("  overflow: hidden;");
+        sj.add("  position: relative;");
+        sj.add("  box-sizing: border-box;");
+        sj.add("  page-break-after: always;");
+        sj.add("}");
+        sj.add("");
+        sj.add("/** Paper sizes **/");
+        sj.add("body.A3               .sheet { width: 297mm; height: 419mm }");
+        sj.add("body.A3.landscape     .sheet { width: 420mm; height: 296mm }");
+        sj.add("body.A4               .sheet { width: 210mm; height: 296mm }");
+        sj.add("body.A4.landscape     .sheet { width: 297mm; height: 209mm }");
+        sj.add("body.A5               .sheet { width: 148mm; height: 209mm }");
+        sj.add("body.A5.landscape     .sheet { width: 210mm; height: 147mm }");
+        sj.add("body.letter           .sheet { width: 216mm; height: 279mm }");
+        sj.add("body.letter.landscape .sheet { width: 280mm; height: 215mm }");
+        sj.add("body.legal            .sheet { width: 216mm; height: 356mm }");
+        sj.add("body.legal.landscape  .sheet { width: 357mm; height: 215mm }");
+        sj.add("");
+        sj.add("/** Padding area **/");
+        sj.add(".sheet.padding-10mm { padding: 10mm }");
+        sj.add(".sheet.padding-15mm { padding: 15mm }");
+        sj.add(".sheet.padding-20mm { padding: 20mm }");
+        sj.add(".sheet.padding-25mm { padding: 25mm }");
+        sj.add("");
+        sj.add("/** For screen preview **/");
+        sj.add("@media screen {");
+        sj.add("  body { background: #e0e0e0 }");
+        sj.add("  .sheet {");
+        sj.add("    background: white;");
+        sj.add("    box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);");
+        sj.add("    margin: 5mm auto;");
+        sj.add("  }");
+        sj.add("}");
+        sj.add("");
+        sj.add("/** Fix for Chrome issue #273306 **/");
+        sj.add("@media print {");
+        sj.add("           body.A3.landscape { width: 420mm }");
+        sj.add("  body.A3, body.A4.landscape { width: 297mm }");
+        sj.add("  body.A4, body.A5.landscape { width: 210mm }");
+        sj.add("  body.A5                    { width: 148mm }");
+        sj.add("  body.letter, body.legal    { width: 216mm }");
+        sj.add("  body.letter.landscape      { width: 280mm }");
+        sj.add("  body.legal.landscape       { width: 357mm }");
+        sj.add("}");
     }
 }
