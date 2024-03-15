@@ -17,6 +17,13 @@ public class TS_FileHtmlUtils {
 
     final private static TS_Log d = TS_Log.of(TS_FileHtmlUtils.class);
 
+//TODO 
+//    public static boolean String embedPlainFiles(CharSequence htmlContent){
+//        var htmlContentInit = htmlContent.toString();
+//        
+//        return 
+//    }
+    
     public static boolean browse(TGS_Url url) {
         var edge = Path.of("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
         if (!TS_FileUtils.isExistFile(edge)) {
