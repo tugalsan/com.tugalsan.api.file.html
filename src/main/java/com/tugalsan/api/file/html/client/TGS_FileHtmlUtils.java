@@ -34,10 +34,6 @@ public class TGS_FileHtmlUtils {
         );
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
-        return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
-    }
-
     public static String pageStart(Integer padding) {//papaer-css
         //<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
         if (padding == null || padding < 10) {
@@ -58,6 +54,10 @@ public class TGS_FileHtmlUtils {
 
     public static String pageEnd() {
         return "</section>";
+    }
+
+    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
+        return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
     public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
@@ -161,7 +161,7 @@ public class TGS_FileHtmlUtils {
         //HTML->BODY->DIV START
         if (addDivCenter) {
             sj.add("<div class=\"AppModule_configLayout\">");
-            if (bootLoaderJs != null) {
+            if (bootLoaderJs != null && pageSizeAX == null) {
                 sj.add("<div class=\"theme_container\">");
                 sj.add("<div class=\"theme_switch\">");
                 sj.add("<label for=\"theme_toggle\">");
