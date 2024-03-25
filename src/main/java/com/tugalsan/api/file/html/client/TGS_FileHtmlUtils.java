@@ -254,5 +254,8 @@ public class TGS_FileHtmlUtils {
         sj.add("  body.letter.landscape      { width: 280mm }");
         sj.add("  body.legal.landscape       { width: 357mm }");
         sj.add("}");
+        sj.add("table {");
+        sj.add("  table-layout:fixed;");
+        sj.add("}");
     }
 }
