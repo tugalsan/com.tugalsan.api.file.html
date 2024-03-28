@@ -219,7 +219,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             pageSizeAX = pageSizeMaxWidth.length - 1;
             d.ce("beginTable", "pageSizeAX.fixed", pageSizeAX);
         }
-        var pageSizeFix = "max-width:" + (pageSizeAX == null ? "null" : ((int) (Math.round(pageSizeMaxWidth[pageSizeAX] * widthScalePercent / 100f)) + "px")) + ";";
+        var pageSizeFix = "";//"max-width:" + (pageSizeAX == null ? "null" : ((int) (Math.round(pageSizeMaxWidth[pageSizeAX] * widthScalePercent / 100f)) + "px")) + ";";
         table = new TGS_FileHtmlTable("TK_POJOHTMLTable_" + TGS_FileHtmlTable.counter, pageSizeFix + "border-spacing:0;border-collapse:collapse;border:1px solid black; width:100%;");
         webWriter.getChilderen().add(table);
 
