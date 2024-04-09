@@ -14,32 +14,33 @@ import java.util.stream.IntStream;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.runnable.client.TGS_RunnableType1;
 import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
 import java.util.Objects;
 import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
 import com.tugalsan.api.file.common.server.TS_FileCommonConfig;
+import com.tugalsan.api.union.client.TGS_Union;
+import java.io.IOException;
 
 public class TS_FileHtml extends TS_FileCommonAbstract {
-
+    
     final private static TS_Log d = TS_Log.of(TS_FileHtml.class);
-
+    
     private static int FONT_HEIGHT_OFFSET() {
         return 12;
     }
-
+    
     public TGS_FileHtml webWriter;
-
+    
     public TS_FileCommonConfig fileCommonConfig;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
     private final TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
-
+    
     public boolean base64() {
         return isBase64;
     }
     private final boolean isBase64;
-
+    
     private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
         super(enabled, localFile, remoteFile);
         this.isBase64 = isBase64;
@@ -48,20 +49,17 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         this.convertLocalLocationToRemote = convertLocalLocationToRemote;
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
-
+    
     public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
             instance.use_init(fileCommonConfig);
             web.run(instance);
-        } catch (Exception e) {
-            instance.saveFile(e.getMessage());
-            throw e;
         } finally {
             instance.saveFile(null);
         }
     }
-
+    
     private void use_init(TS_FileCommonConfig fileCommonConfig) {
         this.fileCommonConfig = fileCommonConfig;
         if (isClosed()) {
@@ -75,7 +73,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                 pageSizeAX, landscape
         );
     }
-
+    
     @Override
     public boolean saveFile(String errorSource) {
         if (isClosed()) {
@@ -95,7 +93,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         }
         return errorSource == null;
     }
-
+    
     @Override
     public boolean createNewPage(int pageSizeAX, boolean landscape, Integer marginLeft, Integer marginRight, Integer marginTop, Integer marginBottom) {
         if (isClosed()) {
@@ -134,58 +132,57 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     private boolean isFirstPageTriggered = false;
     private Integer pageSizeAX;
     private boolean landscape;
-
-    private boolean addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {
+    
+    private TGS_Union<Boolean> addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {
         if (isClosed()) {
-            return true;
+            return TGS_Union.of(true);
         }
-        return TGS_UnSafe.call(() -> {
-            if (isBase64) {
-                d.ci("addImageWeb", "imageLoc", imageLoc);
-            }
-            var mWidth = width;
-            var mHeight = heights;
-            if (rotationInDegrees_0_90_180_270 == 90 || rotationInDegrees_0_90_180_270 == 270) {
+        if (isBase64) {
+            d.ci("addImageWeb", "imageLoc", imageLoc);
+        }
+        var mWidth = width;
+        var mHeight = heights;
+        if (rotationInDegrees_0_90_180_270 == 90 || rotationInDegrees_0_90_180_270 == 270) {
 //                var tmp = mWidth;
-                mWidth = mHeight;
+            mWidth = mHeight;
 //                mHeight = tmp;
-            }
+        }
 //            d.ci("addImageWeb", "w", mWidth, "h", mHeight, "r", rotationInDegrees_0_90_180_270);
-            var mImageLoc = convertLocalLocationToRemote.call(this, imageLoc);
+        var mImageLoc = convertLocalLocationToRemote.call(this, imageLoc);
 //            mImageLoc = TS_FileTmcrFileConverter.convertLocalLocationToRemote(
 //                    fileCommonConfig.username,
 //                    fileCommonConfig.url,
 //                    mImageLoc
 //            );
-            if (mImageLoc == null) {
-                d.ce("addImageWeb", "Cannot convertLocalLocationToRemote", mImageLoc);
-                return false;
-            }
-
-            var sw = mWidth + "px";
+        if (mImageLoc == null) {
+            return TGS_Union.ofExcuse(d.className, "addImageWeb", "Cannot convertLocalLocationToRemote: " + mImageLoc);
+        }
+        
+        var sw = mWidth + "px";
 //            var sh = height + "px";
-            if (pageSizeAX != null) {
-                var maxWidth = pageSizeMaxWidth[pageSizeAX];
-                var maxPermissableWidth = (int) (Math.round(maxWidth * widthScalePercent / 100f));
-                var selectedWidth = mWidth > maxPermissableWidth ? maxPermissableWidth : mWidth;
-                sw = selectedWidth + "px";
+        if (pageSizeAX != null) {
+            var maxWidth = pageSizeMaxWidth[pageSizeAX];
+            var maxPermissableWidth = (int) (Math.round(maxWidth * widthScalePercent / 100f));
+            var selectedWidth = mWidth > maxPermissableWidth ? maxPermissableWidth : mWidth;
+            sw = selectedWidth + "px";
 //                sh = ((int) (selectedWidth * height / width) + "px");
-            }
-            var image = isBase64
+        }
+        TS_FileHtmlImage64 image;
+        try {
+            image = isBase64
                     ? new TS_FileHtmlImage64(TS_FileHtmlImage64.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString().startsWith("http") ? mImageLoc.toString() : imageLoc, sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270))
                     : new TS_FileHtmlImage(TS_FileHtmlImage.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString(), sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270));
-            if (tableRowCell == null) {
-                webWriter.getChilderen().add(image);
-            } else {
-                tableRowCell.getChilderen().add(image);
-            }
-            return true;
-        }, e -> {
-            d.ce("addImageWeb", e);
-            return true;
-        });
+        } catch (IOException ex) {
+            return TGS_Union.ofExcuse(ex);
+        }
+        if (tableRowCell == null) {
+            webWriter.getChilderen().add(image);
+        } else {
+            tableRowCell.getChilderen().add(image);
+        }
+        return TGS_Union.of(true);
     }
-
+    
     @Override
     public boolean addImage(BufferedImage pstImage, Path pstImageLoc, boolean textWrap, int left0_center1_right2, long imageCounter) {
         if (isClosed()) {
@@ -193,11 +190,11 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         }
         boolean result;
         d.ci("addImage", "init", "imageLoc", pstImageLoc);
-        result = addImageWeb(pstImageLoc.toAbsolutePath().toString(), pstImage.getWidth(), pstImage.getHeight(), 0, imageCounter);
+        result = addImageWeb(pstImageLoc.toAbsolutePath().toString(), pstImage.getWidth(), pstImage.getHeight(), 0, imageCounter).orElse(false);
         d.ci("addImage", "fin");
         return result;
     }
-
+    
     @Override
     public boolean beginTable(int[] table_relColSizes) {
         if (isClosed()) {
@@ -257,7 +254,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         currentRowIndex = 0;
         return true;
     }
-
+    
     @Override
     public boolean beginTableCell(int rowSpan, int colSpan, Integer cellHeight) {
         if (isClosed()) {
@@ -298,7 +295,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             tableRowCell = new TGS_FileHtmlTableRowCell(escape, "TK_POJOHTMLTableRowCell_" + TGS_FileHtmlTableRowCell.counter, String.valueOf(rowSpan), String.valueOf(colSpan), "");
             tableRow.getChilderen().set(rowCellColSpanOffset, tableRowCell);
         }
-
+        
         var sumWidth = 0;//SET STYLE
         for (var c = 0; c < colSpan; c++) {
             if (rowCellColSpanOffset + c <= table_relColSizes.length - 1) {
@@ -311,7 +308,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         var styleWidth = TGS_StringUtils.concat("width:", String.valueOf(sumWidth), "%;");
         var styleHeight = cellHeight == null ? "" : TGS_StringUtils.concat("height:", String.valueOf(cellHeight), "px;");
         tableRowCell.setStyle_Properties2(TGS_StringUtils.concat(pageSizeFix, "vertical-align:top;border:1px solid black;", styleWidth, styleHeight));
-
+        
         var fRowCellColSpanOffset = rowCellColSpanOffset;
         var escape = new TS_FileHtmlEscape();
         IntStream.range(1, colSpan).forEach(ci -> {//ADD COLSPAN FILL TODO
@@ -344,7 +341,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         return true;
     }
     private TGS_FileHtmlTableRowCell tableRowCell = null;
-
+    
     private int calcultaeRowCellColSpanOffset() {
         var rowCellColSpanOffset = 0;
         if (isClosed()) {
@@ -367,7 +364,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         d.ci("calcultaeRowCellColSpanOffset.MIFWeb.calcultaeRowCellColSpanOffset", "rowCellColSpanMax: " + table_relColSizes.length, "rowCellColSpanOffset", rowCellColSpanOffset);
         return rowCellColSpanOffset;
     }
-
+    
     private boolean checkMaxColumnSize(int rowCellColSpanOffset) {
         if (isClosed()) {
             return true;
@@ -394,7 +391,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         }
         return rowAdded;
     }
-
+    
     @Override
     public boolean endTableCell(int rotationInDegrees_0_90_180_270) {
         if (isClosed()) {
@@ -411,7 +408,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         tableRowCell = null;
         return true;
     }
-
+    
     @Override
     public boolean beginText(int allign_Left0_center1_right2_just3) {
         if (isClosed()) {
@@ -435,7 +432,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         return true;
     }
     private TGS_FileHtmlParagraph parag = null;
-
+    
     @Override
     public boolean endText() {
         if (isClosed()) {
@@ -453,7 +450,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         parag = null;
         return true;
     }
-
+    
     @Override
     public boolean addText(String text) {
         if (isClosed()) {
@@ -480,7 +477,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, tag, getFont());
                             parag.getChilderen().add(span);
                         } else {
-                            var htmlText = TGS_StringUtils.concat(String.valueOf(dbl.get().left), "<sub>", String.valueOf(dbl.get().dim()), String.valueOf(dbl.get().right), "</sub>");
+                            var htmlText = TGS_StringUtils.concat(String.valueOf(dbl.value().left), "<sub>", String.valueOf(dbl.value().dim()), String.valueOf(dbl.value().right), "</sub>");
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, htmlText, getFont());
                             span.pureCode = true;
                             parag.getChilderen().add(span);
@@ -498,7 +495,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         });
         return true;
     }
-
+    
     @Override
     public boolean addLineBreak() {
         if (isClosed()) {
@@ -511,7 +508,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         parag.getChilderen().add(new TGS_FileHtmlBR());
         return true;
     }
-
+    
     @Override
     public boolean setFontStyle() {
         if (isClosed()) {
@@ -521,7 +518,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         getFont();
         return true;
     }
-
+    
     @Override
     public boolean setFontHeight() {
         if (isClosed()) {
@@ -531,7 +528,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         getFont();
         return true;
     }
-
+    
     @Override
     public boolean setFontColor() {
         if (isClosed()) {
@@ -541,7 +538,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         getFont();
         return true;
     }
-
+    
     private String getFont() {
         if (styleIterator == null) {
             var calculatedfontHeight = (int) (Math.round((fileCommonConfig.fontHeight + FONT_HEIGHT_OFFSET()) * fontHeightScalePercent / 100f));
@@ -553,7 +550,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         return styleIterator;
     }
     private String styleIterator = null;
-
+    
     private String getFontColor() {
         if (isClosed()) {
             return "#000000";

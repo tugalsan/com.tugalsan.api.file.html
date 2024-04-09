@@ -8,6 +8,7 @@ import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.union.client.TGS_Union;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.nio.file.*;
 import net.htmlparser.jericho.*;
@@ -39,7 +40,7 @@ public class TS_FileHtmlUtils {
         return TS_OsProcess.of(cmd).exitValueOk();
     }
 
-    public static Path write2File(TGS_FileHtml src, Path filePath) {
+    public static TGS_Union<Boolean> write2File(TGS_FileHtml src, Path filePath) {
         var content = src.toString();
         return TS_FileTxtUtils.toFile(content, filePath, false);
     }

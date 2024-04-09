@@ -3,7 +3,7 @@ module com.tugalsan.api.file.html {
     requires java.desktop;
     requires jericho.html;
     requires org.apache.commons.text;
-    requires com.tugalsan.api.unsafe;
+    requires com.tugalsan.api.union;
     requires com.tugalsan.api.crypto;
     requires com.tugalsan.api.callable;
     requires com.tugalsan.api.coronator;

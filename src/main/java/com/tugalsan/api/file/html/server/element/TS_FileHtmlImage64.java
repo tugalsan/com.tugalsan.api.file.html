@@ -7,6 +7,7 @@ import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
+import java.io.IOException;
 import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
@@ -49,7 +50,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         super(null, "img", nameAndId);
     }
 
-    public TS_FileHtmlImage64(CharSequence nameAndId, CharSequence fileLoc, CharSequence width, CharSequence height, CharSequence rotationInDegrees_0_90_180_270) {
+    public TS_FileHtmlImage64(CharSequence nameAndId, CharSequence fileLoc, CharSequence width, CharSequence height, CharSequence rotationInDegrees_0_90_180_270) throws IOException {
         super(null, "img", nameAndId);
         var fileLocStr = fileLoc.toString();
         d.ci("cons", "fileLocStr", fileLocStr);
@@ -58,12 +59,16 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
             d.ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
-            base64 = TS_UrlDownloadUtils.toBase64(url);
-            imageFileType = TS_UrlUtils.mime(url);
+            base64 = TS_UrlDownloadUtils.toBase64_orEmpty(url);
+            imageFileType = TS_UrlUtils.mime(url).orElse("image/unknown");
         } else {
             d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
-            base64 = TGS_CryptUtils.encrypt64_orEmpty(TS_FileUtils.read(path));
+            var u_read = TS_FileUtils.read(path);
+            if (u_read.isError()) {
+                throw (IOException) u_read.excuse();
+            }
+            base64 = TGS_CryptUtils.encrypt64_orEmpty(u_read.value());
             imageFileType = TS_FileUtils.mime(path);
         }
         if (base64 == null) {
