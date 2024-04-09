@@ -65,7 +65,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
             var u_read = TS_FileUtils.read(path);
-            if (u_read.isError()) {
+            if (u_read.isExcuse()) {
                 throw (IOException) u_read.excuse();
             }
             base64 = TGS_CryptUtils.encrypt64_orEmpty(u_read.value());
