@@ -481,7 +481,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     IntStream.range(0, tags.size()).forEachOrdered(j -> {
                         var tag = tags.get(j);
                         var dbl = TGS_StringDouble.of(text);
-                        if (dbl.isEmpty()) {
+                        if (dbl.isExcuse()) {
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, tag, getFont());
                             parag.getChilderen().add(span);
                         } else {
