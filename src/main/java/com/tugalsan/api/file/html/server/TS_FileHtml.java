@@ -18,7 +18,7 @@ import com.tugalsan.api.url.client.*;
 import java.util.Objects;
 import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
 import com.tugalsan.api.file.common.server.TS_FileCommonConfig;
-import com.tugalsan.api.union.client.TGS_UnionExcuse;
+import com.tugalsan.api.union.client.TGS_UnionExcuseVoid;
 import java.io.IOException;
 
 public class TS_FileHtml extends TS_FileCommonAbstract {
@@ -133,9 +133,9 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     private Integer pageSizeAX;
     private boolean landscape;
 
-    private TGS_UnionExcuse addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {
+    private TGS_UnionExcuseVoid addImageWeb(String imageLoc, int width, int heights, int rotationInDegrees_0_90_180_270, long imageCounter) {
         if (isClosed()) {
-            return TGS_UnionExcuse.ofVoid();
+            return TGS_UnionExcuseVoid.ofVoid();
         }
         if (isBase64) {
             d.ci("addImageWeb", "imageLoc", imageLoc);
@@ -155,7 +155,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
 //                    mImageLoc
 //            );
         if (mImageLoc == null) {
-            return TGS_UnionExcuse.ofExcuse(d.className, "addImageWeb", "Cannot convertLocalLocationToRemote: " + mImageLoc);
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "addImageWeb", "Cannot convertLocalLocationToRemote: " + mImageLoc);
         }
 
         var sw = mWidth + "px";
@@ -173,14 +173,14 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     ? new TS_FileHtmlImage64(TS_FileHtmlImage64.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString().startsWith("http") ? mImageLoc.toString() : imageLoc, sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270))
                     : new TS_FileHtmlImage(TS_FileHtmlImage.class.getSimpleName() + "_" + imageCounter, mImageLoc.toString(), sw, "auto", String.valueOf(rotationInDegrees_0_90_180_270));
         } catch (IOException ex) {
-            return TGS_UnionExcuse.ofExcuse(ex);
+            return TGS_UnionExcuseVoid.ofExcuse(ex);
         }
         if (tableRowCell == null) {
             webWriter.getChilderen().add(image);
         } else {
             tableRowCell.getChilderen().add(image);
         }
-        return TGS_UnionExcuse.ofVoid();
+        return TGS_UnionExcuseVoid.ofVoid();
     }
 
     @Override

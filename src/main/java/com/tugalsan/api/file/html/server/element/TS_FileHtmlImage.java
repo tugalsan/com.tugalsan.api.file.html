@@ -2,7 +2,7 @@ package com.tugalsan.api.file.html.server.element;
 
 import com.tugalsan.api.file.html.client.element.TGS_FileHtmlProperty;
 import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.union.client.TGS_Union;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import java.io.IOException;
 
 public class TS_FileHtmlImage extends TS_FileHtmlImage64 {
@@ -32,9 +32,9 @@ public class TS_FileHtmlImage extends TS_FileHtmlImage64 {
         return TGS_StringUtils.concat("<img ", (DEFAULT_isNameAndIdEnabled ? TGS_StringUtils.concat("id='", nameAndId, "' name='", nameAndId, "' ") : ""), " style='display:block;", rotate, size, "' src='", getBase64_Properties0(), "' />\n");
     }
 
-    public TGS_Union<TS_FileHtmlImage64> cloneToImage64() {
+    public TGS_UnionExcuse<TS_FileHtmlImage64> cloneToImage64() {
         try {
-            return TGS_Union.of(
+            return TGS_UnionExcuse.of(
                     new TS_FileHtmlImage64(
                             nameAndId,
                             super.getBase64_Properties0(),
@@ -44,7 +44,7 @@ public class TS_FileHtmlImage extends TS_FileHtmlImage64 {
                     )
             );
         } catch (IOException ex) {
-            return TGS_Union.ofExcuse(ex);
+            return TGS_UnionExcuse.ofExcuse(ex);
         }
     }
 }
