@@ -60,7 +60,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             d.ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
             base64 = TS_UrlDownloadUtils.toBase64_orEmpty(url);
-            imageFileType = TS_UrlUtils.mime(url).orElse("image/unknown");
+            imageFileType = TS_UrlUtils.mime(url).orElse("image/jpeg");
         } else {
             d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
@@ -69,10 +69,7 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
                 throw (IOException) u_read.excuse();
             }
             base64 = TGS_CryptUtils.encrypt64_orEmpty(u_read.value());
-            imageFileType = TS_FileUtils.mime(path);
-        }
-        if (base64 == null) {
-            base64 = "image/jpeg";
+            imageFileType = TS_FileUtils.mime(path).orElse("image/jpeg");
         }
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
