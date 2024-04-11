@@ -25,20 +25,17 @@ public class TS_FileHtmlUtils {
 //        
 //        return 
 //    }
-    
-    public static boolean browse(TGS_Url url) {
+    public static TGS_UnionExcuseVoid browse(TGS_Url url) {
         var edge = Path.of("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
         if (!TS_FileUtils.isExistFile(edge)) {
-            d.ce("browse", "File not exist", edge);
-            return false;
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "browse", "File not exist " + edge);
         }
         if (!TS_OsPlatformUtils.isWindows()) {
-            d.ce("browse", "os not supported");
-            return false;
+            return TGS_UnionExcuseVoid.ofExcuse(d.className, "browse", "os not supported");
         }
         var cmd = edge.toAbsolutePath().toString() + " " + url.toString();
         d.ci("browse", "edge", cmd);
-        return TS_OsProcess.of(cmd).exitValueOk();
+        return TS_OsProcess.of(cmd).toUnion().toExcuseVoid();
     }
 
     public static TGS_UnionExcuseVoid write2File(TGS_FileHtml src, Path filePath) {
