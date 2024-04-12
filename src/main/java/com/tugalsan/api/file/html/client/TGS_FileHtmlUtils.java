@@ -3,6 +3,7 @@ package com.tugalsan.api.file.html.client;
 import com.tugalsan.api.coronator.client.TGS_Coronator;
 import com.tugalsan.api.file.common.client.TGS_FileCommonFavIcon;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
 import java.nio.charset.StandardCharsets;
@@ -56,11 +57,11 @@ public class TGS_FileHtmlUtils {
         return "</section>";
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
+    public static TGS_UnionExcuse<String> beginLines(CharSequence browserTitle, boolean addBorder, int leftMargin, int topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs) {
         return beginLines(browserTitle, addBorder, leftMargin, topMargin, optional_hrefPngIcon, addDivCenter, bootLoaderJs, null, null);
     }
 
-    public static String beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
+    public static TGS_UnionExcuse<String> beginLines(CharSequence browserTitle, boolean addBorder, Integer leftMargin, Integer topMargin, TGS_FileCommonFavIcon optional_hrefPngIcon, boolean addDivCenter, TGS_Url bootLoaderJs, Integer pageSizeAX, Boolean landscape) {
         var sj = new StringJoiner("\n");
         //DOCTYPE
         sj.add("<!doctype html>");
@@ -107,7 +108,11 @@ public class TGS_FileHtmlUtils {
             sj.add("console.log(\"index.jsp: welcome\");");
             sj.add("};");
 
-            var parser = TGS_UrlParser.of(bootLoaderJs);
+            var u_parser = TGS_UrlParser.of(bootLoaderJs);
+            if (u_parser.isExcuse()){
+                return u_parser.toExcuse();
+            }
+            var parser = u_parser.value();
             sj.add("let protocol = 'https';");
             sj.add("let hostname = '" + parser.host.domain + "';");
             sj.add("let port = " + parser.host.port + ";");
@@ -191,7 +196,7 @@ public class TGS_FileHtmlUtils {
                 sj.add("</script>");
             }
         }
-        return sj.toString();
+        return TGS_UnionExcuse.of(sj.toString());
     }
 
     public static String endLines(boolean addDiv) {

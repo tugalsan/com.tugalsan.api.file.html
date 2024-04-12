@@ -11,7 +11,7 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
         var cs = table.getMaxColumnSize();
         var rs = table.getRowSize();
         var htmlTable = new TGS_FileHtmlTable("", "");
-        if (table.isHeaderBold()){
+        if (table.isHeaderBold()) {
             htmlTable.setHeaderRowCount(1);
         }
         IntStream.range(0, rs).forEachOrdered(ri -> {
@@ -21,7 +21,7 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
                 var cell = new TGS_FileHtmlTableRowCell(escapeHTML, "", "", "", "");
                 row.getChilderen().add(cell);
 
-                var spanValue = table.getValueAsString(ri, ci);
+                var spanValue = table.getValueAsString(ri, ci).orElse(excuse -> "");
                 var span = new TGS_FileHtmlSpan(escapeHTML, "", spanValue, "");
                 cell.getChilderen().add(span);
             });
@@ -32,7 +32,7 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
     public TGS_FileHtmlTable setHeaderRowCount(int headerRowCount) {
         IntStream.range(0, getChilderen().size()).forEachOrdered(i -> {
             var el = getChilderen().get(i);
-            if (el instanceof TGS_FileHtmlTableRow) {
+            if (el instanceof TGS_FileHtmlTableRow) {//THINK OF GWT
                 var tableRow = (TGS_FileHtmlTableRow) el;
                 tableRow.setIsHeader(i < headerRowCount);
             }
