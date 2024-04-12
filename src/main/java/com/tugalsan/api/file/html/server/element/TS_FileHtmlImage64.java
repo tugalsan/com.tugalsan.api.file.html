@@ -5,6 +5,7 @@ import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 import java.io.IOException;
@@ -54,13 +55,13 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         super(null, "img", nameAndId);
         var fileLocStr = fileLoc.toString();
         d.ci("cons", "fileLocStr", fileLocStr);
-        String base64;
-        String imageFileType;
+        TGS_UnionExcuse<String> u_base64;
+        TGS_UnionExcuse<String> u_imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
             d.ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
-            base64 = TS_UrlDownloadUtils.toBase64_orEmpty(url);
-            imageFileType = TS_UrlUtils.mime(url).orElse("image/jpeg");
+            u_base64 = TS_UrlDownloadUtils.toBase64(url);
+            u_imageFileType = TS_UrlUtils.mime(url);
         } else {
             d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
@@ -68,9 +69,11 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
             if (u_read.isExcuse()) {
                 throw (IOException) u_read.excuse();
             }
-            base64 = TGS_CryptUtils.encrypt64_orEmpty(u_read.value());
-            imageFileType = TS_FileUtils.mime(path).orElse("image/jpeg");
+            u_base64 = TGS_CryptUtils.encrypt64(u_read.value());
+            u_imageFileType = TS_FileUtils.mime(path);
         }
+        var base64 = u_base64.isExcuse() ? u_base64.excuse().getMessage() : u_base64.value();
+        var imageFileType = u_imageFileType.isExcuse() ? u_imageFileType.excuse().getMessage() : u_imageFileType.value();
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
         d.ci("cons", "imageFileType", imageFileType);
