@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.server.archive;
 
-import com.tugalsan.api.charset.client.TGS_CharSetCast;
+import com.tugalsan.api.charset.client.TGS_CharSet;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
@@ -176,7 +176,7 @@ public class TS_FileHtmlArchive {
      * Guesses the MIME type (or returns empty string)
      */
     public static String mimeType(CharSequence path) {
-        var pathStr = TGS_CharSetCast.toLocaleLowerCase(path);
+        var pathStr = TGS_CharSet.cmn().languageDefault().toLowerCase(path);
         for (var i = 0; i < MIME().size(); i += 2) {
             if (pathStr.contains(MIME().get(i))) {
                 return (MIME().get(i + 1));
@@ -196,7 +196,7 @@ public class TS_FileHtmlArchive {
             warn("Unknown mime type " + mimeTypeStr + ", using .dat");
             return (".dat");
         }
-        mimeTypeStr = "." + TGS_CharSetCast.toLocaleLowerCase(mimeTypeStr.substring(pos + 1));
+        mimeTypeStr = "." + TGS_CharSet.cmn().languageDefault().toLowerCase(mimeTypeStr.substring(pos + 1));
         if (mimeTypeStr.equals(".font-sfnt")) {
             return (".ttf");
         }
