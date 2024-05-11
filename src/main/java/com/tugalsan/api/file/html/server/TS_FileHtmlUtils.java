@@ -8,10 +8,12 @@ import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.nio.file.*;
-import net.htmlparser.jericho.*;
+//import net.htmlparser.jericho.*;
 import org.apache.commons.text.*;
+import org.jsoup.Jsoup;
 
 public class TS_FileHtmlUtils {
 
@@ -23,7 +25,6 @@ public class TS_FileHtmlUtils {
 //        
 //        return 
 //    }
-    
     public static boolean browse(TGS_Url url) {
         var edge = Path.of("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
         if (!TS_FileUtils.isExistFile(edge)) {
@@ -48,8 +49,12 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
+    public static String toText(TGS_Url url) {
+        return TGS_UnSafe.call(() -> Jsoup.connect(url.toString()).get().body().text());
+    }
+
     public static String toText(CharSequence html) {//converts html &tags to chars
-        return new Source(html).getTextExtractor().toString();
+        return Jsoup.parse(html.toString()).body().text();
     }
 
     public static int getIdxBodyStartBefore(CharSequence html) {
