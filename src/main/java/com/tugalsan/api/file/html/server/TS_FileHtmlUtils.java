@@ -69,8 +69,9 @@ public class TS_FileHtmlUtils {
         var processed = TGS_StreamUtils.toLst(
                 links.stream()
                         .map(u -> removeAnchor ? TGS_UrlUtils.trimAnchor(u) : u)
-                        .map(u -> fetchOnlyChild ? TGS_UrlUtils.toFull(base, u) : u)
+                        .map(u -> TGS_UrlUtils.toFull(base, u))
                         .filter(u -> fetchOnlyChild ? u.toString().startsWith(base.toString()) : true)
+                        .filter(u -> !u.equals(u))
         );
         if (removeAnchor) {
             processed = TGS_StreamUtils.toLst(
