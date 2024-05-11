@@ -72,6 +72,8 @@ public class TS_FileHtmlUtils {
                         .map(u -> TGS_UrlUtils.toFull(base, u))
                         .filter(u -> fetchOnlyChild ? u.toString().startsWith(base.toString()) : true)
                         .filter(u -> !u.equals(base))
+                        .filter(u -> !u.toString().equals(base.toString() + "/"))
+                        .filter(u -> !(u.toString() + "/").equals(base.toString()))
         );
         if (removeAnchor) {
             processed = TGS_StreamUtils.toLst(
