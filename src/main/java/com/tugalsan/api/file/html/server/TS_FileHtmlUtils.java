@@ -64,11 +64,11 @@ public class TS_FileHtmlUtils {
     }
 
     public static String toText(TGS_Url url) {
-        return TGS_UnSafe.call(() -> Jsoup.connect(url.toString()).get().body().text());
+        return TGS_UnSafe.call(() -> Jsoup.connect(url.toString()).get().wholeText());
     }
 
     public static String toText(CharSequence html) {//converts html &tags to chars
-        return Jsoup.parse(html.toString()).body().text();
+        return Jsoup.parse(html.toString()).wholeText();
     }
 
     public static int getIdxBodyStartBefore(CharSequence html) {
