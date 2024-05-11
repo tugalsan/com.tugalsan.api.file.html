@@ -6,11 +6,13 @@ import com.tugalsan.api.file.txt.server.*;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
+import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import java.nio.file.*;
+import java.util.List;
 //import net.htmlparser.jericho.*;
 import org.apache.commons.text.*;
 import org.jsoup.Jsoup;
@@ -47,6 +49,18 @@ public class TS_FileHtmlUtils {
 
     public static String escape(CharSequence html) {//converts chars to html &tags
         return StringEscapeUtils.escapeHtml4(html.toString());
+    }
+
+    public static List<TGS_Url> parseLinks(CharSequence html) {
+        return TGS_StreamUtils.toLst(
+                Jsoup.parse(html.toString()).select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
+        );
+    }
+
+    public static List<TGS_Url> parseLinks(TGS_Url url) {
+        return TGS_UnSafe.call(() -> TGS_StreamUtils.toLst(
+                Jsoup.connect(url.toString()).get().select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
+        ));
     }
 
     public static String toText(TGS_Url url) {
