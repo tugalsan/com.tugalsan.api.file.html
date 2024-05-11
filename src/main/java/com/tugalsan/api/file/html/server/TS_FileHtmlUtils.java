@@ -3,6 +3,7 @@ package com.tugalsan.api.file.html.server;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.file.txt.server.*;
+import com.tugalsan.api.list.client.TGS_ListDistinctizeUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
@@ -11,6 +12,7 @@ import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
+import com.tugalsan.api.url.client.TGS_UrlUtils;
 import java.nio.file.*;
 import java.util.List;
 //import net.htmlparser.jericho.*;
@@ -51,16 +53,33 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
-    public static List<TGS_Url> parseLinks(CharSequence html) {
-        return TGS_StreamUtils.toLst(
+    public static List<TGS_Url> parseLinks(CharSequence html, boolean removeAnchor) {
+        return parseLinks_filter(TGS_Url.of(""), TGS_StreamUtils.toLst(
                 Jsoup.parse(html.toString()).select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
-        );
+        ), removeAnchor, false);
     }
 
-    public static List<TGS_Url> parseLinks(TGS_Url url) {
-        return TGS_UnSafe.call(() -> TGS_StreamUtils.toLst(
+    public static List<TGS_Url> parseLinks(TGS_Url url, boolean removeAnchor, boolean fetchOnlyChild) {
+        return parseLinks_filter(url, TGS_UnSafe.call(() -> TGS_StreamUtils.toLst(
                 Jsoup.connect(url.toString()).get().select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
-        ));
+        )), removeAnchor, fetchOnlyChild);
+    }
+
+    private static List<TGS_Url> parseLinks_filter(TGS_Url base, List<TGS_Url> links, boolean removeAnchor, boolean fetchOnlyChild) {
+        var processed = TGS_StreamUtils.toLst(
+                links.stream()
+                        .map(u -> removeAnchor ? TGS_UrlUtils.trimAnchor(u) : u)
+                        .map(u -> fetchOnlyChild ? TGS_UrlUtils.toFull(base, u) : u)
+                        .filter(u -> fetchOnlyChild ? u.toString().startsWith(base.toString()) : true)
+        );
+        if (removeAnchor) {
+            processed = TGS_StreamUtils.toLst(
+                    TGS_ListDistinctizeUtils.toUniqueString(
+                            TGS_StreamUtils.toLst(processed.stream().map(u -> u.toString()))
+                    ).stream().map(s -> TGS_Url.of(s))
+            );
+        }
+        return processed;
     }
 
     public static String toText(TGS_Url url) {
