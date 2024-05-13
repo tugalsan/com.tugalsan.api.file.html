@@ -13,6 +13,7 @@ import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
+import com.tugalsan.api.url.client.parser.TGS_UrlParser;
 import java.nio.file.*;
 import java.util.List;
 //import net.htmlparser.jericho.*;
@@ -60,7 +61,9 @@ public class TS_FileHtmlUtils {
     }
 
     public static List<TGS_Url> parseLinks(TGS_Url url, boolean removeAnchor, boolean fetchOnlyChild) {
-        return parseLinks_filter(url, TGS_UnSafe.call(() -> TGS_StreamUtils.toLst(
+        var base = TGS_UrlParser.of(url);
+        base.path.fileOrServletName = "";
+        return parseLinks_filter(base.toUrl(), TGS_UnSafe.call(() -> TGS_StreamUtils.toLst(
                 Jsoup.connect(url.toString()).get().select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
         )), removeAnchor, fetchOnlyChild);
     }
