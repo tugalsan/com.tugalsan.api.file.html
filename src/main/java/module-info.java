@@ -7,6 +7,7 @@ module com.tugalsan.api.file.html {
     requires com.tugalsan.api.stream;
     requires com.tugalsan.api.crypto;
     requires com.tugalsan.api.callable;
+    requires com.tugalsan.api.union;
     requires com.tugalsan.api.coronator;
     requires com.tugalsan.api.os;
     requires com.tugalsan.api.runnable;

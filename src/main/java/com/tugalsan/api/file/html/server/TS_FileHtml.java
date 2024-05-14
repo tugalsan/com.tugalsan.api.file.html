@@ -476,11 +476,11 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     IntStream.range(0, tags.size()).forEachOrdered(j -> {
                         var tag = tags.get(j);
                         var dbl = TGS_StringDouble.of(text);
-                        if (dbl.isEmpty()) {
+                        if (dbl.isExcuse()) {
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, tag, getFont());
                             parag.getChilderen().add(span);
                         } else {
-                            var htmlText = TGS_StringUtils.concat(String.valueOf(dbl.get().left), "<sub>", String.valueOf(dbl.get().dim()), String.valueOf(dbl.get().right), "</sub>");
+                            var htmlText = TGS_StringUtils.concat(String.valueOf(dbl.value().left), "<sub>", String.valueOf(dbl.value().dim()), String.valueOf(dbl.value().right), "</sub>");
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, htmlText, getFont());
                             span.pureCode = true;
                             parag.getChilderen().add(span);
