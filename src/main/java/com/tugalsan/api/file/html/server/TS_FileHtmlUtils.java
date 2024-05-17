@@ -74,6 +74,7 @@ public class TS_FileHtmlUtils {
                         .map(u -> removeAnchor ? TGS_UrlUtils.trimAnchor(u) : u)
                         .map(u -> TGS_UrlUtils.toFull(base, u))
                         .filter(u -> fetchOnlyChild ? u.toString().startsWith(base.toString()) : true)
+                        .filter(u -> fetchOnlyChild ? u.toString().contains("..") : false)
                         .filter(u -> !u.equals(base))
                         .filter(u -> !u.toString().equals(base.toString() + "/"))
                         .filter(u -> !(u.toString() + "/").equals(base.toString()))
