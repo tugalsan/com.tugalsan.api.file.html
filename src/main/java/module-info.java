@@ -10,7 +10,6 @@ module com.tugalsan.api.file.html {
     requires com.tugalsan.api.union;
     requires com.tugalsan.api.coronator;
     requires com.tugalsan.api.os;
-    requires com.tugalsan.api.runnable;
     requires com.tugalsan.api.list;
     requires com.tugalsan.api.charset;
     requires com.tugalsan.api.log;

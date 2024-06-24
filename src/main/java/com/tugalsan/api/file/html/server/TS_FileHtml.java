@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.server;
 
+import com.tugalsan.api.callable.client.TGS_CallableType1Void;
 import com.tugalsan.api.callable.client.TGS_CallableType2;
 import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
 import com.tugalsan.api.file.html.server.element.*;
@@ -12,7 +13,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.runnable.client.TGS_RunnableType1;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.unsafe.client.*;
 import com.tugalsan.api.url.client.*;
@@ -49,7 +49,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_RunnableType1<TS_FileHtml> web) {
+    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_CallableType1Void<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
             instance.use_init(fileCommonConfig);
