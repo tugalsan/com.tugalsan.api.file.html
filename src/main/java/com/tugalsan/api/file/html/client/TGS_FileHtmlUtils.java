@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client;
 
-import com.tugalsan.api.coronator.client.TGS_Coronator;
+import com.tugalsan.api.callable.client.TGS_CallableType1_Coronator;
 import com.tugalsan.api.file.common.client.TGS_FileCommonFavIcon;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.url.client.TGS_Url;
@@ -132,7 +132,7 @@ public class TGS_FileHtmlUtils {
             sj.add("}");
             sj.add("</style>");
         }
-        var bodyClass = TGS_Coronator.ofStr().coronateAs(__ -> {
+        var bodyClass = TGS_CallableType1_Coronator.ofStr().coronateAs(__ -> {
             var pageSize = pageSizeAX == null ? "" : ("A" + pageSizeAX);
             var pageOri = landscape == null ? "" : (landscape ? "landscape" : "portrait");
             if (!pageSize.isEmpty() && !pageOri.isEmpty()) {
