@@ -11,6 +11,6 @@ public class TGS_FileHtmlTableRowCellOccupied extends TGS_FileHtmlTableRowCell {
 
     @Override
     public String toString() {
-        return TGS_StringUtils.concat(" <! -- ", TGS_FileHtmlTableRowCellOccupied.class.getSimpleName(), " -->\n");
+        return TGS_StringUtils.cmn().concat(" <! -- ", TGS_FileHtmlTableRowCellOccupied.class.getSimpleName(), " -->\n");
     }
 }

@@ -157,7 +157,7 @@ public class TS_FileHtmlUtils {
     }
 
     public static String updateTitleContent(CharSequence html, CharSequence content) {
-        return TGS_StringUtils.concat(
+        return TGS_StringUtils.cmn().concat(
                 html.subSequence(0, getIdxTitleStartAfter(html)),
                 content,
                 html.subSequence(getIdxTitleEndBefore(html), html.length())
@@ -165,7 +165,7 @@ public class TS_FileHtmlUtils {
     }
 
     public static String updateBodyTag(CharSequence html, CharSequence newBodyTag) {
-        return TGS_StringUtils.concat(
+        return TGS_StringUtils.cmn().concat(
                 html.subSequence(0, getIdxBodyStartBefore(html)),
                 newBodyTag,
                 html.subSequence(getIdxBodyStartAfter(html), html.length())
@@ -176,23 +176,23 @@ public class TS_FileHtmlUtils {
         var idxTitleEndAfter = TS_FileHtmlUtils.getIdxTitleEndAfter(html);
         var idxHeadEndBefore = TS_FileHtmlUtils.getIdxHeadEndBefore(html);
         var ribContent = html.subSequence(idxTitleEndAfter, idxHeadEndBefore).toString();
-        var newHtm = TGS_StringUtils.concat(html.subSequence(0, idxTitleEndAfter), html.subSequence(idxHeadEndBefore, html.length()));
+        var newHtm = TGS_StringUtils.cmn().concat(html.subSequence(0, idxTitleEndAfter), html.subSequence(idxHeadEndBefore, html.length()));
         return new TGS_Tuple2(newHtm, ribContent);
     }
 
     public static String appendToHead(CharSequence html, CharSequence content) {
         var headEnd = getIdxHeadEndBefore(html);
-        return TGS_StringUtils.concat(html.subSequence(0, headEnd), content, html.subSequence(headEnd, html.length()));
+        return TGS_StringUtils.cmn().concat(html.subSequence(0, headEnd), content, html.subSequence(headEnd, html.length()));
     }
 
     public static String appendToBodyStartAfter(CharSequence html, CharSequence content) {
         var bodyStartAfter = getIdxBodyStartAfter(html);
-        return TGS_StringUtils.concat(html.subSequence(0, bodyStartAfter), content, html.subSequence(bodyStartAfter, html.length()));
+        return TGS_StringUtils.cmn().concat(html.subSequence(0, bodyStartAfter), content, html.subSequence(bodyStartAfter, html.length()));
     }
 
     public static String appendToBodyEndBefore(CharSequence html, CharSequence content) {
         var bodyEndBefore = getIdxBodyEndBefore(html);
-        return TGS_StringUtils.concat(html.subSequence(0, bodyEndBefore), content, html.subSequence(bodyEndBefore, html.length()));
+        return TGS_StringUtils.cmn().concat(html.subSequence(0, bodyEndBefore), content, html.subSequence(bodyEndBefore, html.length()));
     }
 
     public static String addLoader(CharSequence htm) {
@@ -311,7 +311,7 @@ public class TS_FileHtmlUtils {
     }
 
     public static String appendResponsiveVideo(CharSequence htm, CharSequence iframe_video) {
-        return appendToBodyStartAfter(htm, TGS_StringUtils.concat(
+        return appendToBodyStartAfter(htm, TGS_StringUtils.cmn().concat(
                 "<div class=\"video-container\">",
                 iframe_video,
                 """

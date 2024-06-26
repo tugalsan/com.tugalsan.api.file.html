@@ -60,10 +60,10 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
                 return;
             }
             if ("style".equals(properties.get(i).name)) {
-                var p = TGS_StringUtils.concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
+                var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
                 sb.append(p);
             } else {
-                var p = TGS_StringUtils.concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
+                var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
                 sb.append(p);
             }
         });

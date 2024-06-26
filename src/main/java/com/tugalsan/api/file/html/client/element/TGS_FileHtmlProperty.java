@@ -14,6 +14,6 @@ public class TGS_FileHtmlProperty {
 
     @Override
     public String toString() {
-        return TGS_StringUtils.concat(name, "='", value, "'");
+        return TGS_StringUtils.cmn().concat(name, "='", value, "'");
     }
 }

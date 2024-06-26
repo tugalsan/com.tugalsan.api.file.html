@@ -5,7 +5,7 @@ import com.tugalsan.api.callable.client.TGS_CallableType2;
 import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
 import com.tugalsan.api.file.html.server.element.*;
 import com.tugalsan.api.file.html.client.*;
-import com.tugalsan.api.string.server.*;
+import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
 import java.awt.image.BufferedImage;
@@ -308,9 +308,9 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             }
         }
         var pageSizeFix = "";//max-width:" + (pageSizeAX == null ? "null" : ((int) (Math.round(pageSizeMaxWidth[pageSizeAX] * widthScalePercent / 100f)) + "px")) + ";";
-        var styleWidth = TGS_StringUtils.concat("width:", String.valueOf(sumWidth), "%;");
-        var styleHeight = cellHeight == null ? "" : TGS_StringUtils.concat("height:", String.valueOf(cellHeight), "px;");
-        tableRowCell.setStyle_Properties2(TGS_StringUtils.concat(pageSizeFix, "vertical-align:top;border:1px solid black;", styleWidth, styleHeight));
+        var styleWidth = TGS_StringUtils.cmn().concat("width:", String.valueOf(sumWidth), "%;");
+        var styleHeight = cellHeight == null ? "" : TGS_StringUtils.cmn().concat("height:", String.valueOf(cellHeight), "px;");
+        tableRowCell.setStyle_Properties2(TGS_StringUtils.cmn().concat(pageSizeFix, "vertical-align:top;border:1px solid black;", styleWidth, styleHeight));
 
         var fRowCellColSpanOffset = rowCellColSpanOffset;
         var escape = new TS_FileHtmlEscape();
@@ -463,7 +463,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             d.ce("addText.ERROR: MIFWeb.addText -> why parag not exists!");
             return false;
         }
-        var lines = TS_StringUtils.toList(text, "\n");
+        var lines = TGS_StringUtils.jre().toList(text, "\n");
         var escape = new TS_FileHtmlEscape();
         IntStream.range(0, lines.size()).forEachOrdered(i -> {
             var line = lines.get(i);
@@ -472,7 +472,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, line, getFont());
                     parag.getChilderen().add(span);
                 } else {
-                    var tags = TS_StringUtils.toList_spc(line);
+                    var tags = TGS_StringUtils.jre().toList_spc(line);
                     IntStream.range(0, tags.size()).forEachOrdered(j -> {
                         var tag = tags.get(j);
                         var dbl = TGS_StringDouble.of(text);
@@ -480,7 +480,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, tag, getFont());
                             parag.getChilderen().add(span);
                         } else {
-                            var htmlText = TGS_StringUtils.concat(String.valueOf(dbl.value().left), "<sub>", String.valueOf(dbl.value().dim()), String.valueOf(dbl.value().right), "</sub>");
+                            var htmlText = TGS_StringUtils.cmn().concat(String.valueOf(dbl.value().left), "<sub>", String.valueOf(dbl.value().dim()), String.valueOf(dbl.value().right), "</sub>");
                             var span = new TGS_FileHtmlSpan(escape, "TK_POJOHTMLSpan_" + TGS_FileHtmlSpan.counter, htmlText, getFont());
                             span.pureCode = true;
                             parag.getChilderen().add(span);

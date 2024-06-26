@@ -25,7 +25,7 @@ public class TGS_FileHtmlUtils {
             sb.append("\";\n");
         });
 
-        return TGS_StringUtils.concat(
+        return TGS_StringUtils.cmn().concat(
                 "<script>\n",
                 sb,
                 "var iframe = document.getElementById(\"", iframeId, "\");\n",
@@ -77,9 +77,9 @@ public class TGS_FileHtmlUtils {
             sj.add(optional_hrefPngIcon.toString());
         }
         //HTML->HEAD->CHARSET
-        sj.add(TGS_StringUtils.concat("<meta charset='", StandardCharsets.UTF_8.name(), "'>"));
+        sj.add(TGS_StringUtils.cmn().concat("<meta charset='", StandardCharsets.UTF_8.name(), "'>"));
         //HTML->HEAD->TITLE
-        sj.add(TGS_StringUtils.concat("<title>", browserTitle, "</title>"));
+        sj.add(TGS_StringUtils.cmn().concat("<title>", browserTitle, "</title>"));
         //HTML->HEAD->BORDER STYLE
         if (addBorder) {
             sj.add("<style>");
