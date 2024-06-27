@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.callable.client.*;
+import com.tugalsan.api.function.client.*;
 import com.tugalsan.api.list.client.*;
 import java.util.*;
 
@@ -13,9 +13,9 @@ public class TGS_FileHtmlElement {
     protected List<TGS_FileHtmlElement> childeren;
     protected List<TGS_FileHtmlProperty> properties;
     protected String spanText;
-    protected TGS_CallableType1<String, CharSequence> escapeHTML;
+    protected TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML;
 
-    public TGS_FileHtmlElement(TGS_CallableType1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
+    public TGS_FileHtmlElement(TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
         this.escapeHTML = escapeHTML;
         this.nameAndId = nameAndId == null ? null : nameAndId.toString();
         this.tag = tag == null ? null : tag.toString();

@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.callable.client.*;
+import com.tugalsan.api.function.client.*;
 
 public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
 
@@ -15,7 +15,7 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
         return properties.get(0).value;
     }
 
-    public TGS_FileHtmlSpan(TGS_CallableType1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence spanText, CharSequence style) {
+    public TGS_FileHtmlSpan(TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence spanText, CharSequence style) {
         super(escapeHTML, "span", nameAndId);
         counter++;
         super.spanText = spanText.toString();

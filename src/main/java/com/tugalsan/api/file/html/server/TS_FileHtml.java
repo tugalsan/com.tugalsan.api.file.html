@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server;
 
-import com.tugalsan.api.callable.client.TGS_CallableType1_Run;
-import com.tugalsan.api.callable.client.TGS_CallableType2;
+import com.tugalsan.api.function.client.TGS_Func_In1;
+import com.tugalsan.api.function.client.TGS_Func_OutTyped_In2;
 import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
 import com.tugalsan.api.file.html.server.element.*;
 import com.tugalsan.api.file.html.client.*;
@@ -33,14 +33,14 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     public TS_FileCommonConfig fileCommonConfig;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
-    private final TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
+    private final TGS_Func_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
 
     public boolean base64() {
         return isBase64;
     }
     private final boolean isBase64;
 
-    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
+    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Func_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
         super(enabled, localFile, remoteFile);
         this.isBase64 = isBase64;
         this.fontHeightScalePercent = fontHeightScalePercent;
@@ -49,7 +49,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_CallableType2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_CallableType1_Run<TS_FileHtml> web) {
+    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_Func_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_Func_In1<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
             instance.use_init(fileCommonConfig);
