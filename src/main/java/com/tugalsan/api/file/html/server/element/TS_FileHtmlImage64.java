@@ -5,6 +5,7 @@ import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 import java.nio.file.*;
@@ -54,24 +55,29 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         var fileLocStr = fileLoc.toString();
         d.ci("cons", "fileLocStr", fileLocStr);
         String base64;
-        String imageFileType;
+        TGS_UnionExcuse<String> u_imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
             d.ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
             base64 = TS_UrlDownloadUtils.toBase64(url);
-            imageFileType = TS_UrlUtils.mime(url);
+            u_imageFileType = TS_UrlUtils.mime(url);
         } else {
             d.ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
             base64 = TGS_CryptUtils.encrypt64(TS_FileUtils.read(path));
-            imageFileType = TS_FileUtils.mime(path);
+            u_imageFileType = TS_FileUtils.mime(path);
         }
         if (base64 == null) {
             base64 = "image/jpeg";
         }
         d.ci("cons", "base64", base64);
         d.ci("cons", "base64.len", base64.length());
-        d.ci("cons", "imageFileType", imageFileType);
+        if (u_imageFileType.isExcuse()) {
+            d.ce("constructor", fileLocStr, "u_imageFileType", u_imageFileType.excuse().getMessage());
+        } else {
+            d.ci("cons", "imageFileType", u_imageFileType.value());
+        }
+        var imageFileType = u_imageFileType.isExcuse() ? "null" : "image/jpeg";
         var base64_data = imageFileType + ";base64," + base64;
         d.ci("cons", "base64_data", base64_data);
         properties.add(new TGS_FileHtmlProperty("data", base64_data));
