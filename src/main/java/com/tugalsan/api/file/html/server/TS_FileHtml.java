@@ -227,7 +227,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         tableRow = new TGS_FileHtmlTableRow("TK_POJOHTMLTableRow_" + TGS_FileHtmlTableRow.counter);
         var escape = new TS_FileHtmlEscape();
         Arrays.stream(table_relColSizes).forEachOrdered(rcs -> {
-            tableRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(escape));
+            tableRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(tableRow.IsHeader(), escape));
         });
         table.getChilderen().add(tableRow);
         return true;
@@ -294,7 +294,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                 return false;
             }
             var escape = new TS_FileHtmlEscape();
-            tableRowCell = new TGS_FileHtmlTableRowCell(escape, "TK_POJOHTMLTableRowCell_" + TGS_FileHtmlTableRowCell.counter, String.valueOf(rowSpan), String.valueOf(colSpan), "");
+            tableRowCell = new TGS_FileHtmlTableRowCell(tableRow.IsHeader(), escape, "TK_POJOHTMLTableRowCell_" + TGS_FileHtmlTableRowCell.counter, String.valueOf(rowSpan), String.valueOf(colSpan), "");
             tableRow.getChilderen().set(rowCellColSpanOffset, tableRowCell);
         }
 
@@ -316,7 +316,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         IntStream.range(1, colSpan).forEach(ci -> {//ADD COLSPAN FILL TODO
             if (fRowCellColSpanOffset + ci <= table_relColSizes.length - 1) {
                 tableRow.getChilderen().set(fRowCellColSpanOffset + ci,
-                        new TGS_FileHtmlTableRowCellOccupied(escape)
+                        new TGS_FileHtmlTableRowCellOccupied(tableRow.IsHeader(), escape)
                 );
             } else {
                 d.ci("beginTableCell.ERROR: MIFWeb.beginTableCell -> eColSpan WHY CANOT ADD COLSPANFULL: rowCellColSpanOffset + c <= table_relColSizes.length - 1", "rowCellColSpanOffset", fRowCellColSpanOffset, "table_relColSizes.length", table_relColSizes.length);
@@ -328,7 +328,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             if (table.getChilderen().size() <= currentRowIndex + ri) {
                 nextRow = new TGS_FileHtmlTableRow("TK_POJOHTMLTableRow_" + TGS_FileHtmlTableRow.counter);
                 Arrays.stream(table_relColSizes).forEachOrdered(rcs -> {
-                    nextRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(escape));
+                    nextRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(nextRow.IsHeader(), escape));
                 });
                 table.getChilderen().add(nextRow);
             } else {
@@ -336,7 +336,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             }
             IntStream.range(0, colSpan).forEach(ci -> {
                 nextRow.getChilderen().set(fRowCellColSpanOffset + ci,
-                        new TGS_FileHtmlTableRowCellOccupied(escape)
+                        new TGS_FileHtmlTableRowCellOccupied(nextRow.IsHeader(), escape)
                 );
             });
         });
@@ -379,7 +379,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                 currentRowIndex++;
                 tableRow = new TGS_FileHtmlTableRow("TK_POJOHTMLTableRow_" + TGS_FileHtmlTableRow.counter);
                 Arrays.stream(table_relColSizes).forEachOrdered(rcs -> {
-                    tableRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(escape));
+                    tableRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(tableRow.IsHeader(), escape));
                 });
                 table.getChilderen().add(tableRow);
                 d.ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: NEWROW_ADDED");

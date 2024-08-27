@@ -17,12 +17,11 @@ public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
 
     private boolean isHeader = false;
 
-    public boolean isIsHeader() {
+    public boolean IsHeader() {
         return isHeader;
     }
 
-    public void setIsHeader(boolean isHeader) {
+    public void setHeader(boolean isHeader) {
         this.isHeader = isHeader;
     }
-
 }

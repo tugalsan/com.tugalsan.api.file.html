@@ -41,11 +41,9 @@ public class TGS_FileHtmlElement {
         var tableHeader = false;
         if (this instanceof TGS_FileHtmlTableRow) {
             var tableRow = (TGS_FileHtmlTableRow) this;
-            tableHeader = tableRow.isIsHeader();
+            tableHeader = tableRow.IsHeader();
         }
-        if (tableHeader) {
-            tag = "th";
-        }
+        System.out.println("[" + tag + "], [" + spanText + "], [tableHeader:" + tableHeader + "]");
 
         var sb = new StringBuilder();
         if (tableHeader) {
@@ -69,7 +67,7 @@ public class TGS_FileHtmlElement {
             if (this instanceof TGS_FileHtmlSpan) {
                 var span = (TGS_FileHtmlSpan) this;
                 if (span.pureCode) {//html span
-                    sb.append((spanText));
+                    sb.append(spanText);
                 } else {//normal span
                     sb.append(escapeHTML == null ? spanText : escapeHTML.call(spanText));
                 }

@@ -18,9 +18,8 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
             var row = new TGS_FileHtmlTableRow("");
             htmlTable.getChilderen().add(row);
             IntStream.range(0, cs).forEachOrdered(ci -> {
-                var cell = new TGS_FileHtmlTableRowCell(escapeHTML, "", "", "", "");
+                var cell = new TGS_FileHtmlTableRowCell(row.IsHeader(), escapeHTML, "", "", "", "");
                 row.getChilderen().add(cell);
-
                 var spanValue = table.getValueAsString(ri, ci);
                 var span = new TGS_FileHtmlSpan(escapeHTML, "", spanValue, "");
                 cell.getChilderen().add(span);
@@ -34,7 +33,7 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
             var el = getChilderen().get(i);
             if (el instanceof TGS_FileHtmlTableRow) {
                 var tableRow = (TGS_FileHtmlTableRow) el;
-                tableRow.setIsHeader(i < headerRowCount);
+                tableRow.setHeader(i < headerRowCount);
             }
         });
         return this;

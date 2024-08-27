@@ -7,7 +7,8 @@ import java.util.stream.IntStream;
 
 public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
 
-    public static int counter = 0; 
+    public static int counter = 0;
+    public boolean header = false;
 
     public void setRowspan_Properties0(CharSequence rowspan) {
         properties.get(0).value = rowspan.toString();
@@ -37,8 +38,8 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         return childeren;
     }
 
-    public TGS_FileHtmlTableRowCell(TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
-        super(escapeHTML, "td", nameAndId);
+    public TGS_FileHtmlTableRowCell(boolean header, TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
+        super(escapeHTML, header ? "th" : "td", nameAndId);
         counter++;
         properties.add(new TGS_FileHtmlProperty("rowspan", rowspan));
         properties.add(new TGS_FileHtmlProperty("colspan", colspan));

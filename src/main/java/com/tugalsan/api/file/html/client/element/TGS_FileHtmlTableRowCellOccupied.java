@@ -5,8 +5,8 @@ import com.tugalsan.api.string.client.*;
 
 public class TGS_FileHtmlTableRowCellOccupied extends TGS_FileHtmlTableRowCell {
 
-    public TGS_FileHtmlTableRowCellOccupied(TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML) {
-        super(escapeHTML, "null", "1", "1", "");
+    public TGS_FileHtmlTableRowCellOccupied(boolean header, TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML) {
+        super(header, escapeHTML, "null", "1", "1", "");
     }
 
     @Override
