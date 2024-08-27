@@ -44,7 +44,17 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         properties.add(new TGS_FileHtmlProperty("colspan", colspan));
         properties.add(new TGS_FileHtmlProperty("style", style));
     }
-    final public boolean header = false;
+
+    private boolean header = false;
+
+    public boolean isHeader() {
+        return header;
+    }
+
+    public void setHeader(boolean header) {
+        this.header = header;
+        tag = header ? "th" : "td";
+    }
 
     @Override
     public String toString() {

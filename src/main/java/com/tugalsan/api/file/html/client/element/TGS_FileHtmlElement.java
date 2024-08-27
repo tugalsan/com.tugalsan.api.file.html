@@ -43,7 +43,7 @@ public class TGS_FileHtmlElement {
             var tableRow = (TGS_FileHtmlTableRow) this;
             tableHeader = tableRow.IsHeader();
         }
-        System.out.println("[" + tag + "], [" + spanText + "], [tableHeader:" + tableHeader + "]");
+//        System.out.println("[" + tag + "], [" + spanText + "], [tableHeader:" + tableHeader + "]");
 
         var sb = new StringBuilder();
         if (tableHeader) {

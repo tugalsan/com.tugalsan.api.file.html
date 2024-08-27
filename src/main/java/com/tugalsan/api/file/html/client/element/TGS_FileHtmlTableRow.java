@@ -23,5 +23,11 @@ public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
 
     public void setHeader(boolean isHeader) {
         this.isHeader = isHeader;
+        getChilderen().forEach(e -> {
+            if (e instanceof TGS_FileHtmlTableRowCell) {
+                var c = (TGS_FileHtmlTableRowCell) e;
+                c.setHeader(isHeader);
+            }
+        });
     }
 }
