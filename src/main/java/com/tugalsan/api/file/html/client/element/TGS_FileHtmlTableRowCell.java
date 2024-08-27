@@ -8,7 +8,6 @@ import java.util.stream.IntStream;
 public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
 
     public static int counter = 0;
-    public boolean header = false;
 
     public void setRowspan_Properties0(CharSequence rowspan) {
         properties.get(0).value = rowspan.toString();
@@ -45,6 +44,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         properties.add(new TGS_FileHtmlProperty("colspan", colspan));
         properties.add(new TGS_FileHtmlProperty("style", style));
     }
+    final public boolean header = false;
 
     @Override
     public String toString() {
