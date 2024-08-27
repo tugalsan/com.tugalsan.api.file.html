@@ -43,6 +43,9 @@ public class TGS_FileHtmlElement {
             var tableRow = (TGS_FileHtmlTableRow) this;
             tableHeader = tableRow.isIsHeader();
         }
+        if (tableHeader) {
+            tag = "th";
+        }
 
         var sb = new StringBuilder();
         if (tableHeader) {
