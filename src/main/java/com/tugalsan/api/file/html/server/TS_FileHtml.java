@@ -151,7 +151,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             }
 //            d.ci("addImageWeb", "w", mWidth, "h", mHeight, "r", rotationInDegrees_0_90_180_270);
             var mImageLoc = convertLocalLocationToRemote.call(this, imageLoc);
-//            mImageLoc = TS_FileTmcrFileConverter.convertLocalLocationToRemote(
+//            mImageLoc = TS_LibFileTmcrFileConverter.convertLocalLocationToRemote(
 //                    fileCommonConfig.username,
 //                    fileCommonConfig.url,
 //                    mImageLoc
