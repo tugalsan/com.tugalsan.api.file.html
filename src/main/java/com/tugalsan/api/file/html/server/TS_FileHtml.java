@@ -54,6 +54,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             instance.use_init(fileCommonConfig);
             web.run(instance);
         } catch (Exception e) {
+            TGS_UnSafe.throwIfInterruptedException(e);
             instance.saveFile(e.getMessage());
             throw e;
         } finally {
