@@ -23,6 +23,10 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
 
     final private static TS_Log d = TS_Log.of(TS_FileHtml.class);
 
+    public String getSuperClassName() {
+        return d.className;
+    }
+
     private static int FONT_HEIGHT_OFFSET() {
         return 12;
     }
