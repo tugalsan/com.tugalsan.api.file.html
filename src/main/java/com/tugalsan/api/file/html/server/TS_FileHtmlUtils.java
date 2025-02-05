@@ -61,10 +61,10 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<TGS_Url> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_Func_OutBool_In1<TGS_Url> filter) {
         TS_ThreadSyncLst<TGS_Url> lst = TS_ThreadSyncLst.ofSlowRead();
         urlSrcs.parallelStream().forEach(urlSrc -> {
-            var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, addBaseAsPrefix, filter);
+            var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, mapBase, filter);
             d.cr("parseLinks_usingRegex", "urlSrcs", urlSrc, "urls.size()", urls.size());
             lst.add(urls);
         });
@@ -72,7 +72,7 @@ public class TS_FileHtmlUtils {
         return lst.toList_modifiable();
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<TGS_Url> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_Func_OutBool_In1<TGS_Url> filter) {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
         if (html == null) {
@@ -85,31 +85,25 @@ public class TS_FileHtmlUtils {
                     d.ci("parseLinks_usingRegex", urlSrc.toString(), u);
                 });
             }
+            var parser = TGS_UrlParser.of(urlSrc);
+            parser.anchor.clear();
+            parser.quary.clear();
+            parser.path.clear();
+            var strBase = parser.toString();
             urlsProcessed.addAll(
                     urlsAll.stream()
                             .filter(u -> filter.validate(u))
                             .map(u -> {
-                                if (!addBaseAsPrefix) {
+                                if (!mapBase) {
                                     return u;
                                 }
                                 if (!TGS_CharSetCast.current().startsWithIgnoreCase(u.toString(), urlSrc.toString())) {
-                                    var base = urlSrc.toString();
-                                    var child = u.toString();
-                                    var baseEndsWithSlash = base.endsWith("/");
-                                    var childStartsWithSlash = child.startsWith("/");
-                                    if (baseEndsWithSlash && childStartsWithSlash) {
-                                        child = child.substring(1);
-                                        return TGS_Url.of(base + child);
+                                    var strChild = u.toString();
+                                    var childStartsWithSlash = strChild.startsWith("/");
+                                    if (childStartsWithSlash) {
+                                        strChild = strChild.substring(1);
                                     }
-                                    if (!baseEndsWithSlash && childStartsWithSlash) {
-                                        return TGS_Url.of(base + child);
-                                    }
-                                    if (baseEndsWithSlash && !childStartsWithSlash) {
-                                        return TGS_Url.of(base + child);
-                                    }
-                                    if (!baseEndsWithSlash && !childStartsWithSlash) {
-                                        return TGS_Url.of(base + "/" + child);
-                                    }
+                                    return TGS_Url.of(strBase + strChild);
                                 }
                                 return u;
                             })
