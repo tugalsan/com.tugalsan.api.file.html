@@ -61,16 +61,18 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<String> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<TGS_Url> filter) {
         TS_ThreadSyncLst<TGS_Url> lst = TS_ThreadSyncLst.ofSlowRead();
         urlSrcs.parallelStream().forEach(urlSrc -> {
             var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, addBaseAsPrefix, filter);
+            d.cr("parseLinks_usingRegex", "urlSrcs", urlSrc, "urls.size()", urls.size());
             lst.add(urls);
         });
+        d.cr("parseLinks_usingRegex", "urlSrcs", "lst.size()", lst.size());
         return lst.toList_modifiable();
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<String> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<TGS_Url> filter) {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
         if (html == null) {
@@ -85,7 +87,7 @@ public class TS_FileHtmlUtils {
             }
             urlsProcessed.addAll(
                     urlsAll.stream()
-                            .filter(u -> filter.validate(html))
+                            .filter(u -> filter.validate(u))
                             .map(u -> {
                                 if (!addBaseAsPrefix) {
                                     return u;
