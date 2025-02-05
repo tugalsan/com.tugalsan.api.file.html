@@ -71,12 +71,14 @@ public class TS_FileHtmlUtils {
         return urls;
     }
 
+    @Deprecated //NOT WORKING, DONNO WHY, USE parseLinks_usingRegex
     public static List<TGS_Url> parseLinks(CharSequence html, boolean removeAnchor) {
         return parseLinks_filter(TGS_Url.of(""), TGS_StreamUtils.toLst(
                 Jsoup.parse(html.toString()).select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
         ), removeAnchor, false);
     }
 
+    @Deprecated //NOT WORKING, DONNO WHY, USE parseLinks_usingRegex
     public static List<TGS_Url> parseLinks(TGS_Url url, boolean removeAnchor, boolean fetchOnlyChild) {
         var base = TGS_UrlParser.of(url);
         base.path.fileOrServletName = "";
