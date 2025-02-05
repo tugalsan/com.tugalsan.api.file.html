@@ -74,13 +74,13 @@ public class TS_FileHtmlUtils {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
         if (html == null) {
-            d.cr("main", urlSrc.toString(), "html == null", urlSrc.toString());
+            d.cr("parseLinks_usingRegex", urlSrc.toString(), "html == null", urlSrc.toString());
         } else {
             var urlsAll = TS_FileHtmlUtils.parseLinks_usingRegex(html, true);
-            d.cr("main", urlSrc.toString(), "urls.size", urlsAll.size());
+            d.cr("parseLinks_usingRegex", urlSrc.toString(), "urls.size", urlsAll.size());
             if (d.infoEnable) {
                 urlsAll.forEach(u -> {
-                    d.ci("main", urlSrc.toString(), u);
+                    d.ci("parseLinks_usingRegex", urlSrc.toString(), u);
                 });
             }
             urlsProcessed.addAll(
