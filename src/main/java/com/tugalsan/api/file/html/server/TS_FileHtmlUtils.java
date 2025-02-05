@@ -12,6 +12,7 @@ import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
 import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
@@ -60,6 +61,15 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
+    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<String> filter) {
+        TS_ThreadSyncLst<TGS_Url> lst = TS_ThreadSyncLst.ofSlowRead();
+        urlSrcs.parallelStream().forEach(urlSrc -> {
+            var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, addBaseAsPrefix, filter);
+            lst.add(urls);
+        });
+        return lst.toList_modifiable();
+    }
+
     public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<String> filter) {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
@@ -77,7 +87,7 @@ public class TS_FileHtmlUtils {
                     urlsAll.stream()
                             .filter(u -> filter.validate(html))
                             .map(u -> {
-                                if (!addBaseAsPrefix){
+                                if (!addBaseAsPrefix) {
                                     return u;
                                 }
                                 if (!TGS_CharSetCast.current().startsWithIgnoreCase(u.toString(), urlSrc.toString())) {
