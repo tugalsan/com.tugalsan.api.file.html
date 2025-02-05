@@ -15,7 +15,9 @@ import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 //import net.htmlparser.jericho.*;
 import org.apache.commons.text.*;
 import org.jsoup.Jsoup;
@@ -52,6 +54,21 @@ public class TS_FileHtmlUtils {
 
     public static String escape(CharSequence html) {//converts chars to html &tags
         return StringEscapeUtils.escapeHtml4(html.toString());
+    }
+
+    public static List<TGS_Url> parseLinks_usingRegex(CharSequence html, boolean removeAnchor) {
+        List<TGS_Url> urls = new ArrayList();
+        var regex = "<a href\\s?=\\s?\"([^\"]+)\">";
+        var pattern = Pattern.compile(regex);
+        var matcher = pattern.matcher(html);
+        var index = 0;
+        while (matcher.find(index)) {
+            var tag = matcher.group(); // includes "<a href" and ">"
+            var link = matcher.group(1); // just the link
+            urls.add(TGS_Url.of(removeAnchor ? link : tag));
+            index = matcher.end();
+        }
+        return urls;
     }
 
     public static List<TGS_Url> parseLinks(CharSequence html, boolean removeAnchor) {
