@@ -1,8 +1,10 @@
 package com.tugalsan.api.file.html.server;
 
+import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.file.txt.server.*;
+import com.tugalsan.api.function.client.TGS_Func_OutBool_In1;
 import com.tugalsan.api.list.client.TGS_ListDistinctizeUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
@@ -14,7 +16,9 @@ import com.tugalsan.api.unsafe.client.TGS_UnSafe;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
+import com.tugalsan.api.url.server.TS_UrlDownloadUtils;
 import java.nio.file.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -54,6 +58,53 @@ public class TS_FileHtmlUtils {
 
     public static String escape(CharSequence html) {//converts chars to html &tags
         return StringEscapeUtils.escapeHtml4(html.toString());
+    }
+
+    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean addBaseAsPrefix, TGS_Func_OutBool_In1<String> filter) {
+        List<TGS_Url> urlsProcessed = new ArrayList();
+        var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
+        if (html == null) {
+            d.cr("main", urlSrc.toString(), "html == null", urlSrc.toString());
+        } else {
+            var urlsAll = TS_FileHtmlUtils.parseLinks_usingRegex(html, true);
+            d.cr("main", urlSrc.toString(), "urls.size", urlsAll.size());
+            if (d.infoEnable) {
+                urlsAll.forEach(u -> {
+                    d.ci("main", urlSrc.toString(), u);
+                });
+            }
+            urlsProcessed.addAll(
+                    urlsAll.stream()
+                            .filter(u -> filter.validate(html))
+                            .map(u -> {
+                                if (!addBaseAsPrefix){
+                                    return u;
+                                }
+                                if (!TGS_CharSetCast.current().startsWithIgnoreCase(u.toString(), urlSrc.toString())) {
+                                    var base = urlSrc.toString();
+                                    var child = u.toString();
+                                    var baseEndsWithSlash = base.endsWith("/");
+                                    var childStartsWithSlash = child.startsWith("/");
+                                    if (baseEndsWithSlash && childStartsWithSlash) {
+                                        child = child.substring(1);
+                                        return TGS_Url.of(base + child);
+                                    }
+                                    if (!baseEndsWithSlash && childStartsWithSlash) {
+                                        return TGS_Url.of(base + child);
+                                    }
+                                    if (baseEndsWithSlash && !childStartsWithSlash) {
+                                        return TGS_Url.of(base + child);
+                                    }
+                                    if (!baseEndsWithSlash && !childStartsWithSlash) {
+                                        return TGS_Url.of(base + "/" + child);
+                                    }
+                                }
+                                return u;
+                            })
+                            .toList()
+            );
+        }
+        return urlsProcessed;
     }
 
     public static List<TGS_Url> parseLinks_usingRegex(CharSequence html, boolean removeAnchor) {
