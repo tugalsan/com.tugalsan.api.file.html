@@ -3,7 +3,7 @@ module com.tugalsan.api.file.html {
     requires java.desktop;
     requires org.jsoup;
     requires org.apache.commons.text;
-    requires com.tugalsan.api.unsafe;
+    
     requires com.tugalsan.api.stream;
     requires com.tugalsan.api.crypto;
     requires com.tugalsan.api.function;

@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.function.client.*;
+import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In1;
 import com.tugalsan.api.string.client.*;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -37,7 +37,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         return childeren;
     }
 
-    public TGS_FileHtmlTableRowCell(boolean header, TGS_Func_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
+    public TGS_FileHtmlTableRowCell(boolean header, TGS_FuncMTUCE_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
         super(escapeHTML, header ? "th" : "td", nameAndId);
         counter++;
         properties.add(new TGS_FileHtmlProperty("rowspan", rowspan));

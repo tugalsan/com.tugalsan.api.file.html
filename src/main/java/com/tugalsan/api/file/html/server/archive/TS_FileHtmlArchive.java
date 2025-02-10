@@ -1,9 +1,9 @@
 package com.tugalsan.api.file.html.server.archive;
 
-import com.tugalsan.api.charset.client.TGS_CharSet;
 import com.tugalsan.api.charset.client.TGS_CharSetCast;
+import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
 import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.unsafe.client.*;
+
 import com.tugalsan.api.url.client.*;
 import java.io.File;
 import java.io.*;
@@ -17,7 +17,7 @@ public class TS_FileHtmlArchive {
      * Resolves a remote filename wrt a remote context (file or URL)
      */
     public static String remoteName(CharSequence context, CharSequence fileName) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var contextStr = context.toString();
             var fileNameStr = fileName.toString();
             if (TGS_UrlUtils.isValidUrl(TGS_Url.of(contextStr))) {
@@ -42,7 +42,7 @@ public class TS_FileHtmlArchive {
         SRC(" src=", false) {
             @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
-                TGS_UnSafe.run(() -> {
+                TGS_FuncMTCEUtils.run(() -> {
                     var c = in.read();
                     while (c == ' ') {
                         c = in.read();
@@ -71,25 +71,25 @@ public class TS_FileHtmlArchive {
         HREF(" href=", false) {
             @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
-                TGS_UnSafe.run(() -> SRC.parse(in, result));
+                TGS_FuncMTCEUtils.run(() -> SRC.parse(in, result));
             }
         },
         LINK("<link ", false) {
             @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
-                TGS_UnSafe.run(() -> result.appendASCII(in, ">"));
+                TGS_FuncMTCEUtils.run(() -> result.appendASCII(in, ">"));
             }
         },
         IMPORT("@import url(", true) {
             @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
-                TGS_UnSafe.run(() -> URL.parse(in, result));
+                TGS_FuncMTCEUtils.run(() -> URL.parse(in, result));
             }
         },
         URL("url(", true) {
             @Override
             public void parse(InputStream in, TS_FileHtmlArchiveByteStreamBuilder result) {
-                TGS_UnSafe.run(() -> {
+                TGS_FuncMTCEUtils.run(() -> {
                     var c = in.read();
                     while (c == ' ') {
                         c = in.read();
@@ -136,7 +136,7 @@ public class TS_FileHtmlArchive {
      * result. Returns NULL for end of file.
      */
     protected static LinkType source(InputStream in, OutputStream out, TS_FileHtmlArchiveByteStreamBuilder result, boolean css) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             if (lastChar != -1) {
                 out.write(lastChar);
                 lastChar = -1;
@@ -232,8 +232,8 @@ public class TS_FileHtmlArchive {
      * (https://stackoverflow.com/questions/5801993/quickest-way-to-get-content-type)
      */
     public static String getContentType(CharSequence urlString) {
-        return TGS_UnSafe.call(() -> {
-            var url = TGS_UnSafe.call(() -> new URL(urlString.toString()));
+        return TGS_FuncMTCEUtils.call(() -> {
+            var url = TGS_FuncMTCEUtils.call(() -> new URL(urlString.toString()));
             var con = (HttpURLConnection) url.openConnection();
             try (AutoCloseable conc = () -> con.disconnect()) {
                 con.setRequestMethod("HEAD");
@@ -273,7 +273,7 @@ public class TS_FileHtmlArchive {
      * and creates it
      */
     public static File localNameFor(File outFile, CharSequence name, boolean overwrite) {
-        return TGS_UnSafe.call(() -> {
+        return TGS_FuncMTCEUtils.call(() -> {
             var nameStr = name.toString();
             if (TGS_UrlUtils.isValidUrl(TGS_Url.of(nameStr))) {
                 try {
@@ -296,7 +296,7 @@ public class TS_FileHtmlArchive {
      * Inlines an HTML file
      */
     public static void inline(CharSequence input, OutputStream out, boolean css, File hrefFolder) {
-        TGS_UnSafe.run(() -> {
+        TGS_FuncMTCEUtils.run(() -> {
             var inputStr = input.toString();
             System.err.println("Inlining " + inputStr);
             try (var in = TGS_UrlUtils.isValidUrl(TGS_Url.of(inputStr)) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
@@ -399,7 +399,7 @@ public class TS_FileHtmlArchive {
      * Produces a bundle
      */
     public static void bundle(CharSequence input, File outFile, boolean css) {
-        TGS_UnSafe.run(() -> {
+        TGS_FuncMTCEUtils.run(() -> {
             var inputStr = input.toString();
             System.err.println("Bundling " + inputStr);
             try (var in = TGS_UrlUtils.isValidUrl(TGS_Url.of(inputStr)) ? new URL(inputStr).openStream() : new FileInputStream(inputStr)) {
@@ -508,7 +508,7 @@ public class TS_FileHtmlArchive {
     public static void main(final String[] args0) {
 //        args = new String[]{"BUNDLE", "www.mebosa.com", "D:\\me\\Documents\\ProgsCodes\\Maven\\MHTCreator\\"};
         var args = new String[]{"INLINE", "http://mebosa.com"};
-        TGS_UnSafe.run(() -> {
+        TGS_FuncMTCEUtils.run(() -> {
             System.out.println("Hello");
 
             if (args.length != 3 && args.length != 2) {
