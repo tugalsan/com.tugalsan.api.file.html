@@ -25,6 +25,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
 
     final private static TS_Log d = TS_Log.of(TS_FileHtml.class);
 
+    @Override
     public String getSuperClassName() {
         return d.className;
     }
