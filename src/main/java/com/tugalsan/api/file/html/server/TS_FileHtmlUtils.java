@@ -4,7 +4,7 @@ import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.TS_FileUtils;
 import com.tugalsan.api.file.txt.server.*;
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutBool_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutBool_In1;
 import com.tugalsan.api.list.client.TGS_ListDistinctizeUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
@@ -13,7 +13,7 @@ import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import com.tugalsan.api.url.client.parser.TGS_UrlParser;
@@ -61,7 +61,7 @@ public class TS_FileHtmlUtils {
         return StringEscapeUtils.escapeHtml4(html.toString());
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_FuncMTUCE_OutBool_In1<TGS_Url> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(List<TGS_Url> urlSrcs, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_FuncMTU_OutBool_In1<TGS_Url> filter) {
         TS_ThreadSyncLst<TGS_Url> lst = TS_ThreadSyncLst.ofSlowRead();
         urlSrcs.parallelStream().forEach(urlSrc -> {
             var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, mapBase, filter);
@@ -72,7 +72,7 @@ public class TS_FileHtmlUtils {
         return lst.toList_modifiable();
     }
 
-    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_FuncMTUCE_OutBool_In1<TGS_Url> filter) {
+    public static List<TGS_Url> parseLinks_usingRegex(TGS_Url urlSrc, Duration timeout, boolean removeAnchor, boolean mapBase, TGS_FuncMTU_OutBool_In1<TGS_Url> filter) {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
         if (html == null) {
@@ -139,7 +139,7 @@ public class TS_FileHtmlUtils {
     public static List<TGS_Url> parseLinks(TGS_Url url, boolean removeAnchor, boolean fetchOnlyChild) {
         var base = TGS_UrlParser.of(url);
         base.path.fileOrServletName = "";
-        return parseLinks_filter(base.toUrl(), TGS_FuncMTCEUtils.call(() -> TGS_StreamUtils.toLst(
+        return parseLinks_filter(base.toUrl(), TGS_FuncMTCUtils.call(() -> TGS_StreamUtils.toLst(
                 Jsoup.connect(url.toString()).get().select("a").stream().map(a -> TGS_Url.of(a.attr("href")))
         )), removeAnchor, fetchOnlyChild);
     }
@@ -166,7 +166,7 @@ public class TS_FileHtmlUtils {
     }
 
     public static String toText(TGS_Url url) {
-        return TGS_FuncMTCEUtils.call(() -> Jsoup.connect(url.toString()).get().wholeText());
+        return TGS_FuncMTCUtils.call(() -> Jsoup.connect(url.toString()).get().wholeText());
     }
 
     public static String toText(CharSequence html) {//converts html &tags to chars

@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import java.util.List;
 
 public class TGS_FileHtmlParagraph extends TGS_FileHtmlElement {
@@ -15,7 +15,7 @@ public class TGS_FileHtmlParagraph extends TGS_FileHtmlElement {
         return properties.get(0).value;
     }
 
-    public TGS_FileHtmlParagraph(TGS_FuncMTUCE_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence style) {
+    public TGS_FileHtmlParagraph(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence style) {
         super(escapeHTML, "p", nameAndId);
         counter++;
         properties.add(new TGS_FileHtmlProperty("style", style));

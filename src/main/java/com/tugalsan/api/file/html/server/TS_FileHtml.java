@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_In1;
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In2;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In2;
 import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
 import com.tugalsan.api.file.html.server.element.*;
 import com.tugalsan.api.file.html.client.*;
@@ -19,7 +19,7 @@ import java.util.Objects;
 import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
 import com.tugalsan.api.file.common.server.TS_FileCommonConfig;
 import com.tugalsan.api.function.client.TGS_FuncUtils;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 
 public class TS_FileHtml extends TS_FileCommonAbstract {
 
@@ -39,14 +39,14 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     public TS_FileCommonConfig fileCommonConfig;
     private final int fontHeightScalePercent;
     private final int widthScalePercent;
-    private final TGS_FuncMTUCE_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
+    private final TGS_FuncMTU_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote;
 
     public boolean base64() {
         return isBase64;
     }
     private final boolean isBase64;
 
-    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_FuncMTUCE_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
+    private TS_FileHtml(boolean enabled, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_FuncMTU_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote) {
         super(enabled, localFile, remoteFile);
         this.isBase64 = isBase64;
         this.fontHeightScalePercent = fontHeightScalePercent;
@@ -55,7 +55,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
     }
     private final String customCssForBlackText = TGS_FileHtmlText.getDefaultCustomCssForBlackText();
 
-    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_FuncMTUCE_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_FuncMTUCE_In1<TS_FileHtml> web) {
+    public static void use(boolean enabled, TS_FileCommonConfig fileCommonConfig, Path localFile, TGS_Url remoteFile, boolean isBase64, int widthScalePercent, int fontHeightScalePercent, TGS_FuncMTU_OutTyped_In2<TGS_Url, TS_FileHtml, String> convertLocalLocationToRemote, TGS_FuncMTU_In1<TS_FileHtml> web) {
         var instance = new TS_FileHtml(enabled, localFile, remoteFile, isBase64, widthScalePercent, fontHeightScalePercent, convertLocalLocationToRemote);
         try {
             instance.use_init(fileCommonConfig);
@@ -146,7 +146,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         if (isClosed()) {
             return true;
         }
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             if (isBase64) {
                 d.ci("addImageWeb", "imageLoc", imageLoc);
             }

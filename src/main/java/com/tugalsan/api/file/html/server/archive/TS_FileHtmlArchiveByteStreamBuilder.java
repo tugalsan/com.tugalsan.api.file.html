@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server.archive;
 
 
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import com.tugalsan.api.url.client.TGS_Url;
 import com.tugalsan.api.url.client.TGS_UrlUtils;
 import java.io.InputStream;
@@ -57,7 +57,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder append(InputStream in, int num0) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             var num = num0;
             int c;
             while (num-- > 0 && (c = in.read()) != -1) {
@@ -68,7 +68,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder append(URL url) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             try ( var in = url.openStream()) {
                 append(in, Integer.MAX_VALUE);
             }
@@ -77,7 +77,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public TS_FileHtmlArchiveByteStreamBuilder append(Path input) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             try ( var in = Files.newInputStream(input)) {
                 append(in);
             }
@@ -86,7 +86,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public void writeTo(OutputStream out) {
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             for (var i = 0; i < len; i++) {
                 out.write(data[i]);
             }
@@ -94,7 +94,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public void writeTo(Path output) {
-        TGS_FuncMTCEUtils.run(() -> {
+        TGS_FuncMTCUtils.run(() -> {
             try ( var o = Files.newOutputStream(output)) {
                 writeTo(o);
             }
@@ -137,7 +137,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
      * append the delimiter.
      */
     public TS_FileHtmlArchiveByteStreamBuilder appendASCII(InputStream in, CharSequence delimiters) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             int c;
             var delimitersStr = delimiters.toString();
             while ((c = in.read()) != -1 && delimitersStr.indexOf(c) == -1) {
@@ -152,7 +152,7 @@ public class TS_FileHtmlArchiveByteStreamBuilder {
     }
 
     public static TS_FileHtmlArchiveByteStreamBuilder forUrlOrFile(CharSequence source) {
-        return TGS_FuncMTCEUtils.call(() -> {
+        return TGS_FuncMTCUtils.call(() -> {
             var sourceStr = source.toString();
             if (TGS_UrlUtils.isValidUrl(TGS_Url.of(sourceStr))) {
                 return (new TS_FileHtmlArchiveByteStreamBuilder().append(URI.create(sourceStr).toURL()));

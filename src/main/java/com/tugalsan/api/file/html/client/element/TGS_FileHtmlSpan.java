@@ -1,6 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 
 public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
 
@@ -15,7 +15,7 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
         return properties.get(0).value;
     }
 
-    public TGS_FileHtmlSpan(TGS_FuncMTUCE_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence spanText, CharSequence style) {
+    public TGS_FileHtmlSpan(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence spanText, CharSequence style) {
         super(escapeHTML, "span", nameAndId);
         counter++;
         super.spanText = spanText.toString();

@@ -1,13 +1,13 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.function.client.maythrow.uncheckedexceptions.TGS_FuncMTUCE_OutTyped_In1;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import com.tugalsan.api.list.client.*;
 import java.util.List;
 import java.util.stream.*;
 
 public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
 
-    public static TGS_FileHtmlTable of(TGS_FuncMTUCE_OutTyped_In1<String, CharSequence> escapeHTML, TGS_ListTable table) {
+    public static TGS_FileHtmlTable of(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, TGS_ListTable table) {
         var cs = table.getMaxColumnSize();
         var rs = table.getRowSize();
         var htmlTable = new TGS_FileHtmlTable("", "");
