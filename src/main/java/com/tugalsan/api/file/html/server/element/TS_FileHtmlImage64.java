@@ -12,8 +12,10 @@ import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
 
-    final private static TS_Log d = TS_Log.of(false, TS_FileHtmlImage64.class);
-
+    private static TS_Log d() {
+        return d.orElse(TS_Log.of( TS_FileHtmlImage64.class));
+    }
+    final private static StableValue<TS_Log> d = StableValue.of();
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
     }
@@ -53,16 +55,16 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
     public TS_FileHtmlImage64(CharSequence nameAndId, CharSequence fileLoc, CharSequence width, CharSequence height, CharSequence rotationInDegrees_0_90_180_270) {
         super(null, "img", nameAndId);
         var fileLocStr = fileLoc.toString();
-        d.ci("cons", "fileLocStr", fileLocStr);
+        d().ci("cons", "fileLocStr", fileLocStr);
         String base64;
         TGS_UnionExcuse<String> u_imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
-            d.ci("cons", "fileLoc is url");
+            d().ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
             base64 = TS_UrlDownloadUtils.toBase64(url);
             u_imageFileType = TS_UrlUtils.mime(url);
         } else {
-            d.ci("cons", "fileLoc is path");
+            d().ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
             base64 = TGS_CryptUtils.encrypt64(TS_FileUtils.read(path));
             u_imageFileType = TS_FileUtils.mime(path);
@@ -70,16 +72,16 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         if (base64 == null) {
             base64 = "image/jpeg";
         }
-        d.ci("cons", "base64", base64);
-        d.ci("cons", "base64.len", base64.length());
+        d().ci("cons", "base64", base64);
+        d().ci("cons", "base64.len", base64.length());
         if (u_imageFileType.isExcuse()) {
-            d.ce("constructor", fileLocStr, "u_imageFileType", u_imageFileType.excuse().getMessage());
+            d().ce("constructor", fileLocStr, "u_imageFileType", u_imageFileType.excuse().getMessage());
         } else {
-            d.ci("cons", "imageFileType", u_imageFileType.value());
+            d().ci("cons", "imageFileType", u_imageFileType.value());
         }
         var imageFileType = u_imageFileType.isExcuse() ? "null" : "image/jpeg";
         var base64_data = imageFileType + ";base64," + base64;
-        d.ci("cons", "base64_data", base64_data);
+        d().ci("cons", "base64_data", base64_data);
         properties.add(new TGS_FileHtmlProperty("data", base64_data));
         properties.add(new TGS_FileHtmlProperty("width", width));
         properties.add(new TGS_FileHtmlProperty("height", height));

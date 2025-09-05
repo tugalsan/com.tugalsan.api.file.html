@@ -23,11 +23,14 @@ import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUt
 
 public class TS_FileHtml extends TS_FileCommonAbstract {
 
-    final private static TS_Log d = TS_Log.of(TS_FileHtml.class);
+   private static TS_Log d() {
+        return d.orElse(TS_Log.of( TS_FileHtml.class));
+    }
+    final private static StableValue<TS_Log> d = StableValue.of();
 
     @Override
     public String getSuperClassName() {
-        return d.className;
+        return d().className;
     }
 
     private static int FONT_HEIGHT_OFFSET() {
@@ -89,15 +92,15 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         setClosed();
-        d.ci("saveFile.Web->");
+        d().ci("saveFile.Web->");
         if (webWriter == null) {
-            d.ci("Web File is null");
+            d().ci("Web File is null");
         } else {
             TS_FileHtmlUtils.write2File(webWriter, getLocalFileName());
             if (TS_FileUtils.isExistFile(getLocalFileName())) {
-                d.ci("saveFile.FIX: Web File save", getLocalFileName(), "successfull");
+                d().ci("saveFile.FIX: Web File save", getLocalFileName(), "successfull");
             } else {
-                d.ce("saveFile.FIX: Web File save", getLocalFileName(), "failed");
+                d().ce("saveFile.FIX: Web File save", getLocalFileName(), "failed");
             }
         }
         return errorSource == null;
@@ -119,7 +122,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         webWriter.pageSizeAX = pageSizeAX;
         webWriter.landscape = landscape;
         if (table != null) {
-            d.ce("createNewPage.ERROR: MIFWeb.createNewPage -> why table exists!");
+            d().ce("createNewPage.ERROR: MIFWeb.createNewPage -> why table exists!");
             return false;
         }
         var paddingFix = 0;
@@ -148,7 +151,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         }
         return TGS_FuncMTCUtils.call(() -> {
             if (isBase64) {
-                d.ci("addImageWeb", "imageLoc", imageLoc);
+                d().ci("addImageWeb", "imageLoc", imageLoc);
             }
             var mWidth = width;
             var mHeight = heights;
@@ -157,7 +160,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                 mWidth = mHeight;
 //                mHeight = tmp;
             }
-//            d.ci("addImageWeb", "w", mWidth, "h", mHeight, "r", rotationInDegrees_0_90_180_270);
+//            d().ci("addImageWeb", "w", mWidth, "h", mHeight, "r", rotationInDegrees_0_90_180_270);
             var mImageLoc = convertLocalLocationToRemote.call(this, imageLoc);
 //            mImageLoc = TS_LibFileTmcrFileConverter.convertLocalLocationToRemote(
 //                    fileCommonConfig.username,
@@ -165,7 +168,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
 //                    mImageLoc
 //            );
             if (mImageLoc == null) {
-                d.ce("addImageWeb", "Cannot convertLocalLocationToRemote", mImageLoc);
+                d().ce("addImageWeb", "Cannot convertLocalLocationToRemote", mImageLoc);
                 return false;
             }
 
@@ -188,7 +191,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             }
             return true;
         }, e -> {
-            d.ce("addImageWeb", e);
+            d().ce("addImageWeb", e);
             return true;
         });
     }
@@ -199,9 +202,9 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         boolean result;
-        d.ci("addImage", "init", "imageLoc", pstImageLoc);
+        d().ci("addImage", "init", "imageLoc", pstImageLoc);
         result = addImageWeb(pstImageLoc.toAbsolutePath().toString(), pstImage.getWidth(), pstImage.getHeight(), 0, imageCounter);
-        d.ci("addImage", "fin");
+        d().ci("addImage", "fin");
         return result;
     }
 
@@ -212,19 +215,19 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         }
         this.table_relColSizes = table_relColSizes;
         if (table != null) {
-            d.ce("beginTable.ERROR: MIFWeb.beginTable -> table already exists");
+            d().ce("beginTable.ERROR: MIFWeb.beginTable -> table already exists");
             return false;
         }
         if (tableRow != null) {
-            d.ce("beginTable.ERROR: MIFWeb.beginTable -> tableRow already exists");
+            d().ce("beginTable.ERROR: MIFWeb.beginTable -> tableRow already exists");
             return false;
         }
 
         //ADD TABLE
         if (pageSizeAX == null || pageSizeAX >= pageSizeMaxWidth.length) {
-            d.ce("beginTable", "pageSizeAX.fixing...", pageSizeAX);
+            d().ce("beginTable", "pageSizeAX.fixing...", pageSizeAX);
             pageSizeAX = pageSizeMaxWidth.length - 1;
-            d.ce("beginTable", "pageSizeAX.fixed", pageSizeAX);
+            d().ce("beginTable", "pageSizeAX.fixed", pageSizeAX);
         }
         var pageSizeFix = "";//"max-width:" + (pageSizeAX == null ? "null" : ((int) (Math.round(pageSizeMaxWidth[pageSizeAX] * widthScalePercent / 100f)) + "px")) + ";";
         table = new TGS_FileHtmlTable("TK_POJOHTMLTable_" + TGS_FileHtmlTable.counter, pageSizeFix + "border-spacing:0;border-collapse:collapse;border:1px solid black; width:100%;");
@@ -252,11 +255,11 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (table == null) {
-            d.ce("endTable.ERROR: MIFWeb.endTable -> table not exists");
+            d().ce("endTable.ERROR: MIFWeb.endTable -> table not exists");
             return false;
         }
         if (tableRow == null) {
-            d.ce("endTable.ERROR: MIFWeb.endTable -> tableRow not exists");
+            d().ce("endTable.ERROR: MIFWeb.endTable -> tableRow not exists");
             return false;
         }
         table = null;
@@ -271,15 +274,15 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (tableRowCell != null) {
-            d.ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why tableRowCell exists!");
+            d().ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why tableRowCell exists!");
             return false;
         }
         if (tableRow == null) {
-            d.ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why tableRow not exists!");
+            d().ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why tableRow not exists!");
             return false;
         }
         if (table == null) {
-            d.ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why table not exists!");
+            d().ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> why table not exists!");
             return false;
         }
 
@@ -298,7 +301,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         //SET CELL
         {
             if (table_relColSizes.length <= rowCellColSpanOffset) {
-                d.ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> FAILED(table_relColSizes.length <= cellColCounter)");
+                d().ce("beginTableCell.ERROR: MIFWeb.beginTableCell -> FAILED(table_relColSizes.length <= cellColCounter)");
                 return false;
             }
             var escape = new TS_FileHtmlEscape();
@@ -311,7 +314,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             if (rowCellColSpanOffset + c <= table_relColSizes.length - 1) {
                 sumWidth += table_relColSizes[rowCellColSpanOffset + c];
             } else {
-                d.ci("beginTableCell.ERROR: MIFWeb.beginTableCell -> sumWidth WHY CANOT ADD COLSPANWIDTH: rowCellColSpanOffset + c <= table_relColSizes.length - 1", "rowCellColSpanOffset", rowCellColSpanOffset, "table_relColSizes.length", table_relColSizes.length);
+                d().ci("beginTableCell.ERROR: MIFWeb.beginTableCell -> sumWidth WHY CANOT ADD COLSPANWIDTH: rowCellColSpanOffset + c <= table_relColSizes.length - 1", "rowCellColSpanOffset", rowCellColSpanOffset, "table_relColSizes.length", table_relColSizes.length);
             }
         }
         var pageSizeFix = "";//max-width:" + (pageSizeAX == null ? "null" : ((int) (Math.round(pageSizeMaxWidth[pageSizeAX] * widthScalePercent / 100f)) + "px")) + ";";
@@ -327,7 +330,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                         new TGS_FileHtmlTableRowCellOccupied(tableRow.IsHeader(), escape)
                 );
             } else {
-                d.ci("beginTableCell.ERROR: MIFWeb.beginTableCell -> eColSpan WHY CANOT ADD COLSPANFULL: rowCellColSpanOffset + c <= table_relColSizes.length - 1", "rowCellColSpanOffset", fRowCellColSpanOffset, "table_relColSizes.length", table_relColSizes.length);
+                d().ci("beginTableCell.ERROR: MIFWeb.beginTableCell -> eColSpan WHY CANOT ADD COLSPANFULL: rowCellColSpanOffset + c <= table_relColSizes.length - 1", "rowCellColSpanOffset", fRowCellColSpanOffset, "table_relColSizes.length", table_relColSizes.length);
             }
         });
         //ADD ROWSPAN FILL
@@ -367,11 +370,11 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     rowCellColSpanOffset += 1; //full already adds 1
                 }
             } else {
-                d.ce("calcultaeRowCellColSpanOffset.ERROR: MIFWeb.beginTableCell -> e NOT instanceof TK_POJOHTMLTableRowCell: " + eRowCell);
+                d().ce("calcultaeRowCellColSpanOffset.ERROR: MIFWeb.beginTableCell -> e NOT instanceof TK_POJOHTMLTableRowCell: " + eRowCell);
                 return -1;
             }
         }
-        d.ci("calcultaeRowCellColSpanOffset.MIFWeb.calcultaeRowCellColSpanOffset", "rowCellColSpanMax: " + table_relColSizes.length, "rowCellColSpanOffset", rowCellColSpanOffset);
+        d().ci("calcultaeRowCellColSpanOffset.MIFWeb.calcultaeRowCellColSpanOffset", "rowCellColSpanMax: " + table_relColSizes.length, "rowCellColSpanOffset", rowCellColSpanOffset);
         return rowCellColSpanOffset;
     }
 
@@ -390,14 +393,14 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
                     tableRow.getChilderen().add(new TGS_FileHtmlTableRowCellVacant(tableRow.IsHeader(), escape));
                 });
                 table.getChilderen().add(tableRow);
-                d.ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: NEWROW_ADDED");
+                d().ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: NEWROW_ADDED");
             } else {
                 currentRowIndex++;
                 tableRow = (TGS_FileHtmlTableRow) table.getChilderen().get(currentRowIndex);
-                d.ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: ROW_ALREADY_EXISTS");
+                d().ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: ROW_ALREADY_EXISTS");
             }
         } else {
-            d.ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: PASS");
+            d().ci("checkMaxColumnSize.MIFWeb.beginTableCell.checkMaxColumnSize.DECISION: PASS");
         }
         return rowAdded;
     }
@@ -408,11 +411,11 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (tableRow == null) {
-            d.ce("endTableCell.ERROR: MIFWeb.endTableCell -> why tableRow not exists!");
+            d().ce("endTableCell.ERROR: MIFWeb.endTableCell -> why tableRow not exists!");
             return false;
         }
         if (tableRowCell == null) {
-            d.ce("endTableCell.ERROR: MIFWeb.endTableCell -> why tableRowCell not exists!");
+            d().ce("endTableCell.ERROR: MIFWeb.endTableCell -> why tableRowCell not exists!");
             return false;
         }
         tableRowCell = null;
@@ -425,7 +428,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (parag != null) {
-            d.ce("beginText.ERROR: MIFWeb.beginText -> why parag exists!");
+            d().ce("beginText.ERROR: MIFWeb.beginText -> why parag exists!");
             return false;
         }
         String allignText;
@@ -449,7 +452,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (parag == null) {
-            d.ce("endText.ERROR: MIFWeb.endText -> why not exists!");
+            d().ce("endText.ERROR: MIFWeb.endText -> why not exists!");
             return false;
         }
         if (tableRowCell == null) {
@@ -467,7 +470,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (parag == null) {
-            d.ce("addText.ERROR: MIFWeb.addText -> why parag not exists!");
+            d().ce("addText.ERROR: MIFWeb.addText -> why parag not exists!");
             return false;
         }
         var lines = TGS_StringUtils.jre().toList(text, "\n");
@@ -512,7 +515,7 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
             return true;
         }
         if (parag == null) {
-            d.ce("addLineBreak.ERROR: MIFWeb.addLineBreak -> why not exists!");
+            d().ce("addLineBreak.ERROR: MIFWeb.addLineBreak -> why not exists!");
             return false;
         }
         parag.getChilderen().add(new TGS_FileHtmlBR());

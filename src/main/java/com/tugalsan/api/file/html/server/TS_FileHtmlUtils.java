@@ -29,26 +29,33 @@ import org.jsoup.Jsoup;
 
 public class TS_FileHtmlUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_FileHtmlUtils.class);
+    private TS_FileHtmlUtils() {
 
+    }
+
+    private static TS_Log d() {
+        return d.orElse(TS_Log.of( TS_FileHtmlUtils.class));
+    }
+    final private static StableValue<TS_Log> d = StableValue.of();
 //TODO 
 //    public static boolean String embedPlainFiles(CharSequence htmlContent){
 //        var htmlContentInit = htmlContent.toString();
 //        
 //        return 
 //    }
+
     public static boolean browse(TGS_Url url) {
         var edge = Path.of("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
         if (!TS_FileUtils.isExistFile(edge)) {
-            d.ce("browse", "File not exist", edge);
+            d().ce("browse", "File not exist", edge);
             return false;
         }
         if (!TS_OsPlatformUtils.isWindows()) {
-            d.ce("browse", "os not supported");
+            d().ce("browse", "os not supported");
             return false;
         }
         var cmd = edge.toAbsolutePath().toString() + " " + url.toString();
-        d.ci("browse", "edge", cmd);
+        d().ci("browse", "edge", cmd);
         return TS_OsProcess.of(cmd).exitValueOk();
     }
 
@@ -65,10 +72,10 @@ public class TS_FileHtmlUtils {
         TS_ThreadSyncLst<TGS_Url> lst = TS_ThreadSyncLst.ofSlowRead();
         urlSrcs.parallelStream().forEach(urlSrc -> {
             var urls = parseLinks_usingRegex(urlSrc, timeout, removeAnchor, mapBase, filter);
-            d.cr("parseLinks_usingRegex", "urlSrcs", urlSrc, "urls.size()", urls.size());
+            d().cr("parseLinks_usingRegex", "urlSrcs", urlSrc, "urls.size()", urls.size());
             lst.add(urls);
         });
-        d.cr("parseLinks_usingRegex", "urlSrcs", "lst.size()", lst.size());
+        d().cr("parseLinks_usingRegex", "urlSrcs", "lst.size()", lst.size());
         return lst.toList_modifiable();
     }
 
@@ -76,13 +83,13 @@ public class TS_FileHtmlUtils {
         List<TGS_Url> urlsProcessed = new ArrayList();
         var html = TS_UrlDownloadUtils.toText(urlSrc, timeout);
         if (html == null) {
-            d.cr("parseLinks_usingRegex", urlSrc.toString(), "html == null", urlSrc.toString());
+            d().cr("parseLinks_usingRegex", urlSrc.toString(), "html == null", urlSrc.toString());
         } else {
             var urlsAll = TS_FileHtmlUtils.parseLinks_usingRegex(html, true);
-            d.cr("parseLinks_usingRegex", urlSrc.toString(), "urls.size", urlsAll.size());
-            if (d.infoEnable) {
+            d().cr("parseLinks_usingRegex", urlSrc.toString(), "urls.size", urlsAll.size());
+            if (d().infoEnable) {
                 urlsAll.forEach(u -> {
-                    d.ci("parseLinks_usingRegex", urlSrc.toString(), u);
+                    d().ci("parseLinks_usingRegex", urlSrc.toString(), u);
                 });
             }
             var parser = TGS_UrlParser.of(urlSrc);
