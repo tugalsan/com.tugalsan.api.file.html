@@ -2,6 +2,7 @@ package com.tugalsan.api.file.html.server.element;
 
 import com.tugalsan.api.crypto.client.TGS_CryptUtils;
 import com.tugalsan.api.file.html.client.element.*;
+import com.tugalsan.api.file.html.server.TS_FileHtml;
 import com.tugalsan.api.file.server.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.string.client.*;
@@ -9,13 +10,12 @@ import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.url.client.*;
 import com.tugalsan.api.url.server.*;
 import java.nio.file.*;
+import java.util.function.Supplier;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
 
-    private static TS_Log d() {
-        return d.orElse(TS_Log.of( TS_FileHtmlImage64.class));
-    }
-    final private static StableValue<TS_Log> d = StableValue.of();
+    final private static Supplier<TS_Log> d = StableValue.supplier(() -> TS_Log.of(TS_FileHtmlImage64.class));
+
     public void setBase64_Properties0(CharSequence base64) {
         properties.get(0).value = base64 == null ? null : base64.toString();
     }
@@ -55,16 +55,16 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
     public TS_FileHtmlImage64(CharSequence nameAndId, CharSequence fileLoc, CharSequence width, CharSequence height, CharSequence rotationInDegrees_0_90_180_270) {
         super(null, "img", nameAndId);
         var fileLocStr = fileLoc.toString();
-        d().ci("cons", "fileLocStr", fileLocStr);
+        d.get().ci("cons", "fileLocStr", fileLocStr);
         String base64;
         TGS_UnionExcuse<String> u_imageFileType;
         if (fileLocStr.startsWith("http") || fileLocStr.startsWith("ftp")) {
-            d().ci("cons", "fileLoc is url");
+            d.get().ci("cons", "fileLoc is url");
             var url = TGS_Url.of(fileLocStr);
             base64 = TS_UrlDownloadUtils.toBase64(url);
             u_imageFileType = TS_UrlUtils.mime(url);
         } else {
-            d().ci("cons", "fileLoc is path");
+            d.get().ci("cons", "fileLoc is path");
             var path = Path.of(fileLocStr);
             base64 = TGS_CryptUtils.encrypt64(TS_FileUtils.read(path));
             u_imageFileType = TS_FileUtils.mime(path);
@@ -72,16 +72,16 @@ public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
         if (base64 == null) {
             base64 = "image/jpeg";
         }
-        d().ci("cons", "base64", base64);
-        d().ci("cons", "base64.len", base64.length());
+        d.get().ci("cons", "base64", base64);
+        d.get().ci("cons", "base64.len", base64.length());
         if (u_imageFileType.isExcuse()) {
-            d().ce("constructor", fileLocStr, "u_imageFileType", u_imageFileType.excuse().getMessage());
+            d.get().ce("constructor", fileLocStr, "u_imageFileType", u_imageFileType.excuse().getMessage());
         } else {
-            d().ci("cons", "imageFileType", u_imageFileType.value());
+            d.get().ci("cons", "imageFileType", u_imageFileType.value());
         }
         var imageFileType = u_imageFileType.isExcuse() ? "null" : "image/jpeg";
         var base64_data = imageFileType + ";base64," + base64;
-        d().ci("cons", "base64_data", base64_data);
+        d.get().ci("cons", "base64_data", base64_data);
         properties.add(new TGS_FileHtmlProperty("data", base64_data));
         properties.add(new TGS_FileHtmlProperty("width", width));
         properties.add(new TGS_FileHtmlProperty("height", height));
