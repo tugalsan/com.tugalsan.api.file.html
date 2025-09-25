@@ -1,5 +1,6 @@
 package com.tugalsan.api.file.html.server;
 
+import module java.desktop;
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In2;
 import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
@@ -8,7 +9,6 @@ import com.tugalsan.api.file.html.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.file.html.client.element.*;
 import com.tugalsan.api.file.server.*;
-import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.IntStream;

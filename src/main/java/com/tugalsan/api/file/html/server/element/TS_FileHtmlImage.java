@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server.element;
 
-import com.tugalsan.api.file.html.client.element.TGS_FileHtmlProperty;
-import com.tugalsan.api.string.client.*;
+import module com.tugalsan.api.file.html;
+import module com.tugalsan.api.string;
 
 public class TS_FileHtmlImage extends TS_FileHtmlImage64 {
 
