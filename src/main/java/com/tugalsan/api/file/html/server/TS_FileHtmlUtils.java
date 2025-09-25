@@ -1,31 +1,26 @@
 package com.tugalsan.api.file.html.server;
 
-import com.tugalsan.api.charset.client.TGS_CharSetCast;
-import com.tugalsan.api.file.html.client.element.*;
-import com.tugalsan.api.file.server.TS_FileUtils;
-import com.tugalsan.api.file.txt.server.*;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutBool_In1;
-import com.tugalsan.api.list.client.TGS_ListDistinctizeUtils;
-import com.tugalsan.api.log.server.TS_Log;
-import com.tugalsan.api.os.server.TS_OsPlatformUtils;
-import com.tugalsan.api.os.server.TS_OsProcess;
-import com.tugalsan.api.stream.client.TGS_StreamUtils;
-import com.tugalsan.api.tuple.client.*;
-import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.thread.server.sync.TS_ThreadSyncLst;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.url.client.TGS_Url;
-import com.tugalsan.api.url.client.TGS_UrlUtils;
-import com.tugalsan.api.url.client.parser.TGS_UrlParser;
-import com.tugalsan.api.url.server.TS_UrlDownloadUtils;
-import java.nio.file.*;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
+import module com.tugalsan.api.charset;
+import module com.tugalsan.api.file.html;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.file.txt;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.os;
+import module com.tugalsan.api.stream;
+import module com.tugalsan.api.tuple;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.thread;
+import module org.jsoup;
+import module com.tugalsan.api.url;
+import module org.apache.commons.text;
 //import net.htmlparser.jericho.*;
-import org.apache.commons.text.*;
-import org.jsoup.Jsoup;
+import java.nio.file.*;
+import java.time.*;
+import java.util.*;
+import java.util.List;
+import java.util.regex.*;
 
 public class TS_FileHtmlUtils {
 

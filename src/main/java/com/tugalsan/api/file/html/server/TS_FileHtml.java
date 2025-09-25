@@ -1,25 +1,17 @@
 package com.tugalsan.api.file.html.server;
 
 import module java.desktop;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_In1;
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In2;
-import com.tugalsan.api.file.common.server.TS_FileCommonAbstract;
-import com.tugalsan.api.file.html.server.element.*;
-import com.tugalsan.api.file.html.client.*;
-import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.file.html.client.element.*;
-import com.tugalsan.api.file.server.*;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.stream.IntStream;
-import com.tugalsan.api.log.server.TS_Log;
-
-import com.tugalsan.api.url.client.*;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.file.common;
+import module com.tugalsan.api.file.html;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.url;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.*;
 import java.util.Objects;
-import com.tugalsan.api.file.common.server.TS_FileCommonFontTags;
-import com.tugalsan.api.file.common.server.TS_FileCommonConfig;
-import com.tugalsan.api.function.client.TGS_FuncUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 
 public class TS_FileHtml extends TS_FileCommonAbstract {
 

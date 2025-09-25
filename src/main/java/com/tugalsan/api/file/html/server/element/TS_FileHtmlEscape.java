@@ -1,7 +1,7 @@
 package com.tugalsan.api.file.html.server.element;
 
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
-import com.tugalsan.api.file.html.server.TS_FileHtmlUtils;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.file.html;
 
 public class TS_FileHtmlEscape implements TGS_FuncMTU_OutTyped_In1<String, CharSequence> {
 

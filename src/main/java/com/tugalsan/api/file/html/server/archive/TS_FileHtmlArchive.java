@@ -1,10 +1,9 @@
 package com.tugalsan.api.file.html.server.archive;
 
-import com.tugalsan.api.charset.client.TGS_CharSetCast;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.list.client.*;
-
-import com.tugalsan.api.url.client.*;
+import module com.tugalsan.api.charset;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.url;
 import java.io.File;
 import java.io.*;
 import java.net.*;

@@ -1,20 +1,15 @@
 package com.tugalsan.api.file.html.server.archive;
 
 
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
-import com.tugalsan.api.url.client.TGS_Url;
-import com.tugalsan.api.url.client.TGS_UrlUtils;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.stream.IntStream;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.url;
+import java.io.*;
+import java.net.*;
+import java.nio.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.*;
 
 public class TS_FileHtmlArchiveByteStreamBuilder {
 

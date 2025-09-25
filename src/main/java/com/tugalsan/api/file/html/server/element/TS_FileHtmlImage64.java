@@ -6,8 +6,7 @@ import module com.tugalsan.api.log;
 import module com.tugalsan.api.string;
 import module com.tugalsan.api.union;
 import module com.tugalsan.api.url;
-import com.tugalsan.api.file.html.client.element.TGS_FileHtmlElement;
-import com.tugalsan.api.file.html.client.element.TGS_FileHtmlProperty;
+import module com.tugalsan.api.file.html;
 import java.nio.file.*;
 
 public class TS_FileHtmlImage64 extends TGS_FileHtmlElement {
