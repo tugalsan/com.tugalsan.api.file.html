@@ -557,6 +557,9 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         if (isClosed()) {
             return "#000000";
         }
+        if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_WHITE())) {
+            return "#FFFFFF";
+        }
         if (Objects.equals(fileCommonConfig.fontColor, TS_FileCommonFontTags.CODE_TOKEN_FONT_COLOR_BLUE())) {
             return "#0000FF";
         }
