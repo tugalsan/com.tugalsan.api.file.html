@@ -85,6 +85,9 @@ public class TS_FileHtml extends TS_FileCommonAbstract {
         if (webWriter == null) {
             d.ci("Web File is null");
         } else {
+            var span = new TGS_FileHtmlSpan(null, "", TGS_FileHtmlUtils.pageEnd(), "");
+            span.pureCode = true;
+            webWriter.getChilderen().add(span);
             TS_FileHtmlUtils.write2File(webWriter, getLocalFileName());
             if (TS_FileUtils.isExistFile(getLocalFileName())) {
                 d.ci("saveFile.FIX: Web File save", getLocalFileName(), "successfull");
