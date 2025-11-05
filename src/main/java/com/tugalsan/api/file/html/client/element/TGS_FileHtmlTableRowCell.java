@@ -43,7 +43,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         counter++;
         properties.add(new TGS_FileHtmlProperty("rowspan", String.valueOf(TGS_CastUtils.toInteger(rowspan, 1))));
         properties.add(new TGS_FileHtmlProperty("colspan", String.valueOf(TGS_CastUtils.toInteger(colspan, 1))));
-        properties.add(new TGS_FileHtmlProperty("style", style));
+        properties.add(new TGS_FileHtmlProperty("style", TGS_StringUtils.cmn().toEmptyIfNull(style)));
     }
 
     private boolean header = false;

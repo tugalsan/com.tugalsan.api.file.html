@@ -1,6 +1,7 @@
 package com.tugalsan.api.file.html.client.element;
 
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
+import com.tugalsan.api.string.client.TGS_StringUtils;
 
 public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
 
@@ -15,10 +16,42 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
         return properties.get(0).value;
     }
 
-    public TGS_FileHtmlSpan(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence spanText, CharSequence style) {
+    public TGS_FileHtmlSpan(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence slotText, CharSequence style) {
         super(escapeHTML, "span", nameAndId);
         counter++;
-        super.spanText = spanText.toString();
+        super.slotText = slotText.toString();
         properties.add(new TGS_FileHtmlProperty("style", style));
+    }
+
+    @Override
+    public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
+        var sb = new StringBuilder();
+        {
+            sb.append("<").append(tag);
+            if (addNameAndId) {
+                sb.append(" id='").append(nameAndId).append("'");
+                sb.append(" name='").append(nameAndId).append("'");
+            }
+            if (getStyleClassName() != null) {
+                sb.append(" class='").append(getStyleClassName()).append("'");
+            }
+            for (var i = 0; addProperties && i < properties.size(); i++) {
+                sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
+            }
+            sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
+        }
+        {
+            var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
+            var span = (TGS_FileHtmlSpan) this;
+            if (span.pureCode) {//html span
+                sb.append(slotTextNotNull);
+            } else {//normal span
+                sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
+            }
+        }
+        {
+            sb.append("</").append(tag).append(">\n");
+        }
+        return sb.toString();
     }
 }

@@ -13,7 +13,7 @@ public class TGS_FileHtmlElement {
     protected String tag;
     protected List<TGS_FileHtmlElement> childeren;
     protected List<TGS_FileHtmlProperty> properties;
-    protected String spanText;
+    protected String slotText;
     protected TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML;
 
     public TGS_FileHtmlElement(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
@@ -39,17 +39,7 @@ public class TGS_FileHtmlElement {
     private String syleClassName;
 
     public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
-        var tableHeader = false;
-        if (this instanceof TGS_FileHtmlTableRow) {
-            var tableRow = (TGS_FileHtmlTableRow) this;
-            tableHeader = tableRow.IsHeader();
-        }
-//        System.out.println("[" + tag + "], [" + spanText + "], [tableHeader:" + tableHeader + "]");
-
         var sb = new StringBuilder();
-        if (tableHeader) {
-            sb.append("<thead>");
-        }
         {
             sb.append("<").append(tag);
             if (addNameAndId) {
@@ -64,25 +54,13 @@ public class TGS_FileHtmlElement {
             }
             sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
         }
-        if (tag.equals("span")) {
-            var spantTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(spanText);
-            if (this instanceof TGS_FileHtmlSpan) {
-                var span = (TGS_FileHtmlSpan) this;
-                if (span.pureCode) {//html span
-                    sb.append(spantTextNotNull);
-                } else {//normal span
-                    sb.append(escapeHTML == null ? spantTextNotNull : escapeHTML.call(spantTextNotNull));
-                }
-            } else {//custom span
-                sb.append(escapeHTML == null ? spantTextNotNull : escapeHTML.call(spantTextNotNull));
-            }
+        if (tag.equals("span")) {//custom span
+            var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
+            sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
             sb.append("</").append(tag).append(">\n");
         } else if (addChilderenAndCloseTag) {
             childeren.stream().forEachOrdered(s -> sb.append("  ").append(s));
             sb.append("</").append(tag).append(">\n");
-        }
-        if (tableHeader) {
-            sb.append("</thead>");
         }
         return sb.toString();
     }
