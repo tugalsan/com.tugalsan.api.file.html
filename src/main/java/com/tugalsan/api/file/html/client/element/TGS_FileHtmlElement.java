@@ -2,6 +2,7 @@ package com.tugalsan.api.file.html.client.element;
 
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.string.client.TGS_StringUtils;
 import java.util.*;
 
 public class TGS_FileHtmlElement {
@@ -64,15 +65,16 @@ public class TGS_FileHtmlElement {
             sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
         }
         if (tag.equals("span")) {
+            var spantTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(spanText);
             if (this instanceof TGS_FileHtmlSpan) {
                 var span = (TGS_FileHtmlSpan) this;
                 if (span.pureCode) {//html span
-                    sb.append(spanText);
+                    sb.append(spantTextNotNull);
                 } else {//normal span
-                    sb.append(escapeHTML == null ? spanText : escapeHTML.call(spanText));
+                    sb.append(escapeHTML == null ? spantTextNotNull : escapeHTML.call(spantTextNotNull));
                 }
             } else {//custom span
-                sb.append(escapeHTML == null ? spanText : escapeHTML.call(spanText));
+                sb.append(escapeHTML == null ? spantTextNotNull : escapeHTML.call(spantTextNotNull));
             }
             sb.append("</").append(tag).append(">\n");
         } else if (addChilderenAndCloseTag) {
