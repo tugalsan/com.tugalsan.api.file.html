@@ -36,7 +36,7 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
                 sb.append(" class='").append(getStyleClassName()).append("'");
             }
             for (var i = 0; addProperties && i < properties.size(); i++) {
-                if (properties.get(i).value.isEmpty()){
+                if (properties.get(i).value.isEmpty()) {
                     continue;
                 }
                 sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
@@ -45,10 +45,11 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
         }
         {
             var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
-            var span = (TGS_FileHtmlSpan) this;
-            if (span.pureCode) {//html span
+            if (pureCode) {//html span
+                System.out.println("TGS_FileHtmlSpan.pureCode.slotTextNotNull:" + slotTextNotNull);
                 sb.append(slotTextNotNull);
             } else {//normal span
+                System.out.println("TGS_FileHtmlSpan.normal.slotTextNotNull:" + slotTextNotNull);
                 sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
             }
         }
