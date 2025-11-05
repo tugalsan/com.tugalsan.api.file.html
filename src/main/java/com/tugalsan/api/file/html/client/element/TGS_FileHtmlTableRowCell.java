@@ -66,17 +66,19 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         }
         var htmlTDFix = "overflow-wrap:normal;word-wrap:break-word;";
         for (var i = 0; addProperties && i < properties.size(); i++) {
-            if (properties.get(i).value.isEmpty()) {
+            if ("rowspan".equals(properties.get(i).name) || "1".equals(properties.get(i).value)) {
                 continue;
             }
-            if ((i == 0 || i == 1) && "1".equals(properties.get(i).value)) {//HTML FIX
-                //SKİP COLSPAN AND ROWSPAN FOR VALUE 1
+            if ("colspan".equals(properties.get(i).name) || "1".equals(properties.get(i).value)) {
                 continue;
             }
             if ("style".equals(properties.get(i).name)) {
                 var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
                 sb.append(p);
             } else {
+                if (properties.get(i).value.isEmpty()) {
+                    continue;
+                }
                 var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
                 sb.append(p);
             }

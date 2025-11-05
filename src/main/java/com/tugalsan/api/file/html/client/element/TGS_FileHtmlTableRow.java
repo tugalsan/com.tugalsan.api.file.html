@@ -1,7 +1,6 @@
 package com.tugalsan.api.file.html.client.element;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
 
