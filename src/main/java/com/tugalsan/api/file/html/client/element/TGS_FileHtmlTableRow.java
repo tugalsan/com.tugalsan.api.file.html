@@ -1,6 +1,7 @@
 package com.tugalsan.api.file.html.client.element;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
 
@@ -47,6 +48,9 @@ public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
                 sb.append(" class='").append(getStyleClassName()).append("'");
             }
             for (var i = 0; addProperties && i < properties.size(); i++) {
+                if (properties.get(i).value.isEmpty()){
+                    continue;
+                }
                 sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
             }
             sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");

@@ -4,7 +4,6 @@ import com.tugalsan.api.cast.client.TGS_CastUtils;
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import com.tugalsan.api.string.client.*;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
 
@@ -58,7 +57,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
     }
 
     @Override
-    public String toString() {
+    public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
         var sb = new StringBuilder();
         sb.append("<").append(tag);
         if (DEFAULT_isNameAndIdEnabled) {
@@ -66,10 +65,13 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
             sb.append(" name='").append(nameAndId).append("'");
         }
         var htmlTDFix = "overflow-wrap:normal;word-wrap:break-word;";
-        IntStream.range(0, properties.size()).forEachOrdered(i -> {
+        for (var i = 0; addProperties && i < properties.size(); i++) {
+            if (properties.get(i).value.isEmpty()) {
+                continue;
+            }
             if ((i == 0 || i == 1) && "1".equals(properties.get(i).value)) {//HTML FIX
                 //SKİP COLSPAN AND ROWSPAN FOR VALUE 1
-                return;
+                continue;
             }
             if ("style".equals(properties.get(i).name)) {
                 var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
@@ -78,7 +80,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
                 var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
                 sb.append(p);
             }
-        });
+        }
         sb.append(">\n");
         childeren.stream().forEachOrdered(s -> sb.append(s));
         sb.append("</").append(tag).append(">\n");

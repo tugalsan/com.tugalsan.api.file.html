@@ -50,6 +50,9 @@ public class TGS_FileHtmlElement {
                 sb.append(" class='").append(getStyleClassName()).append("'");
             }
             for (var i = 0; addProperties && i < properties.size(); i++) {
+                if (properties.get(i).value.isEmpty()) {
+                    continue;
+                }
                 sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
             }
             sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
