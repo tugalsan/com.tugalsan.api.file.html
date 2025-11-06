@@ -1,9 +1,10 @@
 package com.tugalsan.api.file.html.client.element;
 
-import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
+import com.tugalsan.api.cast.client.*;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.*;
 import com.tugalsan.api.string.client.*;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
 
@@ -40,9 +41,9 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
     public TGS_FileHtmlTableRowCell(boolean header, TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
         super(escapeHTML, header ? "th" : "td", nameAndId);
         counter++;
-        properties.add(new TGS_FileHtmlProperty("rowspan", rowspan));
-        properties.add(new TGS_FileHtmlProperty("colspan", colspan));
-        properties.add(new TGS_FileHtmlProperty("style", style));
+        properties.add(new TGS_FileHtmlProperty("rowspan", String.valueOf(TGS_CastUtils.toInteger(rowspan, 1))));
+        properties.add(new TGS_FileHtmlProperty("colspan", String.valueOf(TGS_CastUtils.toInteger(colspan, 1))));
+        properties.add(new TGS_FileHtmlProperty("style", TGS_StringUtils.cmn().toEmptyIfNull(style)));
     }
 
     private boolean header = false;

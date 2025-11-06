@@ -2,6 +2,7 @@ package com.tugalsan.api.file.html.client.element;
 
 import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
 import com.tugalsan.api.list.client.*;
+import com.tugalsan.api.string.client.TGS_StringUtils;
 import java.util.*;
 
 public class TGS_FileHtmlElement {
@@ -12,7 +13,7 @@ public class TGS_FileHtmlElement {
     protected String tag;
     protected List<TGS_FileHtmlElement> childeren;
     protected List<TGS_FileHtmlProperty> properties;
-    protected String spanText;
+    protected String slotText;
     protected TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML;
 
     public TGS_FileHtmlElement(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
@@ -38,17 +39,7 @@ public class TGS_FileHtmlElement {
     private String syleClassName;
 
     public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
-        var tableHeader = false;
-        if (this instanceof TGS_FileHtmlTableRow) {
-            var tableRow = (TGS_FileHtmlTableRow) this;
-            tableHeader = tableRow.IsHeader();
-        }
-//        System.out.println("[" + tag + "], [" + spanText + "], [tableHeader:" + tableHeader + "]");
-
         var sb = new StringBuilder();
-        if (tableHeader) {
-            sb.append("<thead>");
-        }
         {
             sb.append("<").append(tag);
             if (addNameAndId) {
@@ -59,28 +50,21 @@ public class TGS_FileHtmlElement {
                 sb.append(" class='").append(getStyleClassName()).append("'");
             }
             for (var i = 0; addProperties && i < properties.size(); i++) {
+                if (properties.get(i).value.isEmpty()) {
+                    continue;
+                }
                 sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
             }
             sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
         }
         if (tag.equals("span")) {
-            if (this instanceof TGS_FileHtmlSpan) {
-                var span = (TGS_FileHtmlSpan) this;
-                if (span.pureCode) {//html span
-                    sb.append(spanText);
-                } else {//normal span
-                    sb.append(escapeHTML == null ? spanText : escapeHTML.call(spanText));
-                }
-            } else {//custom span
-                sb.append(escapeHTML == null ? spanText : escapeHTML.call(spanText));
-            }
+            var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
+//            System.out.println("TGS_FileHtmlElement.customSpan.slotTextNotNull:" + slotTextNotNull);
+            sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
             sb.append("</").append(tag).append(">\n");
         } else if (addChilderenAndCloseTag) {
             childeren.stream().forEachOrdered(s -> sb.append("  ").append(s));
             sb.append("</").append(tag).append(">\n");
-        }
-        if (tableHeader) {
-            sb.append("</thead>");
         }
         return sb.toString();
     }

@@ -5,7 +5,7 @@ import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.string.client.TGS_StringUtils;
 import java.util.*;
 
-public class TGS_FileHtmlElement {
+public class TGS_FileHtmlElement2 {
 
     public boolean DEFAULT_isNameAndIdEnabled = false;
 
@@ -16,7 +16,7 @@ public class TGS_FileHtmlElement {
     protected String slotText;
     protected TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML;
 
-    public TGS_FileHtmlElement(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
+    public TGS_FileHtmlElement2(TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence tag, CharSequence nameAndId) {
         this.escapeHTML = escapeHTML;
         this.nameAndId = nameAndId == null ? null : nameAndId.toString();
         this.tag = tag == null ? null : tag.toString();

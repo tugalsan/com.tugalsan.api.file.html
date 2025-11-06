@@ -5,7 +5,7 @@ import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU
 import com.tugalsan.api.string.client.*;
 import java.util.List;
 
-public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
+public class TGS_FileHtmlTableRowCell2 extends TGS_FileHtmlElement {
 
     public static int counter = 0;
 
@@ -37,7 +37,7 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
         return childeren;
     }
 
-    public TGS_FileHtmlTableRowCell(boolean header, TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
+    public TGS_FileHtmlTableRowCell2(boolean header, TGS_FuncMTU_OutTyped_In1<String, CharSequence> escapeHTML, CharSequence nameAndId, CharSequence rowspan, CharSequence colspan, CharSequence style) {
         super(escapeHTML, header ? "th" : "td", nameAndId);
         counter++;
         properties.add(new TGS_FileHtmlProperty("rowspan", String.valueOf(TGS_CastUtils.toInteger(rowspan, 1))));

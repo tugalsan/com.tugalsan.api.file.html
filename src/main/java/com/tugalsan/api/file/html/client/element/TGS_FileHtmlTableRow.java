@@ -30,4 +30,38 @@ public class TGS_FileHtmlTableRow extends TGS_FileHtmlElement {
             }
         });
     }
+    
+    
+    @Override
+    public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
+        var sb = new StringBuilder();
+        if (isHeader) {
+            sb.append("<thead>");
+        }
+        {
+            sb.append("<").append(tag);
+            if (addNameAndId) {
+                sb.append(" id='").append(nameAndId).append("'");
+                sb.append(" name='").append(nameAndId).append("'");
+            }
+            if (getStyleClassName() != null) {
+                sb.append(" class='").append(getStyleClassName()).append("'");
+            }
+            for (var i = 0; addProperties && i < properties.size(); i++) {
+                if (properties.get(i).value.isEmpty()){
+                    continue;
+                }
+                sb.append(" ").append(properties.get(i).name).append("='").append(properties.get(i).value).append("'");
+            }
+            sb.append(addChilderenAndCloseTag ? "" : "/").append(">\n");
+        }
+        if (addChilderenAndCloseTag) {
+            childeren.stream().forEachOrdered(s -> sb.append("  ").append(s));
+            sb.append("</").append(tag).append(">\n");
+        }
+        if (isHeader) {
+            sb.append("</thead>");
+        }
+        return sb.toString();
+    }
 }
