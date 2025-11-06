@@ -75,13 +75,13 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
             if ("style".equals(properties.get(i).name)) {
                 var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
                 sb.append(p);
-            } else {
-                if (properties.get(i).value.isEmpty()) {
-                    continue;
-                }
-                var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
-                sb.append(p);
+                continue;
             }
+            if (properties.get(i).value.isEmpty()) {
+                continue;
+            }
+            var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
+            sb.append(p);
         }
         sb.append(">\n");
         childeren.stream().forEachOrdered(s -> sb.append(s));
