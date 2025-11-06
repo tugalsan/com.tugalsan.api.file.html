@@ -20,7 +20,7 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
             IntStream.range(0, cs).forEachOrdered(ci -> {
                 var cell = new TGS_FileHtmlTableRowCell(row.IsHeader(), escapeHTML, "", "", "", "");
                 row.getChilderen().add(cell);
-                var spanValue = table.getValueAsString(ri, ci);
+                var spanValue = table.getValueAsString(ri, ci, "");
                 var span = new TGS_FileHtmlSpan(escapeHTML, "", spanValue, "");
                 cell.getChilderen().add(span);
             });
