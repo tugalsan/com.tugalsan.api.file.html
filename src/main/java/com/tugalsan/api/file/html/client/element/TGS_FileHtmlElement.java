@@ -59,7 +59,7 @@ public class TGS_FileHtmlElement {
         }
         if (tag.equals("span")) {
             var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
-            System.out.println("TGS_FileHtmlElement.customSpan.slotTextNotNull:" + slotTextNotNull);
+//            System.out.println("TGS_FileHtmlElement.customSpan.slotTextNotNull:" + slotTextNotNull);
             sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
             sb.append("</").append(tag).append(">\n");
         } else if (addChilderenAndCloseTag) {

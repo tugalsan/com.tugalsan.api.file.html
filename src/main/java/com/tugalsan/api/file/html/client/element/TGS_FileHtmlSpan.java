@@ -46,10 +46,10 @@ public class TGS_FileHtmlSpan extends TGS_FileHtmlElement {
         {
             var slotTextNotNull = TGS_StringUtils.cmn().toEmptyIfNull(slotText);
             if (pureCode) {//html span
-                System.out.println("TGS_FileHtmlSpan.pureCode.slotTextNotNull:" + slotTextNotNull);
+//                System.out.println("TGS_FileHtmlSpan.pureCode.slotTextNotNull:" + slotTextNotNull);
                 sb.append(slotTextNotNull);
             } else {//normal span
-                System.out.println("TGS_FileHtmlSpan.normal.slotTextNotNull:" + slotTextNotNull);
+//                System.out.println("TGS_FileHtmlSpan.normal.slotTextNotNull:" + slotTextNotNull);
                 sb.append(escapeHTML == null ? slotTextNotNull : escapeHTML.call(slotTextNotNull));
             }
         }
