@@ -66,41 +66,26 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
             sb.append(" name='").append(nameAndId).append("'");
         }
         var htmlTDFix = "overflow-wrap:normal;word-wrap:break-word;";
-        IntStream.range(0, properties.size()).forEachOrdered(i -> {
-            var p = properties.get(i);
-            //OLD CODE
-            var HTML_FIX_SKIP_COLSPAN_AND_ROWSPAN_FOR_VALUE_1 = (i == 0 || i == 1) && "1".equals(p.value);
-            if (HTML_FIX_SKIP_COLSPAN_AND_ROWSPAN_FOR_VALUE_1) {
-                return;
+        properties.forEach(p -> {
+            if ("1".equals(p.value)) {
+                if ("rowspan".equals(p.name) || "colspan".equals(p.name)) {
+//                    System.out.println("TGS_FileHtmlTableRowCell.name:" + p.name + ", p.value:" + p.value);
+                    return;
+                }
             }
-            //MODERN CODE
-//            if ("rowspan".equals(p.name) || "1".equals(p.value)) {
-//                return;
-//            }
-//            if ("colspan".equals(p.name) || "1".equals(p.value)) {
-//                return;
-//            }
             //OLD CODE
             if ("style".equals(p.name)) {
                 var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", htmlTDFix, p.value, "'");
                 sb.append(pStr);
-            } else {
+                return;
+            }
+            if (p.value.isEmpty()) {
+                return;
+            }
+            {
                 var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", p.value, "'");
                 sb.append(pStr);
             }
-            //MODERN CODE
-//            if ("style".equals(p.name)) {
-//                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", htmlTDFix, p.value, "'");
-//                sb.append(pStr);
-//                return;
-//            }
-//            if (p.value.isEmpty()) {
-//                return;
-//            }
-//            {
-//                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", p.value, "'");
-//                sb.append(pStr);
-//            }
         });
         sb.append(">\n");
         childeren.stream().forEachOrdered(s -> sb.append(s));
