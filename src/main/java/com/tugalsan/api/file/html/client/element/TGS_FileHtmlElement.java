@@ -24,11 +24,6 @@ public class TGS_FileHtmlElement {
         properties = TGS_ListUtils.of();
     }
 
-    @Override
-    public String toString() {
-        return toString(DEFAULT_isNameAndIdEnabled, true, true);
-    }
-
     public String getStyleClassName() {
         return syleClassName;
     }
@@ -37,6 +32,11 @@ public class TGS_FileHtmlElement {
         this.syleClassName = syleClassName;
     }
     private String syleClassName;
+
+    @Override
+    public String toString() {
+        return toString(DEFAULT_isNameAndIdEnabled, true, true);
+    }
 
     public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
         var sb = new StringBuilder();

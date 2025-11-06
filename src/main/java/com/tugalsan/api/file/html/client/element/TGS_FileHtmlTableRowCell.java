@@ -58,26 +58,49 @@ public class TGS_FileHtmlTableRowCell extends TGS_FileHtmlElement {
     }
 
     @Override
-    public String toString() {
+    public String toString(boolean addNameAndId, boolean addProperties, boolean addChilderenAndCloseTag) {
         var sb = new StringBuilder();
         sb.append("<").append(tag);
-        if (DEFAULT_isNameAndIdEnabled) {
+        if (addNameAndId) {
             sb.append(" id='").append(nameAndId).append("'");
             sb.append(" name='").append(nameAndId).append("'");
         }
         var htmlTDFix = "overflow-wrap:normal;word-wrap:break-word;";
         IntStream.range(0, properties.size()).forEachOrdered(i -> {
-            if ((i == 0 || i == 1) && "1".equals(properties.get(i).value)) {//HTML FIX
-                //SKİP COLSPAN AND ROWSPAN FOR VALUE 1
+            var p = properties.get(i);
+            //OLD CODE
+            var HTML_FIX_SKIP_COLSPAN_AND_ROWSPAN_FOR_VALUE_1 = (i == 0 || i == 1) && "1".equals(p.value);
+            if (HTML_FIX_SKIP_COLSPAN_AND_ROWSPAN_FOR_VALUE_1) {
                 return;
             }
-            if ("style".equals(properties.get(i).name)) {
-                var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", htmlTDFix, properties.get(i).value, "'");
-                sb.append(p);
+            //MODERN CODE
+//            if ("rowspan".equals(p.name) || "1".equals(p.value)) {
+//                return;
+//            }
+//            if ("colspan".equals(p.name) || "1".equals(p.value)) {
+//                return;
+//            }
+            //OLD CODE
+            if ("style".equals(p.name)) {
+                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", htmlTDFix, p.value, "'");
+                sb.append(pStr);
             } else {
-                var p = TGS_StringUtils.cmn().concat(" ", properties.get(i).name, "='", properties.get(i).value, "'");
-                sb.append(p);
+                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", p.value, "'");
+                sb.append(pStr);
             }
+            //MODERN CODE
+//            if ("style".equals(p.name)) {
+//                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", htmlTDFix, p.value, "'");
+//                sb.append(pStr);
+//                return;
+//            }
+//            if (p.value.isEmpty()) {
+//                return;
+//            }
+//            {
+//                var pStr = TGS_StringUtils.cmn().concat(" ", p.name, "='", p.value, "'");
+//                sb.append(pStr);
+//            }
         });
         sb.append(">\n");
         childeren.stream().forEachOrdered(s -> sb.append(s));
