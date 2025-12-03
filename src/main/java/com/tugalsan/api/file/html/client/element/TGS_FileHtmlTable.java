@@ -13,6 +13,15 @@ public class TGS_FileHtmlTable extends TGS_FileHtmlElement {
         var htmlTable = new TGS_FileHtmlTable("", "");
         IntStream.range(0, rs).forEachOrdered(ri -> {
             var row = new TGS_FileHtmlTableRow("");
+//            var style = row.properties.stream().filter(p -> p.name.equals("style")).findAny().orElse(null);
+//            if (style == null) {
+                row.properties.add(new TGS_FileHtmlProperty("style", "vertical-align:top;"));
+//            } else {
+//                if (!style.value.endsWith(";")) {
+//                    style.value += ";";
+//                }
+//                style.value += "vertical-align:top;";
+//            }
             htmlTable.getChilderen().add(row);
             if (table.isHeaderBold() && ri == 0) {
                 row.setHeader(true);
